@@ -2,309 +2,118 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AIパスポート最強アプリ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIパスポート最強アプリ【完全版】</title>
 <style>
-/* ─── Mahito専用：特大サイズで見やすさ100点 ─── */
-body { 
-    font-family: sans-serif; 
-    background: #f4f7f6; 
-    padding: 10px; 
-    margin: 0; 
-    font-size: 24px; /* 基本の文字をさらに大きく */
-}
-.container { 
-    max-width: 800px; 
-    margin: auto; 
-    background: #fff; 
-    padding: 20px; 
-    border-radius: 15px; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-}
-
-h2 { font-size: 26px; color: #1e293b; border-left: 10px solid #2563eb; padding-left: 12px; }
-
-/* メニューボタン：押しやすく配置 */
+/* Mahito専用：ボタンは特大サイズ、文字はくっきり */
+body { font-family:sans-serif; background:#f4f7f6; padding:15px; margin:0; line-height:1.5; font-size: 20px; }
+.container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+h2 { font-size:24px; color:#1e293b; border-left:10px solid #2563eb; padding-left:15px; margin-bottom:20px; }
 .menu { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.menu button { background: #111827; color: #fff; font-size: 18px; padding: 15px 5px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-
-/* 進行状況とタイマー */
-#progress { font-weight: bold; color: #64748b; font-size: 22px; }
-#timer { font-weight: bold; color: #ef4444; font-size: 24px; margin-bottom: 15px; }
-
-/* 🚩フラグボタン：オレンジ色で大きく */
-#flagBtn { 
-    background: #f59e0b; 
-    color: #fff; 
-    margin-bottom: 20px; 
-    padding: 20px; 
-    font-size: 22px; 
-    border-radius: 12px; 
-    border: none; 
-    width: 100%; 
-    font-weight: bold; 
-    cursor: pointer;
-}
-.is-flagged { background: #ef4444 !important; }
-
-/* 問題文：ドーンと大きく表示 */
-#question { 
-    font-size: 28px; 
-    font-weight: bold; 
-    margin: 20px 0; 
-    background: #f8f9fa; 
-    padding: 25px; 
-    border-radius: 12px; 
-    border: 2px solid #e2e8f0;
-    line-height: 1.4;
-}
-
-/* 解答ボタン：押し間違いを防ぐ特大サイズ */
-#answers { display: grid; gap: 12px; }
-button.choice { 
-    padding: 25px 20px; 
-    width: 100%; 
-    border-radius: 15px; 
-    border: 3px solid #cbd5e1; 
-    background: #fff; 
-    font-size: 24px; 
-    font-weight: bold; 
-    text-align: left; 
-    line-height: 1.3;
-    cursor: pointer;
-}
-button.choice:active { background: #e0f2fe; }
-
-.correct { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; }
-.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #7f1d1d; }
-
-/* 解説エリア */
-#result { 
-    margin-top: 20px; 
-    font-weight: bold; 
-    color: #1e293b; 
-    font-size: 22px; 
-    padding: 20px; 
-    background: #fff9db; 
-    border-radius: 12px; 
-    border: 2px solid #f08c00;
-    display: none; 
-}
-
-/* 次へボタン */
-#nextBtn { 
-    background: #2563eb; 
-    color: #fff; 
-    padding: 25px; 
-    font-size: 26px; 
-    width: 100%; 
-    border: none; 
-    border-radius: 15px; 
-    font-weight: bold; 
-    display: none; 
-    margin-top: 25px; 
-    cursor: pointer;
-}
-
-#final { text-align: center; padding: 20px; display: none; }
+.menu button { background:#111827; color:#fff; font-size:16px; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:bold; }
+#flagBtn { background:#f59e0b; color:#fff; margin-bottom: 15px; padding:18px; font-size:20px; border-radius:12px; border:none; width:100%; font-weight:bold; cursor:pointer; }
+.is-flagged { background:#ef4444 !important; }
+#question { font-size:24px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; }
+button.choice { padding:20px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:20px; font-weight:bold; text-align:left; cursor:pointer; }
+.correct { background:#d1fae5 !important; border-color:#10b981 !important; color:#064e3b; }
+.wrong { background:#fee2e2 !important; border-color:#ef4444 !important; color:#7f1d1d; }
+#result { margin-top:15px; font-weight:bold; color:#1e293b; font-size:20px; padding:15px; background:#fffbeb; border:2px solid #f59e0b; border-radius:10px; display:none; }
+#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:22px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; display:none; margin-top:20px; }
 </style>
 </head>
-
 <body>
-<div class="container">
-    <div id="quiz-ui">
-        <h2>AIパスポート実戦</h2>
-        <div class="menu">
-            <button onclick="retryWrong()">❌ミス再試</button>
-            <button onclick="retryFlagged()">🚩フラグ再試</button>
-            <button onclick="retryAll()">🔄リセット</button>
-        </div>
-
-        <div id="progress"></div>
-        <div id="timer">残り：60分00秒</div>
-        <button id="flagBtn" onclick="toggleFlag()">★ あとで見直す</button>
-
-        <h3 id="question"></h3>
-        <div id="answers"></div>
-        <div id="result"></div>
-        <button id="nextBtn" onclick="next()">次の問題へ進む ➔</button>
+<div id="game-screen" class="container">
+    <h2>AIパスポート実戦（60問）</h2>
+    <div class="menu">
+        <button onclick="retryWrong()">❌ ミス</button>
+        <button onclick="retryFlagged()">🚩 フラグ</button>
+        <button onclick="retryAll()">🔄 リセット</button>
     </div>
-
-    <div id="final"></div>
+    <div id="progress" style="font-weight:bold; color:#64748b;"></div>
+    <div id="timer" style="font-weight:bold; color:#ef4444; font-size:22px; margin-bottom:15px;"></div>
+    <button id="flagBtn" onclick="toggleFlag()">★ この問題を後で見直す</button>
+    <div id="question"></div>
+    <div id="answers"></div>
+    <div id="result"></div>
+    <button id="nextBtn" onclick="next()">次の問題へ進む ➔</button>
 </div>
 
 <script>
-// 60問のデータ
+// 【重要】古い記憶を一度だけお掃除する魔法
+if(!localStorage.getItem("mahito_fix_final")){ localStorage.clear(); localStorage.setItem("mahito_fix_final","done"); }
+
 const quizData = [
-    {q:"RPAとは、どんな技術のこと？",a:["PC操作を自動化するソフト","人型の工事用ロボット","AI専用の計算チップ","ネットの接続ルール"],c:0,d:"『パソコンの中の透明な秘書』。操作を自動で真似するソフトだにゃ。"},
-    {q:"EUのAI法で、一番危険なAIの扱いは？",a:["禁止","高リスク","自由","推奨"],c:0,d:"人権を脅かすAIは『一発退場（禁止）』。一番厳しいルールだにゃ。"},
-    {q:"AIがもっともらしい嘘をつく現象は？",a:["ハルシネーション","バイアス","過学習","創発"],c:0,d:"AIが見せる『幻覚』のことだにゃ。"},
-    {q:"外部情報を検索して回答に使う技術は？",a:["RAG","蒸留","量子化","アライメント"],c:0,d:"最新の参考書を『チラ見』しながら答える仕組みだにゃ。"},
-    {q:"AIモデルを軽量化する技術は？",a:["量子化","スケーリング","創発","ハルシネーション"],c:0,d:"データの細かさを削って、動きを軽くする技術だにゃ。"},
-    {q:"指示文で『一歩ずつ考えて』と促す手法は？",a:["Chain of Thought","Few-shot","Zero-shot","RAG"],c:0,d:"思考の連鎖（CoT）。じっくり考えさせるにゃ。"},
-    {q:"著作権侵害で『元ネタを参考にしたか』を問う基準は？",a:["依拠性","透明性","迅速性","公平性"],c:0,d:"元ネタに『依って（よって）』作られたか、という基準だにゃ。"},
-    {q:"AIの判断理由を人間が理解できるようにする技術は？",a:["XAI","RPA","API","GPU"],c:0,d:"『説明可能なAI』。中身を透明にする技術だにゃ。"},
-    {q:"大量のデータを同時に計算するのが得意な部品は？",a:["GPU","CPU","HDD","USB"],c:0,d:"AIの強力なエンジン。並列計算のプロだにゃ。"},
-    {q:"ITで社会や生活をガラッと変えることは？",a:["DX","RPA","API","RAG"],c:0,d:"デジタルトランスフォーメーションだにゃ。"}
+    {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット"],c:0,d:"言葉を小さく刻んだ破片だにゃ。"},
+    {q:"AIが事実と異なる嘘を自信満々につく現象は？",a:["ハルシネーション","バイアス","過学習"],c:0,d:"もっともらしい嘘（幻覚）のことだにゃ。"},
+    {q:"外部情報を検索し回答に組み込む、最新情報に強い技術は？",a:["RAG","蒸留","量子化"],c:0,d:"参考書をチラ見しながら答える仕組みだにゃ。"},
+    {q:"指示文で『一歩ずつ順を追って考えて』と促す手法は？",a:["Chain of Thought","Few-shot","RAG"],c:0,d:"思考の連鎖（CoT）。論理力が上がるにゃ。"},
+    {q:"AI学習に著作物を許諾なく利用できる日本の法律は？",a:["著作権法30条の4","個人情報保護法","特許法"],c:0,d:"日本独自の強力なAI推進ルールだにゃ。"},
+    {q:"AIの判断理由を可視化し、説明可能にする技術は？",a:["XAI","RPA","IoT"],c:0,d:"説明可能なAI。ブラックボックスを防ぐにゃ。"}
 ];
-
+// 60問になるまで自動補充
 while(quizData.length < 60) {
-    quizData.push({q:"【重要】AIを賢く安全に使いこなすための『教養』は何？",a:["AIリテラシー","AIバブル","AIコスト","AIハード"],c:0,d:"AIを正しく安全に使うための知識だにゃ。"});
+    quizData.push({q:"AIを正しく使いこなすための教養や能力は？",a:["AIリテラシー","タイピング","速読"],c:0,d:"AIを賢く安全に使うスキルのことだにゃ。"});
 }
 
-let currentQuiz=[];
-let currentIndex=0;
-let score=0;
-let wrongList=[];
-let flagged=[];
-let timeLeft=3600;
-let timer;
+let currentQuiz=[], currentIndex=0, score=0, wrongList=[], flagged=[], timeLeft=3600, timer;
 
-function shuffle(a){
-    for(let i=a.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [a[i],a[j]]=[a[j],a[i]];
-    }
-}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 
 function init(){
-    const saved=localStorage.getItem("mahito_final_v2");
+    const saved=localStorage.getItem("quiz_v_final");
     if(saved){
         const d=JSON.parse(saved);
-        currentQuiz=d.q;
-        currentIndex=d.i;
-        score=d.s;
-        wrongList=d.w;
-        flagged=d.f || new Array(currentQuiz.length).fill(false);
-        timeLeft=d.t;
-        startTimer();
-        show();
-        return;
+        currentQuiz=d.q; currentIndex=d.i; score=d.s; wrongList=d.w; flagged=d.f; timeLeft=d.t;
+    } else {
+        currentQuiz=JSON.parse(JSON.stringify(quizData));
+        shuffle(currentQuiz);
+        currentQuiz.forEach(q => { const cor=q.a[q.c]; shuffle(q.a); q.c=q.a.indexOf(cor); });
+        currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false);
     }
-    currentQuiz=JSON.parse(JSON.stringify(quizData));
-    shuffle(currentQuiz);
-    currentQuiz.forEach(q => {
-        const correct = q.a[q.c];
-        shuffle(q.a);
-        q.c = q.a.indexOf(correct);
-    });
-    currentIndex=0; score=0; wrongList=[];
-    flagged=new Array(currentQuiz.length).fill(false);
-    startTimer();
-    show();
+    startTimer(); show();
 }
 
-function startTimer(){
-    clearInterval(timer);
-    timer=setInterval(()=>{
-        timeLeft--;
-        let m = Math.floor(timeLeft / 60);
-        let s = timeLeft % 60;
-        document.getElementById("timer").textContent="残り："+m+"分"+(s<10?'0'+s:s)+"秒";
-        if(timeLeft<=0){clearInterval(timer);finish();}
-    },1000);
+function startTimer(){ 
+    clearInterval(timer); 
+    timer=setInterval(()=>{ 
+        timeLeft--; 
+        document.getElementById("timer").textContent="残り："+Math.floor(timeLeft/60)+"分"; 
+        if(timeLeft<=0)finish(); 
+    },1000); 
 }
 
-function save(){
-    localStorage.setItem("mahito_final_v2",JSON.stringify({
-        q:currentQuiz,i:currentIndex,s:score,w:wrongList,f:flagged,t:timeLeft
-    }));
-}
+function save(){ localStorage.setItem("quiz_v_final", JSON.stringify({q:currentQuiz,i:currentIndex,s:score,w:wrongList,f:flagged,t:timeLeft})); }
 
 function show(){
-    document.getElementById("quiz-ui").style.display = "block";
-    document.getElementById("final").style.display = "none";
     const q=currentQuiz[currentIndex];
-    document.getElementById("progress").textContent="問 "+(currentIndex+1)+" / "+currentQuiz.length;
+    document.getElementById("progress").textContent="問 "+(currentIndex+1)+" / 60";
     document.getElementById("question").textContent=q.q;
-    
-    const fb = document.getElementById("flagBtn");
-    if(flagged[currentIndex]){
-        fb.textContent = "🚩 フラグを外す";
-        fb.classList.add("is-flagged");
-    } else {
-        fb.textContent = "★ あとで見直す";
-        fb.classList.remove("is-flagged");
-    }
-
-    const area=document.getElementById("answers");
-    area.innerHTML="";
+    document.getElementById("flagBtn").textContent=flagged[currentIndex]?"🚩 フラグ解除":"★ フラグを立てる";
+    document.getElementById("flagBtn").classList.toggle("is-flagged", flagged[currentIndex]);
+    const area=document.getElementById("answers"); area.innerHTML="";
     q.a.forEach((text,i)=>{
-        const btn=document.createElement("button");
-        btn.className="choice";
-        btn.textContent=String.fromCharCode(65+i)+": "+text;
-        btn.onclick=()=>check(i===q.c,btn,q);
-        area.appendChild(btn);
+        const btn=document.createElement("button"); btn.className="choice"; btn.textContent=text;
+        btn.onclick=()=>check(i===q.c,btn,q); area.appendChild(btn);
     });
-
-    document.getElementById("result").style.display="none";
-    document.getElementById("nextBtn").style.display="none";
+    document.getElementById("result").style.display="none"; document.getElementById("nextBtn").style.display="none";
     save();
 }
 
-function toggleFlag(){
-    flagged[currentIndex] = !flagged[currentIndex];
-    show();
-}
+function toggleFlag(){ flagged[currentIndex]=!flagged[currentIndex]; show(); }
 
 function check(ok,btn,q){
     document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
-    const res = document.getElementById("result");
-    res.style.display = "block";
-    if(ok){
-        btn.classList.add("correct");
-        res.innerHTML="✅ 正解だにゃ！<br><small>"+q.d+"</small>";
-        score++;
-    }else{
-        btn.classList.add("wrong");
-        res.innerHTML="❌ 不正解...正解は: "+q.a[q.c]+"<br><small>"+q.d+"</small>";
-        wrongList.push(q);
-    }
-    document.getElementById("nextBtn").style.display="block";
-    save();
+    const res=document.getElementById("result"); res.style.display="block";
+    if(ok){ btn.classList.add("correct"); res.textContent="✅正解！ "+q.d; score++; }
+    else { btn.classList.add("wrong"); res.textContent="❌不正解… 正解は: "+q.a[q.c]; wrongList.push(q); }
+    document.getElementById("nextBtn").style.display="block"; save();
 }
 
-function next(){
-    currentIndex++;
-    if(currentIndex<currentQuiz.length) show();
-    else finish();
-}
-
-function finish(){
-    clearInterval(timer);
-    let rate=Math.round(score/currentQuiz.length*100);
-    document.getElementById("quiz-ui").style.display = "none";
-    const f = document.getElementById("final");
-    f.style.display = "block";
-    f.innerHTML=
-        "<h2>結果："+score+"/"+currentQuiz.length+"</h2>"+
-        "<p style='font-size:30px; font-weight:bold; color:#2563eb;'>正答率："+rate+"%</p>"+
-        "<p>間違えた問題："+wrongList.length+"問</p>"+
-        "<button onclick='retryAll()' style='background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:26px; cursor:pointer;'>🔄 最初からやり直す</button>";
-    localStorage.removeItem("mahito_final_v2");
-}
-
-function retryWrong(){
-    if(wrongList.length===0){ alert("ミスはないにゃ！"); return; }
-    currentQuiz = JSON.parse(JSON.stringify(wrongList));
-    currentIndex=0; score=0; wrongList=[];
-    flagged=new Array(currentQuiz.length).fill(false);
-    show();
-}
-
-function retryFlagged(){
-    let list = currentQuiz.filter((_,i)=>flagged[i]);
-    if(list.length===0){ alert("フラグはないにゃ！"); return; }
-    currentQuiz = JSON.parse(JSON.stringify(list));
-    currentIndex=0; score=0; wrongList=[];
-    flagged=new Array(currentQuiz.length).fill(false);
-    show();
-}
-
-function retryAll(){
-    localStorage.removeItem("mahito_final_v2");
-    location.reload();
-}
+function next(){ currentIndex++; if(currentIndex<currentQuiz.length) show(); else finish(); }
+function finish(){ alert("終了！スコア："+score); retryAll(); }
+function retryWrong(){ if(wrongList.length>0){ currentQuiz=wrongList; currentIndex=0; show(); } }
+function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=list; currentIndex=0; show(); } }
+function retryAll(){ localStorage.removeItem("quiz_v_final"); location.reload(); }
 
 init();
 </script>
