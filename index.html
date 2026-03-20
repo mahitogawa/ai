@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIパスポート最強アプリ【完全版】</title>
+<title>AIパスポート最強アプリ【4択完成版】</title>
 <style>
-/* Mahito専用：ボタンは特大サイズ、文字はくっきり */
+/* Mahito専用：ボタンは特大、文字は24pxで超見やすく */
 body { font-family:sans-serif; background:#f4f7f6; padding:15px; margin:0; line-height:1.5; font-size: 20px; }
 .container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
 h2 { font-size:24px; color:#1e293b; border-left:10px solid #2563eb; padding-left:15px; margin-bottom:20px; }
@@ -23,7 +23,7 @@ button.choice { padding:20px; margin:10px 0; width:100%; border-radius:15px; bor
 </head>
 <body>
 <div id="game-screen" class="container">
-    <h2>AIパスポート実戦（60問）</h2>
+    <h2>AIパスポート実戦（4択）</h2>
     <div class="menu">
         <button onclick="retryWrong()">❌ ミス</button>
         <button onclick="retryFlagged()">🚩 フラグ</button>
@@ -39,20 +39,23 @@ button.choice { padding:20px; margin:10px 0; width:100%; border-radius:15px; bor
 </div>
 
 <script>
-// 【重要】古い記憶を一度だけお掃除する魔法
-if(!localStorage.getItem("mahito_fix_final")){ localStorage.clear(); localStorage.setItem("mahito_fix_final","done"); }
+// 古い記憶をお掃除
+if(!localStorage.getItem("mahito_v4_final")){ localStorage.clear(); localStorage.setItem("mahito_v4_final","done"); }
 
 const quizData = [
-    {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット"],c:0,d:"言葉を小さく刻んだ破片だにゃ。"},
-    {q:"AIが事実と異なる嘘を自信満々につく現象は？",a:["ハルシネーション","バイアス","過学習"],c:0,d:"もっともらしい嘘（幻覚）のことだにゃ。"},
-    {q:"外部情報を検索し回答に組み込む、最新情報に強い技術は？",a:["RAG","蒸留","量子化"],c:0,d:"参考書をチラ見しながら答える仕組みだにゃ。"},
-    {q:"指示文で『一歩ずつ順を追って考えて』と促す手法は？",a:["Chain of Thought","Few-shot","RAG"],c:0,d:"思考の連鎖（CoT）。論理力が上がるにゃ。"},
-    {q:"AI学習に著作物を許諾なく利用できる日本の法律は？",a:["著作権法30条の4","個人情報保護法","特許法"],c:0,d:"日本独自の強力なAI推進ルールだにゃ。"},
-    {q:"AIの判断理由を可視化し、説明可能にする技術は？",a:["XAI","RPA","IoT"],c:0,d:"説明可能なAI。ブラックボックスを防ぐにゃ。"}
+    {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],c:0,d:"言葉を刻んだ破片だにゃ。"},
+    {q:"AIが事実と異なる嘘を自信満々につく現象は？",a:["ハルシネーション","バイアス","過学習","ドリフト"],c:0,d:"もっともらしい嘘（幻覚）だにゃ。"},
+    {q:"最新情報を検索し回答に組み込む技術は？",a:["RAG","蒸留","量子化","LoRA"],c:0,d:"参考書をチラ見する仕組みだにゃ。"},
+    {q:"指示文で『一歩ずつ順を追って考えて』と促す手法は？",a:["Chain of Thought","Few-shot","Zero-shot","RAG"],c:0,d:"思考の連鎖（CoT）だにゃ。"},
+    {q:"AI学習に著作物を許諾なく利用できる日本の法律は？",a:["著作権法30条の4","個人情報保護法","特許法","独禁法"],c:0,d:"日本独自の強力なルールだにゃ。"},
+    {q:"並列計算が得意なAIの心臓部となる半導体は？",a:["GPU","CPU","SSD","RAM"],c:0,d:"高速計算の立役者だにゃ。"},
+    {q:"AIの回答を人間の好みに合わせる調整手法は？",a:["RLHF","蒸留","量子化","スクレイピング"],c:0,d:"人間のフィードバックで教えるにゃ。"},
+    {q:"特定の専門分野に特化してAIを育てる手法は？",a:["ドメイン特化","汎用AI","AGI","エッジAI"],c:0,d:"専門家（ドメイン）を育てるにゃ。"}
 ];
-// 60問になるまで自動補充
+
+// 60問になるまで「4択のダミー」で自動補充
 while(quizData.length < 60) {
-    quizData.push({q:"AIを正しく使いこなすための教養や能力は？",a:["AIリテラシー","タイピング","速読"],c:0,d:"AIを賢く安全に使うスキルのことだにゃ。"});
+    quizData.push({q:"AIリテラシーにおいて、情報を鵜呑みにしない力は？",a:["批判的思考","全肯定","無視","思考停止"],c:0,d:"『本当かな？』と疑う力が大事だにゃ。"});
 }
 
 let currentQuiz=[], currentIndex=0, score=0, wrongList=[], flagged=[], timeLeft=3600, timer;
@@ -60,7 +63,7 @@ let currentQuiz=[], currentIndex=0, score=0, wrongList=[], flagged=[], timeLeft=
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 
 function init(){
-    const saved=localStorage.getItem("quiz_v_final");
+    const saved=localStorage.getItem("quiz_v4_store");
     if(saved){
         const d=JSON.parse(saved);
         currentQuiz=d.q; currentIndex=d.i; score=d.s; wrongList=d.w; flagged=d.f; timeLeft=d.t;
@@ -77,22 +80,25 @@ function startTimer(){
     clearInterval(timer); 
     timer=setInterval(()=>{ 
         timeLeft--; 
-        document.getElementById("timer").textContent="残り："+Math.floor(timeLeft/60)+"分"; 
+        let m=Math.floor(timeLeft/60); let s=timeLeft%60;
+        document.getElementById("timer").textContent="残り："+m+"分"+(s<10?'0'+s:s)+"秒"; 
         if(timeLeft<=0)finish(); 
     },1000); 
 }
 
-function save(){ localStorage.setItem("quiz_v_final", JSON.stringify({q:currentQuiz,i:currentIndex,s:score,w:wrongList,f:flagged,t:timeLeft})); }
+function save(){ localStorage.setItem("quiz_v4_store", JSON.stringify({q:currentQuiz,i:currentIndex,s:score,w:wrongList,f:flagged,t:timeLeft})); }
 
 function show(){
     const q=currentQuiz[currentIndex];
     document.getElementById("progress").textContent="問 "+(currentIndex+1)+" / 60";
     document.getElementById("question").textContent=q.q;
-    document.getElementById("flagBtn").textContent=flagged[currentIndex]?"🚩 フラグ解除":"★ フラグを立てる";
-    document.getElementById("flagBtn").classList.toggle("is-flagged", flagged[currentIndex]);
+    const fb=document.getElementById("flagBtn");
+    fb.textContent=flagged[currentIndex]?"🚩 フラグ解除":"★ フラグを立てる";
+    fb.classList.toggle("is-flagged", flagged[currentIndex]);
     const area=document.getElementById("answers"); area.innerHTML="";
     q.a.forEach((text,i)=>{
-        const btn=document.createElement("button"); btn.className="choice"; btn.textContent=text;
+        const btn=document.createElement("button"); btn.className="choice"; 
+        btn.textContent=String.fromCharCode(65+i)+": "+text; // A, B, C, Dをつける
         btn.onclick=()=>check(i===q.c,btn,q); area.appendChild(btn);
     });
     document.getElementById("result").style.display="none"; document.getElementById("nextBtn").style.display="none";
@@ -104,16 +110,16 @@ function toggleFlag(){ flagged[currentIndex]=!flagged[currentIndex]; show(); }
 function check(ok,btn,q){
     document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
     const res=document.getElementById("result"); res.style.display="block";
-    if(ok){ btn.classList.add("correct"); res.textContent="✅正解！ "+q.d; score++; }
+    if(ok){ btn.classList.add("correct"); res.textContent="✅正解だにゃ！ "+q.d; score++; }
     else { btn.classList.add("wrong"); res.textContent="❌不正解… 正解は: "+q.a[q.c]; wrongList.push(q); }
     document.getElementById("nextBtn").style.display="block"; save();
 }
 
-function next(){ currentIndex++; if(currentIndex<currentQuiz.length) show(); else finish(); }
-function finish(){ alert("終了！スコア："+score); retryAll(); }
-function retryWrong(){ if(wrongList.length>0){ currentQuiz=wrongList; currentIndex=0; show(); } }
-function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=list; currentIndex=0; show(); } }
-function retryAll(){ localStorage.removeItem("quiz_v_final"); location.reload(); }
+function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); window.scrollTo(0,0); } else { finish(); } }
+function finish(){ alert("お疲れ様！スコア："+score+"/"+currentQuiz.length); retryAll(); }
+function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; show(); } }
+function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; show(); } }
+function retryAll(){ localStorage.removeItem("quiz_v4_store"); location.reload(); }
 
 init();
 </script>
