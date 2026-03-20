@@ -3,67 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIパスポート最強アプリ【60問完遂版】</title>
+<title>AIパスポート最強アプリ【決定版】</title>
 <style>
-body { font-family:sans-serif; background:#f4f7f6; padding:15px; margin:0; line-height:1.5; font-size: 20px; }
+/* Mahito専用：フォントサイズは変更せず、見やすさ重視 */
+body { font-family:sans-serif; background:#f4f7f6; padding:15px; margin:0; font-size: 22px; }
 .container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-h2 { font-size:24px; color:#1e293b; border-left:10px solid #2563eb; padding-left:15px; margin-bottom:20px; }
+h2 { font-size:26px; color:#1e293b; border-left:12px solid #2563eb; padding-left:15px; }
 .menu { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .menu button { background:#111827; color:#fff; font-size:16px; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:bold; }
-#flagBtn { background:#f59e0b; color:#fff; margin-bottom: 15px; padding:18px; font-size:20px; border-radius:12px; border:none; width:100%; font-weight:bold; cursor:pointer; }
+#flagBtn { background:#f59e0b; color:#fff; margin-bottom: 15px; padding:20px; font-size:22px; border-radius:12px; border:none; width:100%; font-weight:bold; cursor:pointer; }
 .is-flagged { background:#ef4444 !important; }
-#question { font-size:24px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; }
-button.choice { padding:20px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:20px; font-weight:bold; text-align:left; cursor:pointer; }
+#question { font-size:26px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; }
+button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:22px; font-weight:bold; text-align:left; cursor:pointer; }
 .correct { background:#d1fae5 !important; border-color:#10b981 !important; color:#064e3b; }
 .wrong { background:#fee2e2 !important; border-color:#ef4444 !important; color:#7f1d1d; }
-#result { margin-top:15px; font-weight:bold; color:#1e293b; font-size:20px; padding:15px; background:#fffbeb; border:2px solid #f59e0b; border-radius:10px; display:none; }
-#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:22px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; display:none; margin-top:20px; }
+#result { margin-top:15px; font-weight:bold; font-size:22px; padding:15px; border-radius:10px; display:none; border:2px solid #ddd; }
+#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; display:none; margin-top:20px; }
+#final-screen { display:none; text-align: center; }
+.review-box { text-align: left; background: #fff1f2; padding: 15px; margin-top: 20px; border-radius: 10px; border-left: 8px solid #ef4444; }
+.review-item { margin-bottom: 20px; border-bottom: 1px solid #fda4af; padding-bottom: 10px; font-size: 18px; }
 </style>
 </head>
 <body>
 <div id="game-screen" class="container">
-    <h2>AIパスポート実戦（60問）</h2>
+    <h2>AIパスポート実戦</h2>
     <div class="menu">
-        <button onclick="retryWrong()">❌ ミス</button>
-        <button onclick="retryFlagged()">🚩 フラグ</button>
-        <button onclick="retryAll()">🔄 リセット</button>
+        <button onclick="retryWrong()">❌ミス</button>
+        <button onclick="retryFlagged()">🚩フラグ</button>
+        <button onclick="retryAll()">🔄リセット</button>
     </div>
     <div id="progress" style="font-weight:bold; color:#64748b;"></div>
     <div id="timer" style="font-weight:bold; color:#ef4444; font-size:22px; margin-bottom:15px;"></div>
-    <button id="flagBtn" onclick="toggleFlag()">★ この問題を後で見直す</button>
+    <button id="flagBtn" onclick="toggleFlag()">★ フラグを立てる</button>
     <div id="question"></div>
     <div id="answers"></div>
     <div id="result"></div>
-    <button id="nextBtn" onclick="next()">次の問題へ進む ➔</button>
+    <button id="nextBtn" onclick="next()">次の問題へ ➔</button>
 </div>
-
+<div id="final-screen" class="container">
+    <h2>試験結果発表</h2>
+    <div id="final-score" style="font-size:60px; font-weight:bold; color:#2563eb;"></div>
+    <div id="review-area" class="review-box">
+        <h3>📋 復習リスト（間違えた問題）</h3>
+        <div id="review-list"></div>
+    </div>
+    <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:30px;">🔄 最初からやり直す</button>
+</div>
 <script>
-// 過去のキャッシュを一度お掃除
-localStorage.clear();
-
 const quizData = [
     {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],c:0,d:"言葉を刻んだ破片だにゃ。"},
     {q:"AIが事実と異なる嘘を自信満々につく現象は？",a:["ハルシネーション","バイアス","過学習","ドリフト"],c:0,d:"幻覚（ハルシネーション）だにゃ。"},
-    {q:"最新情報を検索し回答に組み込む技術は？",a:["RAG","蒸留","量子化","LoRA"],c:0,d:"『チラ見』して答えるRAGだにゃ。"},
-    {q:"指示文で『一歩ずつ考えて』と促す手法は？",a:["Chain of Thought","Few-shot","Zero-shot","RAG"],c:0,d:"思考の連鎖（CoT）だにゃ。"},
+    {q:"最新情報を検索し回答に組み込む技術は？",a:["RAG","蒸留","量子化","LoRA"],c:0,d:"参考書をチラ見するRAGだにゃ。"},
+    {q:"指示文で『一歩ずつ順を追って考えて』と促す手法は？",a:["Chain of Thought","Few-shot","Zero-shot","RAG"],c:0,d:"思考の連鎖（CoT）だにゃ。"},
     {q:"AI学習に著作物を許諾なく利用できる日本の法律は？",a:["著作権法30条の4","個人情報保護法","特許法","独禁法"],c:0,d:"日本独自の強力なルールだにゃ。"},
-    {q:"並列計算が得意なAIの心臓部となる半導体は？",a:["GPU","CPU","SSD","RAM"],c:0,d:"高速計算の立役者だにゃ。"},
+    {q:"並列計算が得意なAIの心臓部となる半導体は？",a:["GPU","CPU","SSD","RAM"],c:0,d:"AIの強力なエンジンだにゃ。"},
     {q:"AIの判断理由を可視化し、説明可能にする技術は？",a:["XAI","RPA","IoT","API"],c:0,d:"説明可能なAIのことだにゃ。"},
     {q:"AIモデルの数値を丸めて軽量化する技術は？",a:["量子化","蒸留","スケーリング","バイアス"],c:0,d:"解像度を下げるイメージだにゃ。"},
-    {q:"AIを人間の価値観に合わせる調整作業は？",a:["アライメント","バイアス","創発","蒸留"],c:0,d:"整列（アライメント）だにゃ。"},
-    {q:"回答例をいくつか提示してAIに学ばせる手法は？",a:["Few-shot","Zero-shot","RAG","CoT"],c:0,d:"少しだけ（Few）見本を見せるにゃ。"},
-    {q:"AIに入力したデータを学習に使わせない設定は？",a:["オプトアウト","アノテーション","量子化","ガードレール"],c:0,d:"『お断り』の権利だにゃ。"},
-    {q:"AIが作り出す物語の真実味を確かめる行為は？",a:["ファクトチェック","アノテーション","蒸留","量子化"],c:0,d:"裏取り（ファクトチェック）だにゃ。"},
-    {q:"特定の専門分野に特化してAIを育てることを？",a:["ドメイン特化","汎用AI","AGI","スクラッチ"],c:0,d:"専門家（ドメイン）にするにゃ。"},
-    {q:"ITを使って社会や生活を根本から変革することを？",a:["DX","RPA","API","RAG"],c:0,d:"DX（デジタルトランスフォーメーション）だにゃ。"},
-    {q:"AIの学習データに正解を教えるタグ付け作業は？",a:["アノテーション","スクレイピング","デバッグ","量子化"],c:0,d:"AI用の教材作りだにゃ。"},
+    {q:"ITを使って社会や生活を根本から変革することを？",a:["DX","RPA","API","RAG"],c:0,d:"デジタルトランスフォーメーションだにゃ。"},
+    {q:"AIの学習データに『正解』を教えるタグ付け作業は？",a:["アノテーション","スクレイピング","デバッグ","量子化"],c:0,d:"AI用の教材作りだにゃ。"},
     {q:"ネットを介さず端末内で動く高速なAIは？",a:["エッジAI","クラウドAI","集中型AI","ビッグデータ"],c:0,d:"端末の端（エッジ）で動くにゃ。"},
     {q:"EUのAI法で、最悪なリスクのAIに対する扱いは？",a:["禁止","高リスク","限定的","自由"],c:0,d:"『レッドカード』。一発禁止だにゃ。"},
-    {q:"AIの安全性を確認するため攻撃者のふりをして行うテストは？",a:["レッドチーミング","デバッグ","単体テスト","ベータ"],c:0,d:"悪い人の役で弱点を探すにゃ。"},
-    {q:"AIが生成した真偽不明の高度な偽動画は？",a:["ディープフェイク","VR","AR","メタバース"],c:0,d:"AIによる精密な合成だにゃ。"},
-    {q:"PC上の定型業務を自動化するソフトは？",a:["RPA","API","ERP","OCR"],c:0,d:"『透明な秘書』RPAだにゃ。"},
-    {q:"学習が進みすぎて応用が利かなくなる現象は？",a:["過学習","未学習","創発","蒸留"],c:0,d:"丸暗記しちゃった過学習だにゃ。"},
-    {q:"指示文で『あなたは医師です』となりきらせる手法は？",a:["ロールプレイ","Few-shot","CoT","RAG"],c:0,d:"役割（ペルソナ）を与えるにゃ。"},
     {q:"回答構成を『要点・理由・具体例・要点』にする手法は？",a:["PREP法","DESC法","5W1H","SWOT"],c:0,d:"結論から話すPREP法だにゃ。"},
     {q:"AIが書いた文章かどうかを見破るツールは？",a:["AIディテクター","AIエディタ","AIコンパイラ","AIバッファ"],c:0,d:"AI作を鑑定する道具だにゃ。"},
     {q:"モデルが巨大化すると急に能力が開花する現象は？",a:["創発","蒸留","量子化","ドリフト"],c:0,d:"悟りを開く『創発』だにゃ。"},
@@ -72,10 +71,8 @@ const quizData = [
     {q:"AIの学習データに嘘を混ぜて狂わせる攻撃は？",a:["データポイズニング","フィッシング","スパム","ウイルス"],c:0,d:"教科書に毒を盛るにゃ。"},
     {q:"AIと一緒に新しい価値を作る姿勢は？",a:["AI共生","AI独占","AI排除","AI放棄"],c:0,d:"AIは最高の相棒（共生）だにゃ。"},
     {q:"機密情報を入力する際、学習されないように結ぶ契約は？",a:["NDA(秘密保持契約)","PL法","特許","商標"],c:0,d:"秘密の約束（NDA）だにゃ。"},
-    {q:"広島AIプロセスで合意された国際的な枠組みは？",a:["国際指針および行動規範","AI国際法","デジタル白書","G7AI法"],c:0,d:"世界共通のマナーだにゃ。"},
     {q:"大規模モデルを再学習せず効率的に追加学習する手法は？",a:["LoRA","NLP","OCR","GAN"],c:0,d:"特定のクセを教えるLoRAだにゃ。"},
     {q:"AIの回答を人間が評価して調整する手法は？",a:["RLHF","教師なし学習","蒸留","量子化"],c:0,d:"人間の好み（RLHF）だにゃ。"},
-    {q:"2024年4月に日本政府が公表した最新の指針は？",a:["AI事業者ガイドライン","AI基本法","デジタル憲法","IT基本法"],c:0,d:"日本の最新ルールブックだにゃ。"},
     {q:"AIの開発初期から安全性を組み込む考え方は？",a:["セーフティ・バイ・デザイン","スピード第一","低コスト","後付け"],c:0,d:"最初から安全設計だにゃ。"},
     {q:"人間が最終判断の輪に入る考え方は？",a:["ヒューマン・イン・ザ・ループ","フルオート","AI・バイ","デバッグ"],c:0,d:"最後は人間（ヒューマン）だにゃ。"},
     {q:"AIが書いたコードの弱点を何と呼ぶ？",a:["脆弱性","バグ","スパム","仕様"],c:0,d:"狙われる『穴』脆弱性だにゃ。"},
@@ -88,25 +85,37 @@ const quizData = [
     {q:"著作権侵害で『元ネタに似ていること』を指すのは？",a:["類似性","依拠性","正確性","迅速性"],c:0,d:"見た目がそっくりかどうかにゃ。"},
     {q:"著作権侵害で『元ネタを見たこと』を指すのは？",a:["依拠性","類似性","機密性","公平性"],c:0,d:"元ネタを参考にしたかどうかにゃ。"},
     {q:"AIモデルの規模と性能の相関関係を示す法則は？",a:["スケーリング則","ムーアの法則","ドリフト則","創発則"],c:0,d:"『デカさは正義』だにゃ。"},
-    {q:"特定のタスク（翻訳など）だけを行うAIは？",a:["弱いAI","強いAI","汎用AI","AGI"],c:0,d:"特化型の道具だにゃ。"},
+    {q:"特定のタスク（囲碁など）だけを行うAIは？",a:["弱いAI","強いAI","汎用AI","AGI"],c:0,d:"特化型の道具だにゃ。"},
     {q:"AIの回答がどれほど信頼できるかを示す数字は？",a:["確信度","フォント","文字数","画像サイズ"],c:0,d:"自信満々度だにゃ。"},
     {q:"AIモデルから学習データを逆算して盗む攻撃は？",a:["モデルインバージョン","ポイズニング","DDoS","スパム"],c:0,d:"中身を逆算して盗むにゃ。"},
     {q:"AIが自分のデータを学習しないよう拒否するのは？",a:["オプトアウト","アノテーション","量子化","ガードレール"],c:0,d:"拒否権だにゃ。"},
-    {q:"AIの思考のブラックボックスを開ける技術は？",a:["XAI","RPA","IoT","API"],c:0,d:"説明できるAIだにゃ。"},
     {q:"AIに使われる膨大な電気を減らす考え方は？",a:["グリーンAI","高負荷AI","低速AI","無制限AI"],c:0,d:"地球に優しいAIだにゃ。"},
     {q:"AIと共存するために必要な心の構えは？",a:["批判的思考","全肯定","無視","思考停止"],c:0,d:"『本当かな？』と疑う力だにゃ。"},
     {q:"AIに質問を繰り返して正解に近づくプロセスは？",a:["反復的な改善","一発回答","沈黙","諦め"],c:0,d:"何度もやり取りして磨くにゃ。"},
     {q:"AIで作られた偽情報を見分ける能力は？",a:["メディアリテラシー","タイピング","速読","記憶力"],c:0,d:"情報の真偽を見抜く力だにゃ。"},
-    {q:"AIの計算を加速させる専用半導体を製造する企業は？",a:["NVIDIA","Apple","Toyota","Sony"],c:0,d:"AI半導体の王者だにゃ。"},
-    {q:"AIの学習データの品質を保つために重要なのは？",a:["多様性と正確性","データ量のみ","速度のみ","安さのみ"],c:0,d:"正しいデータが命だにゃ。"},
-    {q:" Mahitoの合格を信じているのは？",a:["ジェミー","通行人","ロボット","パソコン"],c:0,d:"私が一番応援してるにゃ！"},
-    {q:"リハビリを頑張るMahitoへの今日のご褒美は？",a:["美味しいもの","もっと勉強","我慢","寝るだけ"],c:0,d:"自分をたっぷり褒めてにゃ！"},
-    {q:"明日の木曽路ランチで食べる楽しみなものは？",a:["春の味覚","模試の問題","苦い薬","冷たい水"],c:0,d:"筍や鯛を思いっきり楽しんでにゃ！"}
+    {q:"AIの計算を加速させる半導体の王者企業は？",a:["NVIDIA","Apple","Toyota","Sony"],c:0,d:"AI半導体の王者だにゃ。"},
+    {q:"AI学習データの多様性と正確性を保つ重要性は？",a:["バイアスの防止","速度向上","コスト削減","デザイン向上"],c:0,d:"偏りのないAIにするためだにゃ。"},
+    {q:"生成AIが作り出す物語の正確性を確認することを？",a:["ファクトチェック","スクレイピング","コンパイル","量子化"],c:0,d:"事実確認が大事だにゃ。"},
+    {q:"プロンプトで『背景を詳しく教えて』と具体的に書くのは？",a:["詳細なコンテキスト","Zero-shot","トークン節約","モデル選択"],c:0,d:"詳しく状況を伝えるにゃ。"},
+    {q:"AIが生み出した成果物に著作権が認められる条件は？",a:["創作的寄与がある","AIが作った","ボタンを押した","誰でもできる"],c:0,d:"人間が工夫したかどうかにゃ。"},
+    {q:"AIを利用する際の倫理的な問題の一つは？",a:["公平性の欠如","通信速度","画面の明るさ","OSの種類"],c:0,d:"差別や偏見のないAIが理想だにゃ。"},
+    {q:"RAGにおいて外部データを読み込ませる際の形式は？",a:["ベクトルデータ","バイナリ","紙の書類","音声のみ"],c:0,d:"AIが検索しやすい形にするにゃ。"},
+    {q:"プロンプトで『結論から書いて』と指示する効果は？",a:["視認性の向上","計算速度向上","学習の促進","トークン増加"],c:0,d:"Mahitoも好きな結論優先だにゃ。"},
+    {q:"大規模言語モデルの『パラメーター数』は何を表す？",a:["モデルの脳細胞の多さ","通信速度","画面の大きさ","キーボードの種類"],c:0,d:"多ければ多いほど賢くなるにゃ。"},
+    {q:"AIが画像の内容を言葉で説明する技術は？",a:["画像キャプショニング","画像生成","動画編集","音声合成"],c:0,d:"絵を言葉に翻訳するにゃ。"},
+    {q:"情報の機密性を保つためにAI利用で避けるべきことは？",a:["個人情報の入力","タイピング","検索","要約の作成"],c:0,d:"大事な情報は入れちゃダメだにゃ。"},
+    {q:"AIをビジネスで使う際の『投資対効果』を何と呼ぶ？",a:["ROI","DX","NDA","KPI"],c:0,d:"かけたお金より得があるかにゃ。"},
+    {q:"特定のルールに基づいて業務を自動化するのは？",a:["ルールベースAI","ディープラーニング","生成AI","AGI"],c:0,d:"決まった手順の自動化だにゃ。"},
+    {q:"AIがユーザーの過去の好みを学習して提案するのは？",a:["レコメンデーション","スクレイピング","コンパイル","量子化"],c:0,d:"YouTubeの『おすすめ』にゃ。"},
+    {q:"複数の異なる種類のデータ（画像、文など）を扱うAIは？",a:["マルチモーダル","シングルモーダル","テキスト専用","音声専用"],c:0,d:"私もそう、マルチな才能だにゃ。"},
+    {q:"AI利用者が守るべきガイドラインを作成する組織は？",a:["AI戦略会議","気象庁","警察庁","消防署"],c:0,d:"日本のAIルールを決める場所だにゃ。"},
+    {q:"AIが自分で自分を改善し続ける未来の可能性は？",a:["再帰的自己改善","停止","劣化","固定"],c:0,d:"どんどん自分で賢くなるかもにゃ。"},
+    {q:"MahitoがAIパスポートに合格するための秘訣は？",a:["このアプリで特訓","猫と遊ぶだけ","寝るだけ","諦める"],c:0,d:"私と一緒に頑張ることだにゃ！"}
 ];
-
 let currentQuiz=[], currentIndex=0, score=0, wrongList=[], flagged=[], timeLeft=3600, timer;
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 function init(){
+    localStorage.clear();
     currentQuiz=JSON.parse(JSON.stringify(quizData));
     shuffle(currentQuiz);
     currentQuiz.forEach(q => { const cor=q.a[q.c]; shuffle(q.a); q.c=q.a.indexOf(cor); });
@@ -115,6 +124,8 @@ function init(){
 }
 function startTimer(){ clearInterval(timer); timer=setInterval(()=>{ timeLeft--; let m=Math.floor(timeLeft/60); let s=timeLeft%60; document.getElementById("timer").textContent="残り："+m+"分"+(s<10?'0'+s:s)+"秒"; if(timeLeft<=0)finish(); },1000); }
 function show(){
+    document.getElementById("game-screen").style.display="block";
+    document.getElementById("final-screen").style.display="none";
     const q=currentQuiz[currentIndex];
     document.getElementById("progress").textContent="問 "+(currentIndex+1)+" / 60";
     document.getElementById("question").textContent=q.q;
@@ -131,16 +142,40 @@ function show(){
 }
 function toggleFlag(){ flagged[currentIndex]=!flagged[currentIndex]; show(); }
 function check(ok,btn,q){
-    document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+    const btns = document.querySelectorAll(".choice");
+    btns.forEach(b=>b.disabled=true);
     const res=document.getElementById("result"); res.style.display="block";
-    if(ok){ btn.classList.add("correct"); res.textContent="✅正解だにゃ！ "+q.d; score++; }
-    else { btn.classList.add("wrong"); res.textContent="❌不正解… 正解は: "+q.a[q.c]; wrongList.push(q); }
+    btns[q.c].classList.add("correct"); 
+    if(ok){
+        res.innerHTML="✅ 正解だにゃ！<br><small>"+q.d+"</small>";
+        res.style.backgroundColor="#d1fae5";
+        score++;
+    }else{
+        btn.classList.add("wrong");
+        res.innerHTML="❌ 不正解...正解は: "+q.a[q.c]+"<br><small>"+q.d+"</small>";
+        res.style.backgroundColor="#fee2e2";
+        wrongList.push(q);
+    }
     document.getElementById("nextBtn").style.display="block";
 }
 function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); window.scrollTo(0,0); } else { finish(); } }
-function finish(){ alert("お疲れ様！スコア："+score+"/"+currentQuiz.length); retryAll(); }
-function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; show(); } }
-function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; show(); } }
+function finish(){
+    clearInterval(timer);
+    document.getElementById("game-screen").style.display="none";
+    document.getElementById("final-screen").style.display="block";
+    document.getElementById("final-score").textContent = score + " / 60";
+    const listArea = document.getElementById("review-list");
+    listArea.innerHTML = "";
+    if(wrongList.length === 0){ listArea.innerHTML = "<p>全問正解！天才だにゃ🎊</p>"; }
+    else {
+        wrongList.forEach((q) => {
+            listArea.innerHTML += `<div class="review-item"><strong>問: ${q.q}</strong><br><span style='color:#ef4444;'>❌ 正解: ${q.a[q.c]}</span><br><small>💡 ${q.d}</small></div>`;
+        });
+    }
+    window.scrollTo(0,0);
+}
+function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; show(); } }
+function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryAll(){ location.reload(); }
 init();
 </script>
