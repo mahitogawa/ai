@@ -238,11 +238,8 @@ function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.strin
 function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryAll(){ location.reload(); }
 init();
-</script>
 
-<div style="text-align:center; margin-top:40px;">
-  <p>👀 access</p>
-  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=mahitogawa.github.io/ai">
-</div>
+<script data-goatcounter="https://mahito.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
