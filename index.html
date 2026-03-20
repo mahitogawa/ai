@@ -238,6 +238,7 @@ function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.strin
 function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryAll(){ location.reload(); }
 init();
+</script>
 
 <script data-goatcounter="https://mahito.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
