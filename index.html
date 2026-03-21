@@ -303,6 +303,7 @@ function init(){
     shuffle(currentQuiz);
     currentQuiz.forEach(q => { const cor=q.a[q.c]; shuffle(q.a); q.c=q.a.indexOf(cor); });
     currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false);
+    timeLeft=3600;
     startTimer(); show();
 }
 
