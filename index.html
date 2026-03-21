@@ -114,6 +114,13 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   </div>
   <button id="start-btn" onclick="startQuiz()">🐱 練習問題をはじめる</button>
   <p class="edition-note">全60問 ／ 試験時間60分 ／ キジトラ応援団🐈</p>
+  <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
+  <script>
+    fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
+      .then(r => r.json())
+      .then(d => { document.getElementById('gc-visits').textContent = '👀 訪問者数：' + d.count + ' 人'; })
+      .catch(() => { document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
+  </script>
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
     猫と学べるAIパスポート最強ドリル🐈
   </div>
