@@ -140,6 +140,14 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <h2>試験結果発表</h2>
     <div id="final-score" style="font-size:60px; font-weight:bold; color:#2563eb;"></div>
     <div id="judgement" style="margin:15px auto; max-width:500px; padding:20px; border-radius:12px; font-size:22px; font-weight:bold;"></div>
+    <div style="margin:10px auto 20px; max-width:500px;">
+      <div style="display:flex; justify-content:space-between; font-size:16px; color:#64748b; margin-bottom:6px;">
+        <span>正解率</span><span id="score-bar-pct"></span>
+      </div>
+      <div style="background:#e2e8f0; border-radius:50px; height:22px; overflow:hidden;">
+        <div id="score-bar-fill" style="height:100%; width:0%; border-radius:50px; transition:width 1s ease;"></div>
+      </div>
+    </div>
     <div id="review-area" class="review-box">
         <h3>📋 復習リスト（間違えた問題）</h3>
         <div id="review-list"></div>
@@ -339,14 +347,19 @@ function finish(){
     document.getElementById("final-screen").style.display="block";
     document.getElementById("final-score").textContent = score + " / 60";
     const pct = Math.round(score / 60 * 100);
+    // 正解率バー
+    document.getElementById("score-bar-fill").style.width = pct + "%";
+    document.getElementById("score-bar-fill").style.background = score >= 42 ? "#10b981" : "#f59e0b";
+    document.getElementById("score-bar-pct").textContent = pct + "%";
+    // 合格判定
     const judgement = document.getElementById("judgement");
-    if (score >= 48) {
-        judgement.innerHTML = "🎉 合格圏内！（正答率" + pct + "%）<br><small style='font-size:16px;'>目安：80%以上（48問）で合格圏内 ※公式非公開</small>";
+    if (score >= 42) {
+        judgement.innerHTML = "🎉 合格圏内！（" + score + "問正解）<br><small style='font-size:16px;'>※合格ラインは公式非公開です</small>";
         judgement.style.background = "#d1fae5";
         judgement.style.color = "#064e3b";
         judgement.style.border = "3px solid #10b981";
     } else {
-        judgement.innerHTML = "📝 もう少し！（正答率" + pct + "%）<br><small style='font-size:16px;'>目安：80%以上（48問）で合格圏内 ※公式非公開</small>";
+        judgement.innerHTML = "💦 あと少し！（" + score + "問正解）<br><small style='font-size:16px;'>※合格ラインは公式非公開です</small>";
         judgement.style.background = "#fff1f2";
         judgement.style.color = "#7f1d1d";
         judgement.style.border = "3px solid #ef4444";
