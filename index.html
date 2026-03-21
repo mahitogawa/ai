@@ -124,6 +124,17 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
     猫と学べるAIパスポート最強ドリル🐈
   </div>
+  <button onclick="showCheat()" style="margin-top:16px; background:#1e40af; color:#fff; border:none; border-radius:50px; padding:16px 32px; font-size:20px; font-weight:bold; cursor:pointer; width:90%;">📖 略語チートシートを見る</button>
+</div>
+
+<!-- ===== チートシート画面 ===== -->
+<div id="cheat-screen" style="display:none; max-width:700px; margin:auto; background:#0f172a; border-radius:20px; padding:24px 20px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="color:#fbbf24; font-size:22px; font-weight:bold;">📖 略語チートシート</div>
+    <button onclick="hideCheat()" style="background:#334155; color:#fff; border:none; border-radius:20px; padding:8px 20px; font-size:16px; cursor:pointer;">← 戻る</button>
+  </div>
+  <div style="color:#94a3b8; font-size:14px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
+  <div id="cheat-list"></div>
 </div>
 
 <!-- ===== クイズ画面（元のコードそのまま）===== -->
@@ -386,6 +397,99 @@ function finish(){
 function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryAll(){ location.reload(); }
+
+// ===== チートシート =====
+const cheatData = [
+  {cat:"🤖 AIの基本", items:[
+    {term:"AI（人工知能）", read:"Artificial Intelligence", desc:"人間の知的活動を模倣・拡張する技術の総称にゃ。"},
+    {term:"機械学習", read:"Machine Learning", desc:"データからパターンを自動的に学習する手法にゃ。"},
+    {term:"ディープラーニング", read:"Deep Learning", desc:"人間の脳を模倣したニューラルネットワークを使う学習技術にゃ。"},
+    {term:"LLM", read:"Large Language Model", desc:"大規模言語モデル。膨大なテキストで学習した巨大AIにゃ。"},
+    {term:"弱いAI / 強いAI", read:"Narrow AI / AGI", desc:"弱いAIは特定タスク専用、強いAI（AGI）は人間のように何でもできるAIにゃ。"},
+    {term:"創発", read:"Emergence", desc:"モデルが巨大化すると突然新しい能力が開花する現象にゃ。"},
+  ]},
+  {cat:"💬 生成AIモデル", items:[
+    {term:"ChatGPT", read:"OpenAI製", desc:"OpenAIが開発した対話型生成AIの代表格にゃ。"},
+    {term:"GPT-o1 / o3 / o4", read:"推論特化モデル", desc:"回答前に内部で「思考の連鎖」を行う高度な推論モデルにゃ。2026年シラバス追加にゃ。"},
+    {term:"GPT-5", read:"OpenAI最新モデル", desc:"2026年シラバス追加の最新モデルにゃ。"},
+    {term:"Gemini", read:"Google製", desc:"GoogleのDeepMindが開発した大規模言語モデルにゃ。"},
+    {term:"Claude", read:"Anthropic製", desc:"安全性・倫理面を重視して開発されたAIにゃ。（僕のことにゃ🐈）"},
+    {term:"Copilot", read:"Microsoft製", desc:"MicrosoftがOpenAIと共同開発したAIアシスタントにゃ。"},
+    {term:"Sora", read:"OpenAI製動画生成AI", desc:"テキストから最大1分の高品質動画を生成できるAIにゃ。2026年シラバス追加にゃ。"},
+    {term:"Operator", read:"OpenAI製エージェント", desc:"ブラウザ操作などを自律的に実行するAIエージェントにゃ。2026年シラバス追加にゃ。"},
+  ]},
+  {cat:"🔧 技術用語", items:[
+    {term:"RAG", read:"Retrieval-Augmented Generation", desc:"最新情報を外部から検索して回答に組み込む技術にゃ。試験中に参考書を持ち込むイメージにゃ。"},
+    {term:"トークン", read:"Token", desc:"AIが言語を処理する最小単位にゃ。「東京」は1〜2トークンにゃ。"},
+    {term:"パラメーター", read:"Parameter", desc:"モデルの「脳細胞の数」のようなもの。多いほど賢くなるにゃ。"},
+    {term:"ハルシネーション", read:"Hallucination", desc:"AIが自信満々に嘘をつく現象にゃ。必ず裏取りが必要にゃ。"},
+    {term:"LoRA", read:"Low-Rank Adaptation", desc:"大規模モデルを効率的に追加学習する省エネ手法にゃ。"},
+    {term:"量子化", read:"Quantization", desc:"数値を圧縮してモデルを軽量化する技術にゃ。"},
+    {term:"蒸留", read:"Distillation", desc:"大きなモデルの知識を小さなモデルに移す技術にゃ。"},
+    {term:"スケーリング則", read:"Scaling Law", desc:"モデルを大きくするほど性能が上がるという法則にゃ。"},
+    {term:"AIエージェント", read:"AI Agent", desc:"目標を自ら計画・実行する自律的なAIシステムにゃ。2026年シラバス追加にゃ。"},
+    {term:"マルチモーダル", read:"Multimodal", desc:"テキスト・画像・音声など複数の種類のデータを扱えるAIにゃ。"},
+    {term:"XAI", read:"Explainable AI", desc:"AIの判断理由を可視化・説明可能にする技術にゃ。"},
+    {term:"OCR", read:"Optical Character Recognition", desc:"画像から文字を読み取ってデータ化する技術にゃ。"},
+    {term:"RPA", read:"Robotic Process Automation", desc:"ルールに従って業務を自動化するシステムにゃ。"},
+  ]},
+  {cat:"🧠 学習手法", items:[
+    {term:"RLHF", read:"Reinforcement Learning from Human Feedback", desc:"人間の評価を報酬として使いAIを調整する学習手法にゃ。"},
+    {term:"Chain of Thought", read:"思考の連鎖", desc:"AIに「一歩ずつ考えて」と促すことで推論精度を上げる手法にゃ。"},
+    {term:"Few-shot / One-shot / Zero-shot", read:"例示の数", desc:"回答例を2〜数個／1個／0個見せてから解かせる手法にゃ。"},
+    {term:"アノテーション", read:"Annotation", desc:"AI学習用データに正解ラベルを付ける作業にゃ。"},
+    {term:"モデルドリフト", read:"Model Drift", desc:"時間経過でAIの精度が劣化する現象にゃ。"},
+    {term:"データポイズニング", read:"Data Poisoning", desc:"学習データに嘘を混ぜてAIを狂わせる攻撃にゃ。"},
+  ]},
+  {cat:"⚖️ 法律・倫理・安全", items:[
+    {term:"著作権法30条の4", read:"日本独自ルール", desc:"AI学習目的なら著作物を自由に使える日本独自の法律にゃ。試験最頻出にゃ。"},
+    {term:"AI新法", read:"人工知能関連技術の研究開発及び活用の推進に関する法律", desc:"2025年6月公布の日本のAI法律にゃ。2026年シラバス追加にゃ。"},
+    {term:"EUのAI法", read:"EU AI Act", desc:"世界初の法的拘束力を持つAI規制。リスクを4段階に分類にゃ。"},
+    {term:"AI事業者ガイドライン", read:"日本政府策定", desc:"2024年4月公表、2025年3月改訂のAI活用指針にゃ。"},
+    {term:"NDA", read:"Non-Disclosure Agreement", desc:"機密情報をAIに入力する際に結ぶ秘密保持契約にゃ。"},
+    {term:"セーフティ・バイ・デザイン", read:"Safety by Design", desc:"設計段階から安全を組み込む考え方にゃ。"},
+    {term:"ヒューマン・イン・ザ・ループ", read:"Human in the Loop", desc:"要所で人間が確認・承認するプロセス設計にゃ。"},
+    {term:"XAI", read:"Explainable AI", desc:"AIの判断理由を説明可能にする取り組みにゃ。"},
+    {term:"オプトアウト", read:"Opt-out", desc:"「自分のデータを学習に使わないで」と申告する権利にゃ。"},
+    {term:"グリーンAI", read:"Green AI", desc:"AIの環境負荷（電力消費など）を最小化しようとする考え方にゃ。"},
+  ]},
+  {cat:"📊 ビジネス用語", items:[
+    {term:"DX", read:"Digital Transformation", desc:"ITを使って社会・仕事を根本から変革することにゃ。"},
+    {term:"BPR", read:"Business Process Re-engineering", desc:"AI導入に合わせて業務プロセスを根本から再設計することにゃ。"},
+    {term:"ROI", read:"Return on Investment", desc:"投資対効果。AI導入でどれだけ利益が出たかを示す指標にゃ。"},
+    {term:"KPI", read:"Key Performance Indicator", desc:"目標達成度を測るための重要指標にゃ。"},
+    {term:"PREP法", read:"Point・Reason・Example・Point", desc:"結論→理由→具体例→結論の順に伝える構成にゃ。"},
+  ]},
+];
+
+function showCheat() {
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("cheat-screen").style.display = "block";
+  window.scrollTo(0,0);
+
+  const list = document.getElementById("cheat-list");
+  list.innerHTML = "";
+  cheatData.forEach(cat => {
+    list.innerHTML += `<div style="color:#fbbf24; font-size:18px; font-weight:bold; margin:20px 0 10px;">${cat.cat}</div>`;
+    cat.items.forEach(item => {
+      list.innerHTML += `
+        <div onclick="this.querySelector('.desc').style.display=this.querySelector('.desc').style.display==='none'?'block':'none'"
+             style="background:#1e293b; border-radius:10px; padding:14px 16px; margin-bottom:8px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#f1f5f9; font-weight:bold; font-size:18px;">${item.term}</span>
+            <span style="color:#60a5fa; font-size:14px;">${item.read}</span>
+          </div>
+          <div class="desc" style="display:none; margin-top:10px; color:#94a3b8; font-size:16px; line-height:1.6;">${item.desc}</div>
+        </div>`;
+    });
+  });
+}
+
+function hideCheat() {
+  document.getElementById("cheat-screen").style.display = "none";
+  document.getElementById("start-screen").style.display = "block";
+  window.scrollTo(0,0);
+}
 </script>
 
 <script data-goatcounter="https://mahito.goatcounter.com/count"
