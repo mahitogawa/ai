@@ -22,10 +22,102 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #final-screen { display:none; text-align: center; }
 .review-box { text-align: left; background: #fff1f2; padding: 15px; margin-top: 20px; border-radius: 10px; border-left: 8px solid #ef4444; }
 .review-item { margin-bottom: 20px; border-bottom: 1px solid #fda4af; padding-bottom: 10px; font-size: 18px; }
+
+/* ===== 表紙（スタート画面）専用CSS ===== */
+#start-screen {
+  display: block;
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
+  background: #0f172a;
+  border-radius: 20px;
+  padding: 30px 20px 40px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+#start-screen .cover-title {
+  color: #f1f5f9;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+#start-screen .cover-image-wrapper {
+  background: linear-gradient(135deg, #1e3a5f, #0f172a);
+  border: 3px solid #ef4444;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 0 30px rgba(239,68,68,0.35);
+}
+#start-screen .cover-image-wrapper img {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: auto;
+}
+/* 画像がない場合の代替表示 */
+#start-screen .cover-fallback {
+  padding: 30px 10px;
+  color: #f1f5f9;
+}
+#start-screen .cover-fallback .big-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #fbbf24;
+}
+#start-screen .cover-fallback .sub {
+  font-size: 18px;
+  color: #94a3b8;
+}
+#start-btn {
+  display: block;
+  width: 90%;
+  max-width: 420px;
+  margin: 0 auto 16px;
+  padding: 24px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(239,68,68,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+#start-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(239,68,68,0.6); }
+#start-btn:active { transform: scale(0.97); }
+#start-screen .edition-note {
+  color: #64748b;
+  font-size: 16px;
+  margin-top: 8px;
+}
 </style>
 </head>
 <body>
-<div id="game-screen" class="container">
+
+<!-- ===== 表紙（スタート画面）===== -->
+<div id="start-screen">
+  <p class="cover-title">Mahito's Edition 2026</p>
+  <div class="cover-image-wrapper">
+    <!-- 画像ファイルをGitHubに置いていない場合は下の fallback が表示されます -->
+    <img src="image_0aff13.png" alt="AIパスポート模試" 
+         onerror="this.style.display='none'; document.getElementById('cover-fallback').style.display='block';">
+    <div id="cover-fallback" class="cover-fallback" style="display:none;">
+      <div class="big-title">🐱 生成AIパスポート</div>
+      <div class="big-title">実戦模試 60問</div>
+      <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
+    </div>
+  </div>
+  <button id="start-btn" onclick="startQuiz()">🔥 本番に挑戦する！</button>
+  <p class="edition-note">全60問 ／ 試験時間60分 ／ キジトラ応援団🐈</p>
+</div>
+
+<!-- ===== クイズ画面（元のコードそのまま）===== -->
+<div id="game-screen" class="container" style="display:none;">
     <h2>AIパスポート実戦</h2>
     <div class="menu">
         <button onclick="retryWrong()">❌ミス</button>
@@ -40,6 +132,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <div id="result"></div>
     <button id="nextBtn" onclick="next()">次の問題へ ➔</button>
 </div>
+
 <div id="final-screen" class="container">
     <h2>試験結果発表</h2>
     <div id="final-score" style="font-size:60px; font-weight:bold; color:#2563eb;"></div>
@@ -49,6 +142,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     </div>
     <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:30px;">🔄 最初からやり直す</button>
 </div>
+
 <script>
 const quizData = [
     {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],c:0,
@@ -172,8 +266,18 @@ const quizData = [
     {q:"MahitoがAIパスポートに合格するための秘訣は？",a:["このアプリで特訓","猫と遊ぶだけ","寝るだけ","諦める"],c:0,
      d:"私（ジェミー）と一緒に毎日少しずつ積み上げることにゃ！マーニャとアイも応援してるにゃ🐈🐈‍⬛ 4月の本番、絶対合格するにゃ🎌"}
 ];
+
 let currentQuiz=[], currentIndex=0, score=0, wrongList=[], flagged=[], timeLeft=3600, timer;
+
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
+
+// 表紙からクイズへ
+function startQuiz() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+    init();
+}
+
 function init(){
     localStorage.clear();
     currentQuiz=JSON.parse(JSON.stringify(quizData));
@@ -182,7 +286,9 @@ function init(){
     currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false);
     startTimer(); show();
 }
+
 function startTimer(){ clearInterval(timer); timer=setInterval(()=>{ timeLeft--; let m=Math.floor(timeLeft/60); let s=timeLeft%60; document.getElementById("timer").textContent="残り："+m+"分"+(s<10?'0'+s:s)+"秒"; if(timeLeft<=0)finish(); },1000); }
+
 function show(){
     document.getElementById("game-screen").style.display="block";
     document.getElementById("final-screen").style.display="none";
@@ -200,7 +306,9 @@ function show(){
     });
     document.getElementById("result").style.display="none"; document.getElementById("nextBtn").style.display="none";
 }
+
 function toggleFlag(){ flagged[currentIndex]=!flagged[currentIndex]; show(); }
+
 function check(ok,btn,q){
     const btns = document.querySelectorAll(".choice");
     btns.forEach(b=>b.disabled=true);
@@ -218,7 +326,9 @@ function check(ok,btn,q){
     }
     document.getElementById("nextBtn").style.display="block";
 }
+
 function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); window.scrollTo(0,0); } else { finish(); } }
+
 function finish(){
     clearInterval(timer);
     document.getElementById("game-screen").style.display="none";
@@ -234,10 +344,10 @@ function finish(){
     }
     window.scrollTo(0,0);
 }
+
 function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
 function retryAll(){ location.reload(); }
-init();
 </script>
 
 <script data-goatcounter="https://mahito.goatcounter.com/count"
