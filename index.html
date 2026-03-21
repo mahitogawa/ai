@@ -133,7 +133,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <div style="color:#fbbf24; font-size:22px; font-weight:bold;">📖 略語チートシート</div>
     <button onclick="hideCheat()" style="background:#334155; color:#fff; border:none; border-radius:20px; padding:8px 20px; font-size:16px; cursor:pointer;">← 戻る</button>
   </div>
-  <div style="color:#94a3b8; font-size:14px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
+  <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
   <div id="cheat-list"></div>
 </div>
 
@@ -470,16 +470,16 @@ function showCheat() {
   const list = document.getElementById("cheat-list");
   list.innerHTML = "";
   cheatData.forEach(cat => {
-    list.innerHTML += `<div style="color:#fbbf24; font-size:18px; font-weight:bold; margin:20px 0 10px;">${cat.cat}</div>`;
+    list.innerHTML += `<div style="color:#fbbf24; font-size:22px; font-weight:bold; margin:24px 0 12px;">${cat.cat}</div>`;
     cat.items.forEach(item => {
       list.innerHTML += `
         <div onclick="this.querySelector('.desc').style.display=this.querySelector('.desc').style.display==='none'?'block':'none'"
-             style="background:#1e293b; border-radius:10px; padding:14px 16px; margin-bottom:8px; cursor:pointer;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:#f1f5f9; font-weight:bold; font-size:18px;">${item.term}</span>
-            <span style="color:#60a5fa; font-size:14px;">${item.read}</span>
+             style="background:#1e293b; border-radius:10px; padding:18px 16px; margin-bottom:10px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <span style="color:#f1f5f9; font-weight:bold; font-size:22px;">${item.term}</span>
+            <span style="color:#60a5fa; font-size:17px;">${item.read}</span>
           </div>
-          <div class="desc" style="display:none; margin-top:10px; color:#94a3b8; font-size:16px; line-height:1.6;">${item.desc}</div>
+          <div class="desc" style="display:none; margin-top:12px; color:#94a3b8; font-size:20px; line-height:1.7;">${item.desc}</div>
         </div>`;
     });
   });
