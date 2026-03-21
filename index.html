@@ -145,6 +145,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 <div id="final-screen" class="container">
     <h2>試験結果発表</h2>
     <div id="final-score" style="font-size:60px; font-weight:bold; color:#2563eb;"></div>
+    <div id="judgement" style="margin:15px auto; max-width:500px; padding:20px; border-radius:12px; font-size:22px; font-weight:bold;"></div>
     <div id="review-area" class="review-box">
         <h3>📋 復習リスト（間違えた問題）</h3>
         <div id="review-list"></div>
@@ -343,6 +344,19 @@ function finish(){
     document.getElementById("game-screen").style.display="none";
     document.getElementById("final-screen").style.display="block";
     document.getElementById("final-score").textContent = score + " / 60";
+    const pct = Math.round(score / 60 * 100);
+    const judgement = document.getElementById("judgement");
+    if (score >= 48) {
+        judgement.innerHTML = "🎉 合格圏内！（正答率" + pct + "%）<br><small style='font-size:16px;'>目安：80%以上（48問）で合格圏内 ※公式非公開</small>";
+        judgement.style.background = "#d1fae5";
+        judgement.style.color = "#064e3b";
+        judgement.style.border = "3px solid #10b981";
+    } else {
+        judgement.innerHTML = "📝 もう少し！（正答率" + pct + "%）<br><small style='font-size:16px;'>目安：80%以上（48問）で合格圏内 ※公式非公開</small>";
+        judgement.style.background = "#fff1f2";
+        judgement.style.color = "#7f1d1d";
+        judgement.style.border = "3px solid #ef4444";
+    }
     const listArea = document.getElementById("review-list");
     listArea.innerHTML = "";
     if(wrongList.length === 0){ listArea.innerHTML = "<p>全問正解！天才だにゃ🎊</p>"; }
