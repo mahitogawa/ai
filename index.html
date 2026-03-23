@@ -520,7 +520,7 @@ function finish(){
     const pct = Math.round(score / currentQuiz.length * 100);
     // 正解率バー
     document.getElementById("score-bar-fill").style.width = pct + "%";
-    document.getElementById("score-bar-fill").style.background = score >= 42 ? "#10b981" : "#f59e0b";
+    document.getElementById("score-bar-fill").style.background = score >= Math.round(currentQuiz.length * 0.7) ? "#10b981" : "#f59e0b";
     document.getElementById("score-bar-pct").textContent = pct + "%";
     // 合格判定
     const judgement = document.getElementById("judgement");
