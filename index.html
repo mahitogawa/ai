@@ -433,10 +433,8 @@ function startQuiz() {
 }
 
 function init(){
-    localStorage.clear();
     let allQuiz=JSON.parse(JSON.stringify(quizData));
     shuffle(allQuiz);
-    // 120問からランダムに60問を選ぶ
     currentQuiz = allQuiz.slice(0, 60);
     currentQuiz.forEach(q => { const cor=q.a[q.c]; shuffle(q.a); q.c=q.a.indexOf(cor); });
     currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false);
@@ -491,7 +489,7 @@ function finish(){
     document.getElementById("game-screen").style.display="none";
     document.getElementById("final-screen").style.display="block";
     document.getElementById("final-score").textContent = score + " / " + currentQuiz.length;
-    const pct = Math.round(score / 60 * 100);
+    const pct = Math.round(score / currentQuiz.length * 100);
     // 正解率バー
     document.getElementById("score-bar-fill").style.width = pct + "%";
     document.getElementById("score-bar-fill").style.background = score >= 42 ? "#10b981" : "#f59e0b";
@@ -520,8 +518,8 @@ function finish(){
     window.scrollTo(0,0);
 }
 
-function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; startTimer(); show(); } }
-function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; startTimer(); show(); } }
+function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; document.getElementById("final-screen").style.display="none"; document.getElementById("game-screen").style.display="block"; startTimer(); show(); } }
+function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; document.getElementById("final-screen").style.display="none"; document.getElementById("game-screen").style.display="block"; startTimer(); show(); } }
 function retryAll(){ location.reload(); }
 
 // ===== チートシート =====
