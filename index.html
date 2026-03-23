@@ -90,6 +90,24 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 #start-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(239,68,68,0.6); }
 #start-btn:active { transform: scale(0.97); }
+#cheat-btn {
+  display: block;
+  width: 90%;
+  max-width: 420px;
+  margin: 12px auto 0;
+  padding: 24px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(37,99,235,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+#cheat-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(37,99,235,0.6); }
+#cheat-btn:active { transform: scale(0.97); }
 #start-screen .edition-note {
   color: #64748b;
   font-size: 16px;
@@ -108,12 +126,13 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
          onerror="this.style.display='none'; document.getElementById('cover-fallback').style.display='block';">
     <div id="cover-fallback" class="cover-fallback" style="display:none;">
       <div class="big-title">🐱 生成AIパスポート</div>
-      <div class="big-title">実戦模試 60問</div>
+      <div class="big-title">最新124問搭載！</div>
       <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
     </div>
   </div>
   <button id="start-btn" onclick="startQuiz()">🐱 練習問題をはじめる</button>
-  <p class="edition-note">全60問 ／ 試験時間60分 ／ キジトラ応援団🐈</p>
+  <button onclick="showCheat()" id="cheat-btn">📖 略語チートシートを見る</button>
+  <p class="edition-note">全124問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
@@ -124,7 +143,6 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
     猫と学べるAIパスポート最強ドリル🐈
   </div>
-  <button onclick="showCheat()" style="margin-top:16px; background:#1e40af; color:#fff; border:none; border-radius:50px; padding:16px 32px; font-size:20px; font-weight:bold; cursor:pointer; width:90%;">📖 略語チートシートを見る</button>
 </div>
 
 <!-- ===== チートシート画面 ===== -->
@@ -417,7 +435,17 @@ const quizData = [
     {q:"RAGシステムの構築に必要なコンポーネントは？",a:["文書DB・埋め込みモデル・ベクトルDB・LLM","CPU・GPU・メモリ・ストレージ","キーボード・マウス・モニター・スピーカー","メール・チャット・電話・FAX"],c:0,
      d:"RAGシステムは「文書データベース」「埋め込みモデル（テキストをベクトル化）」「ベクトルDB（類似検索）」「LLM（回答生成）」の4要素で構成されるにゃ。"},
     {q:"今日Mahitoさんが120問を完成させた秘訣は？",a:["マーニャとアイの応援にゃ","コーヒーのおかげ","偶然にゃ","魔法にゃ"],c:0,
-     d:"マーニャとアイとジェミーが一緒に頑張ったからにゃ🐈🐈‍⬛ 120問制覇おめでとうにゃ！4月の本番も絶対合格するにゃ🎌"}
+     d:"マーニャとアイとジェミーが一緒に頑張ったからにゃ🐈🐈‍⬛ 120問制覇おめでとうにゃ！4月の本番も絶対合格するにゃ🎌"},
+
+    // ===== 2026年最新トピック追加問題 =====
+    {q:"MCP（Model Context Protocol）の主な役割は？",a:["AIが外部ツールやAPIと標準的に連携するプロトコル","AIモデルを圧縮する技術","AIの学習データを管理する仕組み","AIの出力を暗号化する技術"],c:0,
+     d:"「MCP（Model Context Protocol）」はAIエージェントが外部ツール・データベース・APIと標準的に連携するためのプロトコルにゃ。異なるAIシステムが共通の方法で外部と連携できるようになる基盤技術で、2026年最新トピックにゃ。"},
+    {q:"RAGの処理フローとして正しい順番は？",a:["チャンク分割→埋め込み→ベクトルDB→検索→生成","生成→検索→埋め込み→チャンク分割","検索→生成→チャンク分割→埋め込み","埋め込み→生成→検索→チャンク分割"],c:0,
+     d:"RAGの正しいフローは「チャンク分割（文書を小さく分ける）→埋め込み（ベクトル化）→ベクトルDB（保存）→検索（類似文書を取得）→生成（LLMが回答を作成）」にゃ。各ステップの意味と順番を試験で問われやすいにゃ。"},
+    {q:"2025年6月に公布された日本のAI新法の正式名称は？",a:["人工知能関連技術の研究開発及び活用の推進に関する法律","人工知能規制及び禁止に関する法律","個人情報保護のためのAI制限法","AI利用者保護法"],c:0,
+     d:"「人工知能関連技術の研究開発及び活用の推進に関する法律」が正式名称にゃ。2025年6月公布の日本初のAI推進基本法にゃ。禁止・罰則より推進と環境整備に重点を置いている点がEUのAI法との大きな違いにゃ。"},
+    {q:"各社AIモデルの組み合わせとして正しいのは？",a:["OpenAI→GPT-5、Google→Gemini、Anthropic→Claude、Microsoft→Copilot","OpenAI→Gemini、Google→Claude、Anthropic→Copilot、Microsoft→GPT","OpenAI→Claude、Google→Copilot、Anthropic→GPT、Microsoft→Gemini","OpenAI→Copilot、Google→GPT、Anthropic→Gemini、Microsoft→Claude"],c:0,
+     d:"正しい組み合わせは「OpenAI→GPT（o1/o3/o4/4.1/5）、Google→Gemini、Anthropic→Claude、Microsoft→Copilot」にゃ。各社の主力モデル名は2026年シラバスで新たに追加された最重要暗記事項にゃ🐈"}
 
 ];
 
@@ -535,15 +563,17 @@ const cheatData = [
   {cat:"💬 生成AIモデル", items:[
     {term:"ChatGPT", read:"OpenAI製", desc:"OpenAIが開発した対話型生成AIの代表格にゃ。"},
     {term:"GPT-o1 / o3 / o4", read:"推論特化モデル", desc:"回答前に内部で「思考の連鎖」を行う高度な推論モデルにゃ。2026年シラバス追加にゃ。"},
+    {term:"GPT-4.1", read:"OpenAI製", desc:"GPT-4系の改良版。コーディング・指示への追従性を強化したモデルにゃ。"},
     {term:"GPT-5", read:"OpenAI最新モデル", desc:"2026年シラバス追加の最新モデルにゃ。"},
-    {term:"Gemini", read:"Google製", desc:"GoogleのDeepMindが開発した大規模言語モデルにゃ。"},
+    {term:"Gemini", read:"Google製", desc:"GoogleのDeepMindが開発した大規模言語モデルにゃ。マルチモーダル対応にゃ。"},
     {term:"Claude", read:"Anthropic製", desc:"安全性・倫理面を重視して開発されたAIにゃ。（僕のことにゃ🐈）"},
-    {term:"Copilot", read:"Microsoft製", desc:"MicrosoftがOpenAIと共同開発したAIアシスタントにゃ。"},
+    {term:"Copilot", read:"Microsoft製", desc:"MicrosoftがOpenAIと共同開発したAIアシスタントにゃ。Word・Excel・Teamsと統合にゃ。"},
     {term:"Sora", read:"OpenAI製動画生成AI", desc:"テキストから最大1分の高品質動画を生成できるAIにゃ。2026年シラバス追加にゃ。"},
     {term:"Operator", read:"OpenAI製エージェント", desc:"ブラウザ操作などを自律的に実行するAIエージェントにゃ。2026年シラバス追加にゃ。"},
+    {term:"Codex", read:"OpenAI製コード生成AI", desc:"プログラミングコード生成に特化したモデルにゃ。GitHub Copilotの基盤技術にゃ。"},
   ]},
   {cat:"🔧 技術用語", items:[
-    {term:"RAG", read:"Retrieval-Augmented Generation", desc:"最新情報を外部から検索して回答に組み込む技術にゃ。試験中に参考書を持ち込むイメージにゃ。"},
+    {term:"RAG", read:"Retrieval-Augmented Generation", desc:"最新情報を外部から検索して回答に組み込む技術にゃ。フロー：チャンク分割→埋め込み→ベクトルDB→検索→生成にゃ。効用：幻覚抑制・最新性確保・根拠提示にゃ。"},
     {term:"トークン", read:"Token", desc:"AIが言語を処理する最小単位にゃ。「東京」は1〜2トークンにゃ。"},
     {term:"パラメーター", read:"Parameter", desc:"モデルの「脳細胞の数」のようなもの。多いほど賢くなるにゃ。"},
     {term:"ハルシネーション", read:"Hallucination", desc:"AIが自信満々に嘘をつく現象にゃ。必ず裏取りが必要にゃ。"},
@@ -552,6 +582,7 @@ const cheatData = [
     {term:"蒸留", read:"Distillation", desc:"大きなモデルの知識を小さなモデルに移す技術にゃ。"},
     {term:"スケーリング則", read:"Scaling Law", desc:"モデルを大きくするほど性能が上がるという法則にゃ。"},
     {term:"AIエージェント", read:"AI Agent", desc:"目標を自ら計画・実行する自律的なAIシステムにゃ。2026年シラバス追加にゃ。"},
+    {term:"MCP", read:"Model Context Protocol", desc:"AIが外部ツール・データベース・APIと標準的に連携するためのプロトコルにゃ。AIエージェントの外部連携を支える基盤技術にゃ。2026年最新トピックにゃ。"},
     {term:"マルチモーダル", read:"Multimodal", desc:"テキスト・画像・音声など複数の種類のデータを扱えるAIにゃ。"},
     {term:"XAI", read:"Explainable AI", desc:"AIの判断理由を可視化・説明可能にする技術にゃ。"},
     {term:"OCR", read:"Optical Character Recognition", desc:"画像から文字を読み取ってデータ化する技術にゃ。"},
@@ -567,7 +598,7 @@ const cheatData = [
   ]},
   {cat:"⚖️ 法律・倫理・安全", items:[
     {term:"著作権法30条の4", read:"日本独自ルール", desc:"AI学習目的なら著作物を自由に使える日本独自の法律にゃ。試験最頻出にゃ。"},
-    {term:"AI新法", read:"人工知能関連技術の研究開発及び活用の推進に関する法律", desc:"2025年6月公布の日本のAI法律にゃ。2026年シラバス追加にゃ。"},
+    {term:"AI新法", read:"人工知能関連技術の研究開発及び活用の推進に関する法律", desc:"2025年6月公布の日本初のAI推進法にゃ。禁止・罰則より推進と環境整備に重点にゃ。AI事業者ガイドラインとセットで覚えるにゃ。2026年シラバス追加にゃ。"},
     {term:"EUのAI法", read:"EU AI Act", desc:"世界初の法的拘束力を持つAI規制。リスクを4段階に分類にゃ。"},
     {term:"AI事業者ガイドライン", read:"日本政府策定", desc:"2024年4月公表、2025年3月改訂のAI活用指針にゃ。"},
     {term:"NDA", read:"Non-Disclosure Agreement", desc:"機密情報をAIに入力する際に結ぶ秘密保持契約にゃ。"},
