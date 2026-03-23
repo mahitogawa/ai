@@ -394,8 +394,8 @@ function finish(){
     window.scrollTo(0,0);
 }
 
-function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; show(); } }
-function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; show(); } }
+function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; startTimer(); show(); } }
+function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; startTimer(); show(); } }
 function retryAll(){ location.reload(); }
 
 // ===== チートシート =====
