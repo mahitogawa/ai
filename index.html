@@ -86,77 +86,35 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   font-size: 18px;
   color: #94a3b8;
 }
-#start-btn {
+/* ===== TOPボタン共通：等幅・等高・スマホ最適化 ===== */
+.top-btn {
   display: block;
   width: 90%;
   max-width: 420px;
-  margin: 0 auto 16px;
-  padding: 24px;
-  font-size: 28px;
+  margin: 10px auto 0;
+  padding: 0;
+  height: 76px;
+  line-height: 76px;
+  font-size: 24px;
   font-weight: bold;
   color: #fff;
-  background: linear-gradient(135deg, #ef4444, #f59e0b);
   border: none;
   border-radius: 60px;
-  box-shadow: 0 4px 16px rgba(239,68,68,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   transition: transform 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-#start-btn:hover { transform: scale(1.03); }
-#start-btn:active { transform: scale(0.97); }
-#cat-toggle-btn {
-  display: block;
-  width: 90%;
-  max-width: 420px;
-  margin: 12px auto 0;
-  padding: 24px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(135deg, #059669, #10b981);
-  border: none;
-  border-radius: 60px;
-  box-shadow: 0 4px 16px rgba(5,150,105,0.4);
-  transition: transform 0.15s;
-}
-#cat-toggle-btn:hover { transform: scale(1.03); }
-#cat-toggle-btn:active { transform: scale(0.97); }
-.cat-btn { display:block; width:100%; padding:16px 20px; margin-bottom:8px; background:#0f172a; color:#f1f5f9; border:2px solid #334155; border-radius:12px; font-size:20px; font-weight:bold; text-align:left; cursor:pointer; transition:background 0.15s,border-color 0.15s; }
+.top-btn:hover { transform: scale(1.03); }
+.top-btn:active { transform: scale(0.97); }
+#start-btn     { background: linear-gradient(135deg, #ef4444, #f59e0b); box-shadow: 0 4px 16px rgba(239,68,68,0.4); margin-top: 0; }
+#cat-toggle-btn{ background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 16px rgba(5,150,105,0.4); }
+#ox-btn        { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+#cheat-btn     { background: linear-gradient(135deg, #1e40af, #3b82f6); box-shadow: 0 4px 16px rgba(37,99,235,0.4); }
+.cat-btn { display:block; width:100%; padding:14px 20px; margin-bottom:8px; background:#0f172a; color:#f1f5f9; border:2px solid #334155; border-radius:12px; font-size:18px; font-weight:bold; text-align:left; cursor:pointer; transition:background 0.15s,border-color 0.15s; }
 .cat-btn:hover { background:#1e3a5f; border-color:#3b82f6; }
 .cat-btn:last-child { margin-bottom:0; }
-#cheat-btn {
-  display: block;
-  width: 90%;
-  max-width: 420px;
-  margin: 12px auto 0;
-  padding: 24px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
-  border: none;
-  border-radius: 60px;
-  box-shadow: 0 4px 16px rgba(37,99,235,0.4);
-  transition: transform 0.15s;
-}
-#cheat-btn:hover { transform: scale(1.03); }
-#cheat-btn:active { transform: scale(0.97); }
-#ox-btn {
-  display: block;
-  width: 90%;
-  max-width: 420px;
-  margin: 12px auto 0;
-  padding: 24px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  border: none;
-  border-radius: 60px;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.4);
-  transition: transform 0.15s;
-}
-#ox-btn:hover { transform: scale(1.03); }
-#ox-btn:active { transform: scale(0.97); }
 #start-screen .edition-note {
   color: #64748b;
   font-size: 16px;
@@ -179,8 +137,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
     </div>
   </div>
-  <button id="start-btn" onclick="startQuiz()">🐱 ランダム200問から60問に挑戦！</button>
-  <button onclick="toggleCategoryMenu()" id="cat-toggle-btn">🐱 カテゴリ別練習</button>
+  <button id="start-btn" class="top-btn" onclick="startQuiz()">🐱 ランダム200問から60問に挑戦！</button>
+  <button onclick="toggleCategoryMenu()" id="cat-toggle-btn" class="top-btn">🐱 カテゴリ別練習</button>
   <div id="cat-menu" style="display:none;width:90%;max-width:420px;margin:0 auto 0;background:#1e293b;border-radius:16px;padding:16px;text-align:left;">
       <p style="color:#94a3b8;font-size:16px;margin:0 0 12px 4px;">苦手分野を集中練習にゃ🐱</p>
       <button onclick="startCategory('tech')" class="cat-btn">🐱 第1-3章｜AI技術・生成AI基礎（70問）</button>
@@ -191,8 +149,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（20問）</button>
       <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（16問）</button>
     </div>
-  <button onclick="startOX()" id="ox-btn">🐱 ○×クイズに挑戦！</button>
-  <button onclick="showCheat()" id="cheat-btn">🐱 略語チートシートを見る</button>
+  <button onclick="startOX()" id="ox-btn" class="top-btn">🐱 ○×クイズに挑戦！</button>
+  <button onclick="showCheat()" id="cheat-btn" class="top-btn">🐱 略語チートシートを見る</button>
   <p class="edition-note">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
   <script>
@@ -204,8 +162,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
     猫と学べるAIパスポート最強ドリル🐈
   </div>
-  <div style="margin-top:16px; padding:16px 20px; background:#1e293b; border-radius:12px; color:#64748b; font-size:16px; line-height:1.8; text-align:left;">
-    📝 このアプリはMahitoが脳梗塞のリハビリ中に個人で作成した学習用ドリルです。問題・解説の正確性は保証できません。最新の試験情報・正式な出題範囲は必ずGUGA公式サイト（guga.or.jp）でご確認ください。本アプリの利用により生じた損害について、作者は責任を負いません。<br>これらをご了承の上、マーニャとアイと一緒にAIパスポート合格を目指してください🐈🐈‍⬛
+  <div style="margin-top:16px; padding:14px 18px; background:#1e293b; border-radius:12px; color:#64748b; font-size:14px; line-height:1.7; text-align:left;">
+    🐈 このアプリはMahitoが脳梗塞のリハビリ中に個人で作成した学習用ドリルです。問題・解説の正確性は保証できません。最新の試験情報・正式な出題範囲は必ずGUGA公式サイト（guga.or.jp）でご確認ください。本アプリの利用により生じた損害について、作者は責任を負いません。これらをご了承の上、マーニャとアイと一緒にAIパスポート合格を目指してください🐈🐈‍⬛
   </div>
 </div>
 
@@ -217,6 +175,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   </div>
   <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
   <div id="cheat-list"></div>
+  <button onclick="hideCheat()" style="display:block; width:100%; margin-top:24px; padding:20px; background:#334155; color:#fff; border:none; border-radius:16px; font-size:22px; font-weight:bold; cursor:pointer; touch-action:manipulation;">🐈 TOPに戻る</button>
 </div>
 
 <!-- ===== クイズ画面（元のコードそのまま）===== -->
@@ -257,7 +216,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== ○×クイズ画面 ===== -->
 <div id="ox-screen" class="container" style="display:none;">
-  <h2>🐱 ○×クイズ</h2>
+  <h2>⭕ ○×クイズ</h2>
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <div id="ox-progress" style="font-weight:bold; color:#64748b;"></div>
     <button onclick="retryAll()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">🔄 リセット</button>
@@ -713,7 +672,15 @@ const quizData = [
     {q:"「AIの冬（AI Winter）」とは何か？",a:["AIへの期待が高まりすぎた後に幻滅・投資縮小が起きた停滞期","冬季限定のAIサービス","AIが寒冷地でしか使えない時期","省電力モードのこと"],cat:'tech',c:0,
      d:"「AIの冬」は1970年代・1980年代に2度起きた、AIへの過度な期待が幻滅に変わり研究投資が激減した停滞期にゃ。現在の生成AIブームが3度目の冬を招かないよう、適切な期待値管理が重要にゃ。"},
     {q:"「パーセプトロン」とは何か？",a:["最も単純なニューラルネットワークの基本単位で現代の深層学習の起源","OpenAIが登録した初期の言語モデルシリーズに付けられたブランド名","量子ビット（qubit）を安定化させるための誤り訂正回路の構成素子","AIへの指示文を目的別に分類した際の最小単位となるプロンプトカテゴリ"],cat:'tech',c:0,
-     d:"「パーセプトロン」は1957年に考案された最初期のニューラルネットワークにゃ。入力に重みをかけて合計し閾値で0/1を出力するシンプルな構造にゃ。現代のディープラーニングはこのパーセプトロンを多層化したものにゃ。"}
+     d:"「パーセプトロン」は1957年に考案された最初期のニューラルネットワークにゃ。入力に重みをかけて合計し閾値で0/1を出力するシンプルな構造にゃ。現代のディープラーニングはこのパーセプトロンを多層化したものにゃ。"},
+
+    // ===== 最新ニュース反映問題 =====
+    {q:"2026年3月、OpenAIが提供を終了したサービスはどれか？",a:["Soraアプリ（動画生成SNS）","ChatGPT","DALL-E","Codex"],cat:'models',c:0,
+     d:"OpenAIは2026年3月24日、動画生成SNSアプリ「Sora」の提供終了を発表したにゃ。計算コストの高さや利用者数の減少が原因にゃ。ChatGPT・DALL-E・Codexは継続中にゃ。Soraの動画生成技術自体はロボティクス研究に転用されるにゃ。"},
+    {q:"OpenAIがSoraアプリを終了した主な理由として最も適切なのは？",a:["高い計算コストと利用者数の減少・事業の選択と集中","著作権侵害訴訟で敗訴したため","Googleに買収されたため","日本政府の規制により停止したため"],cat:'models',c:0,
+     d:"Soraアプリ終了の主な理由は「高い計算コスト」「利用者数の急減（ピーク比約3分の1）」「企業向け・コーディングへの選択と集中」にゃ。ディープフェイク問題も背景にあるにゃ。OpenAI自体は事業継続中にゃ。"},
+    {q:"Soraアプリ終了に伴い白紙になった大型契約の相手はどこか？",a:["ウォルト・ディズニー（10億ドル投資契約）","Apple","Microsoft","Netflix"],cat:'models',c:0,
+     d:"OpenAIとウォルト・ディズニーは2026年初頭に10億ドルの投資・キャラクターライセンス契約を締結していたにゃ。しかしSoraアプリ終了により契約は白紙になったにゃ。資金の受け渡しは行われていなかったにゃ。"}
 
 ];
 
@@ -961,14 +928,13 @@ function answerOX(userAnswer) {
         document.getElementById("ox-true-btn").style.opacity = "0.3";
     }
     document.getElementById("ox-next-btn").style.display = "block";
-    document.getElementById("ox-result").scrollIntoView({behavior:"smooth", block:"nearest"});
+    window.scrollTo({top:0,behavior:"instant"});
 }
 
 function nextOX() {
     oxIndex++;
     if (oxIndex < oxData.length) {
         showOX();
-        document.getElementById("ox-screen").scrollIntoView({behavior:"smooth", block:"start"});
     } else {
         finishOX();
     }
@@ -1013,7 +979,7 @@ const cheatData = [
     {term:"Gemini", read:"Google製", desc:"GoogleのDeepMindが開発した大規模言語モデルにゃ。テキスト・画像・音声・動画・コードを同時に扱えるマルチモーダル対応が強みにゃ。GmailやGoogleドキュメントにも統合されているにゃ。"},
     {term:"Claude", read:"Anthropic製", desc:"「Constitutional AI（憲法的AI）」という手法で安全性・倫理面を最重視して開発されたAIにゃ。長文の読み込みや繊細な文脈理解が得意にゃ。（僕のことにゃ🐈）"},
     {term:"Copilot", read:"Microsoft製", desc:"MicrosoftがOpenAIと共同開発したAIアシスタントにゃ。Word・Excel・PowerPoint・Teams・Outlookなどのマイクロソフト製品に深く統合されているにゃ。職場でのAI活用の代表例にゃ。"},
-    {term:"Sora", read:"OpenAI製動画生成AI", desc:"テキストの指示文から最大1分の高品質な動画を生成できるOpenAI製AIにゃ。「猫がピアノを弾いている」と書くだけでリアルな動画が生成されるにゃ。映像制作・広告業界に大きな影響を与えているにゃ。2026年シラバス追加にゃ。"},
+    {term:"Sora", read:"OpenAI製動画生成AI（アプリ終了）", desc:"テキストから動画を生成するOpenAI製AIにゃ。2025年9月にSNSアプリとして公開されたが、高い計算コストと利用者減少により2026年3月にアプリは終了したにゃ。動画生成の技術研究自体は継続中にゃ。"},
     {term:"Operator", read:"OpenAI製エージェント", desc:"人間の代わりにウェブブラウザを自律的に操作してタスクを実行するAIエージェントにゃ。「ホテルを予約して」「フォームを埋めて」などの指示を自分でこなすにゃ。AIエージェント時代の先駆けにゃ。2026年シラバス追加にゃ。"},
     {term:"Codex", read:"OpenAI製コード生成AI", desc:"プログラミングコードの生成・補完・説明に特化したOpenAI製モデルにゃ。GitHub Copilotの基盤技術として世界中の開発者に使われているにゃ。自然言語で「〇〇する関数を作って」と書くとコードを生成するにゃ。"},
   ]},
