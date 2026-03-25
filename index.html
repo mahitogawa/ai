@@ -257,7 +257,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== ○×クイズ画面 ===== -->
 <div id="ox-screen" class="container" style="display:none;">
-  <h2>⭕ ○×クイズ</h2>
+  <h2>🐱 ○×クイズ</h2>
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <div id="ox-progress" style="font-weight:bold; color:#64748b;"></div>
     <button onclick="retryAll()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">🔄 リセット</button>
@@ -961,13 +961,14 @@ function answerOX(userAnswer) {
         document.getElementById("ox-true-btn").style.opacity = "0.3";
     }
     document.getElementById("ox-next-btn").style.display = "block";
-    window.scrollTo({top:0,behavior:"instant"});
+    document.getElementById("ox-result").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
 function nextOX() {
     oxIndex++;
     if (oxIndex < oxData.length) {
         showOX();
+        document.getElementById("ox-screen").scrollIntoView({behavior:"smooth", block:"start"});
     } else {
         finishOX();
     }
