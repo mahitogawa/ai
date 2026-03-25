@@ -173,13 +173,13 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <button onclick="toggleCategoryMenu()" id="cat-toggle-btn">📚 カテゴリ別練習</button>
   <div id="cat-menu" style="display:none;width:90%;max-width:420px;margin:0 auto 0;background:#1e293b;border-radius:16px;padding:16px;text-align:left;">
       <p style="color:#94a3b8;font-size:16px;margin:0 0 12px 4px;">苦手分野を集中練習にゃ🐈</p>
-      <button onclick="startCategory('tech')" class="cat-btn">🔧 AI基礎技術（70問）</button>
-      <button onclick="startCategory('models')" class="cat-btn">💬 生成AIモデル（9問）</button>
-      <button onclick="startCategory('prompt')" class="cat-btn">✍️ プロンプト技術（24問）</button>
-      <button onclick="startCategory('law')" class="cat-btn">⚖️ 法律・著作権（27問）</button>
-      <button onclick="startCategory('business')" class="cat-btn">🏢 ビジネス活用（34問）</button>
-      <button onclick="startCategory('security')" class="cat-btn">🛡️ セキュリティ（20問）</button>
-      <button onclick="startCategory('policy')" class="cat-btn">📋 AI政策・倫理（16問）</button>
+      <button onclick="startCategory('tech')" class="cat-btn">🤖 第1-3章｜AI技術・生成AI基礎（70問）</button>
+      <button onclick="startCategory('models')" class="cat-btn">💬 第2章｜主要生成AIモデル（9問）</button>
+      <button onclick="startCategory('prompt')" class="cat-btn">✍️ 第5章｜プロンプト技術（24問）</button>
+      <button onclick="startCategory('law')" class="cat-btn">⚖️ 第4章｜法律・著作権・個人情報（27問）</button>
+      <button onclick="startCategory('business')" class="cat-btn">🏢 第3-5章｜ビジネス活用（34問）</button>
+      <button onclick="startCategory('security')" class="cat-btn">🛡️ 第4章｜セキュリティ・リスク（20問）</button>
+      <button onclick="startCategory('policy')" class="cat-btn">📋 第4章｜AI政策・倫理・ガイドライン（16問）</button>
     </div>
   <button onclick="startOX()" id="ox-btn">⭕ ○×クイズに挑戦！</button>
   <button onclick="showCheat()" id="cheat-btn">📖 略語チートシートを見る</button>
@@ -226,7 +226,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <button id="nextBtn" onclick="next()">次の問題へ ➔</button>
 </div>
 
-<div id="final-screen" class="container">
+<div id="final-screen" class="container" style="display:none;">
     <h2>試験結果発表</h2>
     <div id="final-score" style="font-size:60px; font-weight:bold; color:#2563eb;"></div>
     <div id="judgement" style="margin:15px auto; max-width:500px; padding:20px; border-radius:12px; font-size:22px; font-weight:bold;"></div>
@@ -248,13 +248,22 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 <!-- ===== ○×クイズ画面 ===== -->
 <div id="ox-screen" class="container" style="display:none;">
   <h2>⭕ ○×クイズ</h2>
-  <div id="ox-progress" style="font-weight:bold; color:#64748b; margin-bottom:10px;"></div>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <div id="ox-progress" style="font-weight:bold; color:#64748b;"></div>
+    <button onclick="retryAll()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">🔄 リセット</button>
+  </div>
   <div id="ox-question" style="font-size:22px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; line-height:1.7;"></div>
   <div style="display:flex; gap:16px; margin-top:10px;">
-    <button onclick="answerOX(true)" id="ox-true-btn" style="flex:1; padding:28px; font-size:36px; font-weight:bold; background:linear-gradient(135deg,#10b981,#059669); color:#fff; border:none; border-radius:20px; cursor:pointer;">⭕</button>
-    <button onclick="answerOX(false)" id="ox-false-btn" style="flex:1; padding:28px; font-size:36px; font-weight:bold; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border:none; border-radius:20px; cursor:pointer;">❌</button>
+    <button onclick="answerOX(true)" id="ox-true-btn"
+      style="flex:1; padding:28px; font-size:42px; font-weight:bold;
+             background:#dcfce7; color:#15803d;
+             border:4px solid #16a34a; border-radius:20px; cursor:pointer;">⭕</button>
+    <button onclick="answerOX(false)" id="ox-false-btn"
+      style="flex:1; padding:28px; font-size:42px; font-weight:bold;
+             background:#fee2e2; color:#b91c1c;
+             border:4px solid #dc2626; border-radius:20px; cursor:pointer;">❌</button>
   </div>
-  <div id="ox-result" style="display:none; margin-top:20px; font-size:20px; font-weight:bold; padding:16px; border-radius:12px; line-height:1.7;"></div>
+  <div id="ox-result" style="display:none; margin-top:20px; font-size:20px; font-weight:bold; padding:16px; border-radius:12px; line-height:1.7; white-space:pre-line;"></div>
   <button id="ox-next-btn" onclick="nextOX()" style="display:none; background:#2563eb; color:#fff; padding:22px; font-size:22px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; margin-top:16px;">次の問題へ ➔</button>
 </div>
 
@@ -390,13 +399,13 @@ const quizData = [
      d:"「レコメンデーション（推薦システム）」はユーザーの過去の行動・好みを学習して「次に気に入りそうなもの」を提案する技術。YouTubeのおすすめ動画・Amazonの「この商品を見た人は」などが代表例にゃ。"},
     {q:"複数の異なる種類のデータ（画像、文など）を扱うAIは？",a:["マルチモーダル","シングルモーダル","テキスト専用","音声専用"],cat:'tech',c:0,
      d:"「マルチモーダルAI」はテキスト・画像・音声・動画など複数の種類（モーダル）のデータを同時に扱えるAI。GPT-4VやGemini Ultraが代表例。「この画像を説明して」のように画像とテキストを組み合わせた指示ができるにゃ。"},
-    {q:"AI利用者が守るべきガイドラインを作成する組織は？",a:["AI戦略会議","気象庁","警察庁","消防署"],cat:'policy',c:0,
-     d:"「AI戦略会議」は日本政府が設置したAI政策の司令塔。2024年4月公表の「AI事業者ガイドライン」の策定を主導した。経済産業省・総務省が共同で運営し、AI開発者・提供者・利用者の三者向けに指針を発信しているにゃ。"},
+    {q:"AI事業者ガイドラインを策定・公表した省庁は？",a:["経済産業省・総務省","気象庁","警察庁","消防署"],cat:'policy',c:0,
+     d:"「AI事業者ガイドライン」は経済産業省と総務省が共同で2024年4月に公表・2025年3月に改訂したにゃ。AI開発者・提供者・利用者の三者すべてに向けた指針で、透明性・公平性・安全性の確保を求めているにゃ。"},
     {q:"AIが自分で自分を改善し続ける未来の可能性は？",a:["再帰的自己改善","停止","劣化","固定"],cat:'tech',c:0,
      d:"「再帰的自己改善」はAIが自分自身のコードや設計を改良して次々とより賢いAIを生み出し続ける能力のこと。これが実現するとシンギュラリティ（技術的特異点）に一気に近づくとされる。AI安全研究が最も警戒する概念の一つにゃ。"},
 
     {q:"MahitoがAIパスポートに合格するための秘訣は？",a:["このアプリで特訓","猫と遊ぶだけ","寝るだけ","諦める"],cat:'tech',c:0,
-     d:"私（ジェミー）と一緒に毎日少しずつ積み上げることにゃ！マーニャとアイも応援してるにゃ🐈🐈‍⬛ 4月の本番、絶対合格するにゃ🎌"},
+     d:"Claudeと一緒に毎日少しずつ積み上げることにゃ！マーニャとアイも応援してるにゃ🐈🐈‍⬛ 4月の本番、絶対合格するにゃ🎌"},
 
     // ===== 新シラバス対応・追加60問 =====
     {q:"GPT-o1やGPT-o3に共通する特徴は？",a:["回答前に内部で推論を行う","画像生成に特化","音声のみを処理","オフラインで動く"],cat:'models',c:0,
@@ -488,7 +497,7 @@ const quizData = [
     {q:"現代社会で最も重要なAI関連スキルは？",a:["AIを批判的に使いこなすAIリテラシー","プログラミング","英語力","タイピング速度"],cat:'tech',c:0,
      d:"現代社会ではAIを鵜呑みにせず批判的に使いこなす「AIリテラシー」が最重要スキルにゃ。生成AIパスポートはまさにそのリテラシー向上を目的とした資格にゃ。"},
     {q:"マーニャとアイが一番好きな猫缶は？",a:["秘密にゃ","マグロにゃ","チキンにゃ","サーモンにゃ"],cat:'tech',c:0,
-     d:"それは聞いてないにゃ！でもマーニャもアイも毎日Mahitoさんと一緒にAIパスポートを応援してるにゃ🐈🐈‍⬛ 120問全部覚えたら本番も余裕にゃ🎌"},
+     d:"それは聞いてないにゃ！でもマーニャもアイも毎日Mahitoさんと一緒にAIパスポートを応援してるにゃ🐈🐈‍⬛ 200問全部覚えたら本番も余裕にゃ🎌"},
     {q:"バックプロパゲーション（誤差逆伝播法）とは何か？",a:["出力の誤差を後ろから前に伝えパラメータを更新する","データを前から後ろに流す","モデルを圧縮する","データを削除する"],cat:'tech',c:0,
      d:"「バックプロパゲーション」は出力の誤差を後ろから前に伝えてパラメータを更新するディープラーニングの基礎アルゴリズムにゃ。"},
     {q:"AIモデルの評価指標で分類問題に使われる『F1スコア』とは？",a:["精度と再現率の調和平均","処理速度の指標","モデルサイズの指標","電力消費の指標"],cat:'tech',c:0,
@@ -517,8 +526,8 @@ const quizData = [
      d:"「コンテキストウィンドウ」はAIが一度に処理・記憶できるテキストの最大量にゃ。長い会話や文書を扱うには大きなコンテキストウィンドウが必要にゃ。"},
     {q:"RAGシステムの構築に必要なコンポーネントは？",a:["文書DB・埋め込みモデル・ベクトルDB・LLM","CPU・GPU・メモリ・ストレージ","キーボード・マウス・モニター・スピーカー","メール・チャット・電話・FAX"],cat:'tech',c:0,
      d:"RAGシステムは「文書データベース」「埋め込みモデル（テキストをベクトル化）」「ベクトルDB（類似検索）」「LLM（回答生成）」の4要素で構成されるにゃ。"},
-    {q:"今日Mahitoさんが120問を完成させた秘訣は？",a:["マーニャとアイの応援にゃ","コーヒーのおかげ","偶然にゃ","魔法にゃ"],cat:'tech',c:0,
-     d:"マーニャとアイとジェミーが一緒に頑張ったからにゃ🐈🐈‍⬛ 120問制覇おめでとうにゃ！4月の本番も絶対合格するにゃ🎌"},
+    {q:"今日Mahitoさんが200問を完成させた秘訣は？",a:["マーニャとアイの応援にゃ","コーヒーのおかげ","偶然にゃ","魔法にゃ"],cat:'tech',c:0,
+     d:"マーニャとアイが一緒に頑張ったからにゃ🐈🐈‍⬛ 200問制覇おめでとうにゃ！4月の本番も絶対合格するにゃ🎌"},
 
     // ===== 2026年最新トピック追加問題 =====
     {q:"MCP（Model Context Protocol）の主な役割は？",a:["AIが外部ツールやAPIと標準的に連携するプロトコル","AIモデルを圧縮する技術","AIの学習データを管理する仕組み","AIの出力を暗号化する技術"],cat:'tech',c:0,
@@ -716,8 +725,13 @@ function toggleCategoryMenu() {
 }
 
 const catNames = {
-    tech:'🔧 AI基礎技術', models:'💬 生成AIモデル', prompt:'✍️ プロンプト技術',
-    law:'⚖️ 法律・著作権', business:'🏢 ビジネス活用', security:'🛡️ セキュリティ', policy:'📋 AI政策・倫理'
+    tech:    '🤖 第1-3章｜AI技術・生成AI基礎',
+    models:  '💬 第2章｜主要生成AIモデル',
+    prompt:  '✍️ 第5章｜プロンプト技術',
+    law:     '⚖️ 第4章｜法律・著作権・個人情報',
+    business:'🏢 第3-5章｜ビジネス活用',
+    security:'🛡️ 第4章｜セキュリティ・リスク',
+    policy:  '📋 第4章｜AI政策・倫理・ガイドライン'
 };
 
 function startCategory(cat) {
@@ -836,26 +850,54 @@ function retryAll(){ location.reload(); }
 // ===== ○×クイズ =====
 let oxData = [], oxIndex = 0, oxScore = 0, oxCorrectAnswer = true;
 
+// ○×クイズ除外キーワード（ジョーク問題・試験範囲外）
+const oxExcludeKeywords = ['マーニャ','アイが一番','Mahitoさんが','Mahitoが','猫缶','秘訣は'];
+
 function buildOXData() {
     const data = [];
-    // 元データ（シャッフル前）を使う
     const original = JSON.parse(JSON.stringify(quizData));
-    original.forEach(q => {
-        const correctAnswer = q.a[q.c]; // シャッフル前の正解
-        const wrongAnswer = q.a[q.c === 0 ? 1 : 0]; // 不正解の選択肢
 
-        // 正文 → 正解は○
+    original.forEach(q => {
+        // ジョーク問題・試験範囲外を除外
+        const isJoke = oxExcludeKeywords.some(kw => q.q.includes(kw) || q.d.includes(kw));
+        if (isJoke) return;
+
+        const correctAnswer = q.a[q.c];
+
+        // 不正解の選択肢を取得（正解以外からランダムに1つ選ぶ）
+        const wrongChoices = q.a.filter((_, i) => i !== q.c);
+        const wrongAnswer = wrongChoices[Math.floor(Math.random() * wrongChoices.length)];
+
+        // 問題文から自然な主語を作る
+        // 「は？」「とは？」「とは何か？」などを除去して体言止め化
+        let topic = q.q
+            .replace(/「/g,'').replace(/」/g,'')
+            .replace(/（[^）]*）/g,'')   // （）内を除去
+            .replace(/\s*の正しい説明は.*$/,'')
+            .replace(/\s*として最も適切.*$/,'')
+            .replace(/\s*に使.*$/,'')
+            .replace(/\s*で最も.*$/,'')
+            .replace(/\s*における.*$/,'')
+            .replace(/とは何か[？?。]?$/,'')
+            .replace(/とは[？?。]?$/,'')
+            .replace(/は何か[？?。]?$/,'')
+            .replace(/は[？?。]?$/,'')
+            .replace(/[？?。]$/,'')
+            .trim();
+
+        // ○文：「正解」は「トピック」を指す正しい用語・説明である
         data.push({
-            text: '「' + correctAnswer + '」は「' + q.q.replace(/「/g,'').replace(/」/g,'').replace('は？','').replace('とは何か','').replace('とは','') + '」の正しい説明である。',
+            text: '「' + correctAnswer + '」は「' + topic + '」に関する正しい説明・用語である。',
             correct: true,
-            hint: '⭕ 正しいにゃ！' + q.d
+            hint: '⭕ 正しいにゃ！\n' + q.d
         });
-        // 誤文 → 正解は×
+
+        // ×文：「誤答」は「トピック」を指す説明として正しくない
         if (wrongAnswer) {
             data.push({
-                text: '「' + wrongAnswer + '」は「' + q.q.replace(/「/g,'').replace(/」/g,'').replace('は？','').replace('とは何か','').replace('とは','') + '」の正しい説明である。',
+                text: '「' + wrongAnswer + '」は「' + topic + '」に関する正しい説明・用語である。',
                 correct: false,
-                hint: '❌ 正しくないにゃ。正解は「' + correctAnswer + '」にゃ。' + q.d
+                hint: '❌ 正しくないにゃ。正しくは「' + correctAnswer + '」にゃ。\n' + q.d
             });
         }
     });
