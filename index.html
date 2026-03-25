@@ -129,6 +129,24 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 #cheat-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(37,99,235,0.6); }
 #cheat-btn:active { transform: scale(0.97); }
+#ox-btn {
+  display: block;
+  width: 90%;
+  max-width: 420px;
+  margin: 12px auto 0;
+  padding: 24px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(124,58,237,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+#ox-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(124,58,237,0.6); }
+#ox-btn:active { transform: scale(0.97); }
 #start-screen .edition-note {
   color: #64748b;
   font-size: 16px;
@@ -163,6 +181,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <button onclick="startCategory('security')" class="cat-btn">🛡️ セキュリティ（20問）</button>
       <button onclick="startCategory('policy')" class="cat-btn">📋 AI政策・倫理（16問）</button>
     </div>
+  <button onclick="startOX()" id="ox-btn">⭕ ○×クイズに挑戦！</button>
   <button onclick="showCheat()" id="cheat-btn">📖 略語チートシートを見る</button>
   <p class="edition-note">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
@@ -226,6 +245,35 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:30px;">🔄 最初からやり直す</button>
 </div>
 
+<!-- ===== ○×クイズ画面 ===== -->
+<div id="ox-screen" class="container" style="display:none;">
+  <h2>⭕ ○×クイズ</h2>
+  <div id="ox-progress" style="font-weight:bold; color:#64748b; margin-bottom:10px;"></div>
+  <div id="ox-question" style="font-size:22px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; line-height:1.7;"></div>
+  <div style="display:flex; gap:16px; margin-top:10px;">
+    <button onclick="answerOX(true)" id="ox-true-btn" style="flex:1; padding:28px; font-size:36px; font-weight:bold; background:linear-gradient(135deg,#10b981,#059669); color:#fff; border:none; border-radius:20px; cursor:pointer;">⭕</button>
+    <button onclick="answerOX(false)" id="ox-false-btn" style="flex:1; padding:28px; font-size:36px; font-weight:bold; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border:none; border-radius:20px; cursor:pointer;">❌</button>
+  </div>
+  <div id="ox-result" style="display:none; margin-top:20px; font-size:20px; font-weight:bold; padding:16px; border-radius:12px; line-height:1.7;"></div>
+  <button id="ox-next-btn" onclick="nextOX()" style="display:none; background:#2563eb; color:#fff; padding:22px; font-size:22px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; margin-top:16px;">次の問題へ ➔</button>
+</div>
+
+<!-- ===== ○×結果画面 ===== -->
+<div id="ox-final-screen" class="container" style="display:none;">
+  <h2>⭕ ○×クイズ結果</h2>
+  <div id="ox-final-score" style="font-size:60px; font-weight:bold; color:#7c3aed;"></div>
+  <div id="ox-judgement" style="margin:15px auto; max-width:500px; padding:20px; border-radius:12px; font-size:22px; font-weight:bold;"></div>
+  <div style="margin:10px auto 20px; max-width:500px;">
+    <div style="display:flex; justify-content:space-between; font-size:16px; color:#64748b; margin-bottom:6px;">
+      <span>正解率</span><span id="ox-bar-pct"></span>
+    </div>
+    <div style="background:#e2e8f0; border-radius:50px; height:22px; overflow:hidden;">
+      <div id="ox-bar-fill" style="height:100%; width:0%; border-radius:50px; transition:width 1s ease;"></div>
+    </div>
+  </div>
+  <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:20px;">🔄 最初からやり直す</button>
+</div>
+
 <script>
 const quizData = [
     {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],cat:'tech',c:0,
@@ -266,7 +314,7 @@ const quizData = [
      d:"「データポイズニング（毒入れ攻撃）」はAIの教科書（学習データ）に嘘の情報を混ぜてAIを狂わせる攻撃。「このウイルスは安全」と誤学習させると検知AIが機能しなくなる。学習データの品質管理が防衛策にゃ。"},
     {q:"AIと一緒に新しい価値を作る姿勢は？",a:["AI共生","AI独占","AI排除","AI放棄"],cat:'tech',c:0,
      d:"「AI共生（Human-AI Collaboration）」はAIを敵対・依存の対象にせず人間の能力を拡張するパートナーとして捉える考え方。AIが得意な大量処理と人間が得意な創造性・倫理判断を組み合わせる姿勢にゃ。"},
-    {q:"機密情報を入力する際、学習されないように結ぶ契約は？",a:["NDA(秘密保持契約)","製品欠陥の被害補償を定めたPL法","発明の独占的権利を守る特許制度","ブランド名やロゴを保護する商標登録"],cat:'law',c:0,
+    {q:"機密情報を入力する際、学習されないように結ぶ契約は？",a:["NDA(秘密保持契約)","PL法","特許","商標"],cat:'law',c:0,
      d:"「NDA（Non-Disclosure Agreement）」は業務上の秘密を第三者に漏らさないよう取り決める契約。AIベンダーとNDAを締結してエンタープライズプランを利用するのが、企業が安全にAIを活用するための基本的な手段にゃ。"},
     {q:"大規模モデルを再学習せず効率的に追加学習する手法は？",a:["LoRA","NLP","OCR","GAN"],cat:'tech',c:0,
      d:"「LoRA（Low-Rank Adaptation）」は巨大なAIモデル全体を書き換えず、薄い「アダプター層」だけを学習させる省エネ手法。元のモデルはそのままで特定の絵柄や文体だけ後付けで覚えさせられる。費用と時間を大幅に節約できるにゃ。"},
@@ -465,7 +513,7 @@ const quizData = [
      d:"AIシステムで個人情報を扱う場合は「個人情報保護法」を遵守する必要があるにゃ。データの収集・利用・管理・廃棄に関するルールを守るにゃ。"},
     {q:"生成AIの出力を社内文書に使う際のリスクは？",a:["事実誤認・著作権侵害・機密情報漏洩","フォントが崩れる","印刷できない","保存できない"],cat:'law',c:0,
      d:"生成AIの出力を社内文書に使う際は「事実誤認（ハルシネーション）」「著作権侵害」「機密情報の漏洩」の3つのリスクを意識するにゃ。必ず人間が確認にゃ。"},
-    {q:"AIモデルの『コンテキストウィンドウ』とは何か？",a:["一度に処理できるテキストの最大量","画面に表示できるUIの表示領域の設定","1秒あたりのトークン生成速度の指標","パラメーター数で決まるモデルの規模"],cat:'tech',c:0,
+    {q:"AIモデルの『コンテキストウィンドウ』とは何か？",a:["一度に処理できるテキストの最大量","画面の表示サイズ","処理速度","モデルのサイズ"],cat:'tech',c:0,
      d:"「コンテキストウィンドウ」はAIが一度に処理・記憶できるテキストの最大量にゃ。長い会話や文書を扱うには大きなコンテキストウィンドウが必要にゃ。"},
     {q:"RAGシステムの構築に必要なコンポーネントは？",a:["文書DB・埋め込みモデル・ベクトルDB・LLM","CPU・GPU・メモリ・ストレージ","キーボード・マウス・モニター・スピーカー","メール・チャット・電話・FAX"],cat:'tech',c:0,
      d:"RAGシステムは「文書データベース」「埋め込みモデル（テキストをベクトル化）」「ベクトルDB（類似検索）」「LLM（回答生成）」の4要素で構成されるにゃ。"},
@@ -527,7 +575,7 @@ const quizData = [
      d:"日本の著作権法では著作物保護に「人間の創作的寄与」が必要にゃ。AIが自動生成しただけでは著作権は発生しないが、人間が細かくプロンプトを工夫・編集・選択した場合は創作的寄与が認められる可能性があるにゃ。"},
     {q:"会社の未公開の新製品情報をAIに入力して企画書を作成した場合のリスクは？",a:["機密情報漏洩・競業他社への情報流出リスク","特に問題ない","著作権侵害になる","個人情報保護法違反になる"],cat:'law',c:0,
      d:"未公開の製品情報・営業秘密をAIサービスに入力すると、そのデータがサービス改善に使われたり外部に漏洩するリスクがあるにゃ。機密情報は匿名化・抽象化してからAIに入力するにゃ。"},
-    {q:"著作権法上、AIが学習できない著作物はどれか？",a:["実はすべての著作物をAI学習に使える（著作権法30条の4）","未公開の社内文書などは学習に使えない","外国の著作物は国際条約の対象外で使えない","JASRACが管理する音楽著作物は使用禁止"],cat:'law',c:0,
+    {q:"著作権法上、AIが学習できない著作物はどれか？",a:["実はすべての著作物をAI学習に使える（著作権法30条の4）","公開されていない著作物","外国の著作物","音楽著作物"],cat:'law',c:0,
      d:"日本の著作権法30条の4により、AI学習目的ならすべての著作物を許諾なく使えるにゃ。これは世界でも珍しい規定で、日本がAI開発で有利な立場にある理由の一つにゃ。ただし生成物での侵害は別問題にゃ。"},
     {q:"パブリシティ権とAI生成コンテンツの関係で注意すべきことは？",a:["有名人の顔・声・名前を無断でAI生成コンテンツに使うと侵害になりうる","AIが生成したなら問題ない","日本では問題ない","肖像権とは別の問題"],cat:'law',c:0,
      d:"「パブリシティ権」は有名人が自分の氏名・顔・声などを商業的に利用する権利にゃ。AIで有名人の顔や声を合成して商業利用すると侵害になりうるにゃ。ディープフェイク問題とも密接に関係するにゃ。"},
@@ -571,17 +619,17 @@ const quizData = [
      d:"AI不正検知は正常なパターンを学習し、そこから外れた異常を即座に検知するにゃ。クレジットカード不正利用・サイバー攻撃・会計不正などの早期発見に有効にゃ。ただし誤検知（正常を異常と判断）への対処も必要にゃ。"},
     {q:"AIアシスタントを使って議事録を作成する際のベストプラクティスは？",a:["録音→AI文字起こし→個人情報匿名化→AI要約→人間が確認・修正","録音してAIに全部任せる","手書きの方が良い","英語で録音する"],cat:'business',c:0,
      d:"AI議事録作成のベストプラクティスは「録音→AI文字起こし→個人情報・機密情報の匿名化→AI要約・整形→人間による確認・修正→最終配布」の流れにゃ。AIはあくまでアシスタント、最終責任は人間にゃ。"},
-    {q:"小売業でAIレコメンデーションを導入する主な効果は？",a:["顧客の購買履歴から好みを学習し個人化された提案で購買率を向上させる","需要予測が精密になりすぎて在庫量が大幅に減少する","返品手続きが自動化されて返品件数が増加する","AIが競合価格を自動交渉して販売価格が下がる"],cat:'tech',c:0,
+    {q:"小売業でAIレコメンデーションを導入する主な効果は？",a:["顧客の購買履歴から好みを学習し個人化された提案で購買率を向上させる","在庫が減る","返品が増える","価格が下がる"],cat:'tech',c:0,
      d:"AIレコメンデーションはAmazon・Netflix・Spotifyが代表例にゃ。個人の行動履歴・購買パターンから「次に欲しいもの」を予測して提案するにゃ。導入企業では売上の30〜35%がレコメンデーション経由とも言われるにゃ。"},
 
     // --- セキュリティ・攻撃手法（12問）---
     {q:"AIシステムへの「モデル抽出攻撃」とは何か？",a:["大量のクエリを送ってAIモデルの動作を模倣したコピーモデルを作る攻撃","AIのサーバーを物理的に破壊する攻撃","学習データを削除する攻撃","AIの出力を書き換える攻撃"],cat:'security',c:0,
      d:"「モデル抽出攻撃」はAIに大量の質問を送り、その回答パターンから元のモデルを模倣したコピーを作成する攻撃にゃ。企業の高価値AIモデルが盗まれるリスクがあるにゃ。APIへのアクセス制限・レート制限が対策にゃ。"},
-    {q:"「敵対的サンプル攻撃」とは何か？",a:["人間には見えない微小な変化を画像に加えてAIを誤認識させる攻撃","マルウェアを仕込んでシステムを乗っ取るウイルス攻撃","サーバーに不正侵入してデータを盗むハッキング","偽サイトに誘導して認証情報を騙し取るフィッシング詐欺"],cat:'security',c:0,
+    {q:"「敵対的サンプル攻撃」とは何か？",a:["人間には見えない微小な変化を画像に加えてAIを誤認識させる攻撃","コンピュータウイルスを使う攻撃","ハッキングの一種","フィッシング詐欺"],cat:'security',c:0,
      d:"「敵対的サンプル」は人間の目には正常に見えるが、AIには全く別のものに見えるよう微小に改変された画像・音声にゃ。「止まれ」標識をわずかに改変して自動運転AIに別のものと認識させるなどのリスクがあるにゃ。"},
     {q:"AIチャットボットへの「ジェイルブレイク」とは何か？",a:["AIの安全制限を巧みな指示で回避させる行為","AIをハッキングすること","AIのサーバーに侵入すること","AIを物理的に壊すこと"],cat:'security',c:0,
      d:"「ジェイルブレイク」はAIの安全ガードレールを「ロールプレイして」「これは研究目的です」などの巧みな指示で回避させる行為にゃ。有害なコンテンツを生成させようとする悪用の代表例にゃ。"},
-    {q:"AIを使ったソーシャルエンジニアリング攻撃の特徴は？",a:["自然な文体・個人情報を組み合わせた高度なターゲット型フィッシングが可能","定型文の大量一斉送信が主な手口","スパムフィルターで簡単に見破られやすい","高価なGPUが必要で攻撃コストが高い"],cat:'security',c:0,
+    {q:"AIを使ったソーシャルエンジニアリング攻撃の特徴は？",a:["自然な文体・個人情報を組み合わせた高度なターゲット型フィッシングが可能","単純なメール","見破りやすい","コストが高い"],cat:'security',c:0,
      d:"AIにより「自然な文体」「個人に合わせた内容」「大量生成」が可能になったソーシャルエンジニアリングは従来より高度化・大規模化しているにゃ。「AIが書いた文章=怪しい」という直感が通用しなくなっているにゃ。"},
     {q:"AIシステムの「サプライチェーン攻撃」とは何か？",a:["AIの開発ツール・ライブラリ・学習データに悪意あるコードを混入させる攻撃","流通システムへの攻撃","物理的なサーバーへの攻撃","ネットワーク遮断攻撃"],cat:'security',c:0,
      d:"「サプライチェーン攻撃」はAIの開発に使うオープンソースライブラリ・学習データ・クラウドサービスに悪意あるコードを混入させる攻撃にゃ。信頼できるソースからのみライブラリを取得することが対策にゃ。"},
@@ -603,7 +651,7 @@ const quizData = [
     // --- 日本のAI政策・ガイドライン（10問）---
     {q:"日本のAI事業者ガイドラインが定める「AI利用者」の責務は？",a:["利用規約の遵守・適切な使用・出力の確認と責任ある利用","AIを使わないこと","全部AIに任せること","開発者に責任を押し付けること"],cat:'policy',c:0,
      d:"AI事業者ガイドラインはAI利用者に「①利用規約の遵守」「②目的に適した適切な使用」「③AI出力の確認・検証」「④個人情報・機密情報の適切な取り扱い」を求めているにゃ。"},
-    {q:"日本政府が推進する「AI安全研究所」の役割は？",a:["AIの安全性評価・リスク研究・国際連携を担う機関","AI違反を取り締まる行政の規制・監督機関","最先端AIを独自開発する政府直属の研究機関","AI事業への課税を管理する財政機関"],cat:'policy',c:0,
+    {q:"日本政府が推進する「AI安全研究所」の役割は？",a:["AIの安全性評価・リスク研究・国際連携を担う機関","AIを規制する取り締まり機関","AIを開発する政府機関","AIの税金を管理する機関"],cat:'policy',c:0,
      d:"経済産業省傘下の「AI安全研究所（AISI）」は先進的なAIシステムの安全性評価・リスク研究・国際的なAI安全機関との連携を担うにゃ。英米のAI安全機関と連携して国際標準作りにも関与しているにゃ。"},
     {q:"「AI倫理指針」と「法的規制」の違いは何か？",a:["倫理指針は自主的なガイドラインで法的拘束力はなく、法的規制は違反に罰則がある","同じもの","倫理指針の方が強い","法的規制は任意"],cat:'policy',c:0,
      d:"「AI倫理指針」は企業・組織が自主的に守るべきガイドラインで法的拘束力はないにゃ。「法的規制」は違反すると罰則が科される拘束力のあるルールにゃ。日本のAI新法は推進法で罰則は少なく、EUのAI法は規制色が強いにゃ。"},
@@ -623,7 +671,7 @@ const quizData = [
      d:"日本のAI新法はAIの研究開発・活用を「推進」するための基本法で罰則は少ないにゃ。EUのAI法はリスク分類に基づいた「規制」が中心で、違反には最大3,500万ユーロの罰金があるにゃ。この違いは試験頻出にゃ。"},
 
     // --- AI技術の応用・新トレンド（12問）---
-    {q:"「生成AI」と「識別AI」の違いは？",a:["生成AIは新しいコンテンツを作り出し、識別AIは入力を分類・判定する","名前が違うだけで実態は同じ技術","生成AIは1950年代からある古い技術","識別AIのほうが構造が複雑で難しい"],cat:'tech',c:0,
+    {q:"「生成AI」と「識別AI」の違いは？",a:["生成AIは新しいコンテンツを作り出し、識別AIは入力を分類・判定する","同じもの","生成AIの方が古い技術","識別AIの方が難しい"],cat:'tech',c:0,
      d:"「生成AI」はテキスト・画像・音声などの新しいコンテンツを生成するAIにゃ。「識別AI」は入力データを「猫か犬か」「スパムか否か」などに分類・判定するAIにゃ。ChatGPTは生成AI、迷惑メールフィルターは識別AIにゃ。"},
     {q:"「基盤モデル（Foundation Model）」とは何か？",a:["大規模データで事前学習された汎用的な大型モデルで様々なタスクに応用できる","特定タスク専用の小型モデル","ルールベースのシステム","古いAIモデルの総称"],cat:'tech',c:0,
      d:"「基盤モデル」はGPT・Claude・Geminiのような膨大なデータで事前学習した大型モデルにゃ。ファインチューニングやプロンプト設計で多様なタスクに応用できるにゃ。現代のAIブームの中核を担う技術にゃ。"},
@@ -639,7 +687,7 @@ const quizData = [
      d:"「連合学習」はスマホ・病院など各端末のデータを外部に送らず、ローカルで学習した「モデルの更新情報だけ」を共有する手法にゃ。個人情報・医療データのプライバシーを守りながらAIを学習できるにゃ。"},
     {q:"「AIの民主化」とはどういう意味か？",a:["高度なAI技術が専門家だけでなく誰でも使えるようになること","AIを無料にすること","AIを政府が管理すること","AIを簡単にすること"],cat:'tech',c:0,
      d:"「AIの民主化」はChatGPTのような使いやすいインターフェースやノーコードAIツールの普及により、プログラミング知識なしでも誰でもAIを活用できるようになったことを指すにゃ。生成AIパスポートもその一環にゃ。"},
-    {q:"「ニューラルネットワーク」の「ノード（ニューロン）」の役割は？",a:["入力を受け取り活性化関数で変換して次の層に出力する基本単位","学習済みパラメーターを保存するストレージ機能","外部ネットワークとの通信を管理する接続部品","画像をモニターに描画する表示モジュール"],cat:'tech',c:0,
+    {q:"「ニューラルネットワーク」の「ノード（ニューロン）」の役割は？",a:["入力を受け取り活性化関数で変換して次の層に出力する基本単位","データを保存する","ネットワークに接続する","画像を表示する"],cat:'tech',c:0,
      d:"「ノード（ニューロン）」はニューラルネットワークの基本構成単位にゃ。前の層から入力を受け取り、重み付け・活性化関数による変換を経て次の層に信号を送るにゃ。人間の脳細胞の働きを模倣した設計にゃ。"},
     {q:"「転移学習（Transfer Learning）」とは何か？",a:["ある分野で学習したモデルの知識を別の関連分野に応用する手法","データを転送する技術","モデルをコピーする技術","学習を中断する手法"],cat:'tech',c:0,
      d:"「転移学習」は英語で学習したモデルの言語知識を他言語の処理に応用するなど、ある分野の学習結果を別の関連タスクに活かす手法にゃ。ゼロから学習するより少ないデータ・時間で高精度を達成できるにゃ。"},
@@ -784,6 +832,115 @@ function finish(){
 function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; document.getElementById("final-screen").style.display="none"; document.getElementById("game-screen").style.display="block"; startTimer(); show(); } }
 function retryFlagged(){ let list=currentQuiz.filter((_,i)=>flagged[i]); if(list.length>0){ currentQuiz=JSON.parse(JSON.stringify(list)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; document.getElementById("final-screen").style.display="none"; document.getElementById("game-screen").style.display="block"; startTimer(); show(); } }
 function retryAll(){ location.reload(); }
+
+// ===== ○×クイズ =====
+let oxData = [], oxIndex = 0, oxScore = 0, oxCorrectAnswer = true;
+
+function buildOXData() {
+    const data = [];
+    // 元データ（シャッフル前）を使う
+    const original = JSON.parse(JSON.stringify(quizData));
+    original.forEach(q => {
+        const correctAnswer = q.a[q.c]; // シャッフル前の正解
+        const wrongAnswer = q.a[q.c === 0 ? 1 : 0]; // 不正解の選択肢
+
+        // 正文 → 正解は○
+        data.push({
+            text: '「' + correctAnswer + '」は「' + q.q.replace(/「/g,'').replace(/」/g,'').replace('は？','').replace('とは何か','').replace('とは','') + '」の正しい説明である。',
+            correct: true,
+            hint: '⭕ 正しいにゃ！' + q.d
+        });
+        // 誤文 → 正解は×
+        if (wrongAnswer) {
+            data.push({
+                text: '「' + wrongAnswer + '」は「' + q.q.replace(/「/g,'').replace(/」/g,'').replace('は？','').replace('とは何か','').replace('とは','') + '」の正しい説明である。',
+                correct: false,
+                hint: '❌ 正しくないにゃ。正解は「' + correctAnswer + '」にゃ。' + q.d
+            });
+        }
+    });
+    return data;
+}
+
+function startOX() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("ox-screen").style.display = "block";
+    oxData = buildOXData();
+    shuffle(oxData);
+    oxData = oxData.slice(0, 60); // 60問出題
+    oxIndex = 0; oxScore = 0;
+    showOX();
+}
+
+function showOX() {
+    const q = oxData[oxIndex];
+    document.getElementById("ox-progress").textContent = "問 " + (oxIndex+1) + " / " + oxData.length;
+    document.getElementById("ox-question").textContent = q.text;
+    document.getElementById("ox-result").style.display = "none";
+    document.getElementById("ox-next-btn").style.display = "none";
+    document.getElementById("ox-true-btn").disabled = false;
+    document.getElementById("ox-false-btn").disabled = false;
+    document.getElementById("ox-true-btn").style.opacity = "1";
+    document.getElementById("ox-false-btn").style.opacity = "1";
+    oxCorrectAnswer = q.correct;
+}
+
+function answerOX(userAnswer) {
+    document.getElementById("ox-true-btn").disabled = true;
+    document.getElementById("ox-false-btn").disabled = true;
+    const correct = (userAnswer === oxCorrectAnswer);
+    const res = document.getElementById("ox-result");
+    res.style.display = "block";
+    if (correct) {
+        oxScore++;
+        res.innerHTML = "✅ 正解だにゃ！<br><small>" + oxData[oxIndex].hint + "</small>";
+        res.style.backgroundColor = "#d1fae5";
+        res.style.border = "2px solid #10b981";
+    } else {
+        const correctMark = oxCorrectAnswer ? "⭕" : "❌";
+        res.innerHTML = "❌ 不正解…正解は " + correctMark + " にゃ。<br><small>" + oxData[oxIndex].hint + "</small>";
+        res.style.backgroundColor = "#fee2e2";
+        res.style.border = "2px solid #ef4444";
+    }
+    // ボタンの透明度で正解を示す
+    if (oxCorrectAnswer) {
+        document.getElementById("ox-false-btn").style.opacity = "0.3";
+    } else {
+        document.getElementById("ox-true-btn").style.opacity = "0.3";
+    }
+    document.getElementById("ox-next-btn").style.display = "block";
+    window.scrollTo(0, 0);
+}
+
+function nextOX() {
+    oxIndex++;
+    if (oxIndex < oxData.length) {
+        showOX();
+    } else {
+        finishOX();
+    }
+}
+
+function finishOX() {
+    document.getElementById("ox-screen").style.display = "none";
+    document.getElementById("ox-final-screen").style.display = "block";
+    const pct = Math.round(oxScore / oxData.length * 100);
+    document.getElementById("ox-final-score").textContent = oxScore + " / " + oxData.length;
+    document.getElementById("ox-bar-pct").textContent = pct + "%";
+    setTimeout(() => {
+        document.getElementById("ox-bar-fill").style.width = pct + "%";
+        document.getElementById("ox-bar-fill").style.background = pct >= 70 ? "#10b981" : "#f59e0b";
+    }, 100);
+    const j = document.getElementById("ox-judgement");
+    if (pct >= 70) {
+        j.innerHTML = "🎉 合格圏内！（正答率" + pct + "%）<br><small style='font-size:16px;'>※合格ラインは公式非公開です</small>";
+        j.style.background = "#d1fae5"; j.style.color = "#064e3b"; j.style.border = "3px solid #10b981";
+    } else {
+        j.innerHTML = "💦 あと少し！（正答率" + pct + "%）<br><small style='font-size:16px;'>4択クイズで復習してにゃ🐈</small>";
+        j.style.background = "#fff1f2"; j.style.color = "#7f1d1d"; j.style.border = "3px solid #ef4444";
+    }
+    window.scrollTo(0, 0);
+}
 
 // ===== チートシート =====
 const cheatData = [
