@@ -6,22 +6,36 @@
 <title>AIパスポート最強アプリ【決定版】</title>
 <style>
 /* Mahito専用：フォントサイズは変更せず、見やすさ重視 */
-body { font-family:sans-serif; background:#f4f7f6; padding:15px; margin:0; font-size: 22px; }
-.container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+/* ===== iOS最適化 ===== */
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background:#f4f7f6; padding:15px; margin:0; font-size:22px;
+  overscroll-behavior: none;           /* iOSスワイプバック誤動作を防止 */
+  -webkit-overflow-scrolling: touch;   /* iOSスクロールをなめらかに */
+}
+/* 全ボタンのタッチ最適化 */
+button {
+  touch-action: manipulation;          /* ダブルタップズームを無効化・タッチ遅延解消 */
+  -webkit-tap-highlight-color: transparent; /* タップ時の青枠を消す */
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+}
+.container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 h2 { font-size:26px; color:#1e293b; border-left:12px solid #2563eb; padding-left:15px; }
 .menu { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.menu button { background:#111827; color:#fff; font-size:16px; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:bold; }
-#flagBtn { background:#f59e0b; color:#fff; margin-bottom: 15px; padding:20px; font-size:22px; border-radius:12px; border:none; width:100%; font-weight:bold; cursor:pointer; }
+.menu button { background:#111827; color:#fff; font-size:16px; padding:12px; border-radius:10px; border:none; font-weight:bold; }
+#flagBtn { background:#f59e0b; color:#fff; margin-bottom:15px; padding:20px; font-size:22px; border-radius:12px; border:none; width:100%; font-weight:bold; }
 .is-flagged { background:#ef4444 !important; }
-#question { font-size:26px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; }
-button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:22px; font-weight:bold; text-align:left; cursor:pointer; }
+#question { font-size:26px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; line-height:1.6; }
+button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:22px; font-weight:bold; text-align:left; line-height:1.5; }
 .correct { background:#d1fae5 !important; border-color:#10b981 !important; color:#064e3b; }
 .wrong { background:#fee2e2 !important; border-color:#ef4444 !important; color:#7f1d1d; }
-#result { margin-top:15px; font-weight:bold; font-size:22px; padding:15px; border-radius:10px; display:none; border:2px solid #ddd; }
-#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; cursor:pointer; display:none; margin-top:20px; }
-#final-screen { display:none; text-align: center; }
-.review-box { text-align: left; background: #fff1f2; padding: 15px; margin-top: 20px; border-radius: 10px; border-left: 8px solid #ef4444; }
-.review-item { margin-bottom: 20px; border-bottom: 1px solid #fda4af; padding-bottom: 10px; font-size: 22px; }
+#result { margin-top:15px; font-weight:bold; font-size:20px; padding:15px; border-radius:10px; display:none; border:2px solid #ddd; line-height:1.7; }
+#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; display:none; margin-top:20px; }
+#final-screen { display:none; text-align:center; }
+.review-box { text-align:left; background:#fff1f2; padding:15px; margin-top:20px; border-radius:10px; border-left:8px solid #ef4444; }
+.review-item { margin-bottom:20px; border-bottom:1px solid #fda4af; padding-bottom:10px; font-size:20px; line-height:1.7; }
 
 /* ===== 表紙（スタート画面）専用CSS ===== */
 #start-screen {
@@ -32,7 +46,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   background: #0f172a;
   border-radius: 20px;
   padding: 30px 20px 40px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 #start-screen .cover-title {
   color: #f1f5f9;
@@ -84,11 +98,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   background: linear-gradient(135deg, #ef4444, #f59e0b);
   border: none;
   border-radius: 60px;
-  cursor: pointer;
-  box-shadow: 0 6px 25px rgba(239,68,68,0.5);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(239,68,68,0.4);
+  transition: transform 0.15s;
 }
-#start-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(239,68,68,0.6); }
+#start-btn:hover { transform: scale(1.03); }
 #start-btn:active { transform: scale(0.97); }
 #cat-toggle-btn {
   display: block;
@@ -102,11 +115,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   background: linear-gradient(135deg, #059669, #10b981);
   border: none;
   border-radius: 60px;
-  cursor: pointer;
-  box-shadow: 0 6px 25px rgba(5,150,105,0.5);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(5,150,105,0.4);
+  transition: transform 0.15s;
 }
-#cat-toggle-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(5,150,105,0.6); }
+#cat-toggle-btn:hover { transform: scale(1.03); }
 #cat-toggle-btn:active { transform: scale(0.97); }
 .cat-btn { display:block; width:100%; padding:16px 20px; margin-bottom:8px; background:#0f172a; color:#f1f5f9; border:2px solid #334155; border-radius:12px; font-size:20px; font-weight:bold; text-align:left; cursor:pointer; transition:background 0.15s,border-color 0.15s; }
 .cat-btn:hover { background:#1e3a5f; border-color:#3b82f6; }
@@ -123,11 +135,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   background: linear-gradient(135deg, #1e40af, #3b82f6);
   border: none;
   border-radius: 60px;
-  cursor: pointer;
-  box-shadow: 0 6px 25px rgba(37,99,235,0.5);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.4);
+  transition: transform 0.15s;
 }
-#cheat-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(37,99,235,0.6); }
+#cheat-btn:hover { transform: scale(1.03); }
 #cheat-btn:active { transform: scale(0.97); }
 #ox-btn {
   display: block;
@@ -141,11 +152,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   background: linear-gradient(135deg, #7c3aed, #a855f7);
   border: none;
   border-radius: 60px;
-  cursor: pointer;
-  box-shadow: 0 6px 25px rgba(124,58,237,0.5);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  transition: transform 0.15s;
 }
-#ox-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(124,58,237,0.6); }
+#ox-btn:hover { transform: scale(1.03); }
 #ox-btn:active { transform: scale(0.97); }
 #start-screen .edition-note {
   color: #64748b;
@@ -194,7 +204,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
     猫と学べるAIパスポート最強ドリル🐈
   </div>
-  <div style="margin-top:16px; padding:16px 20px; background:#1e293b; border-radius:12px; color:#64748b; font-size:14px; line-height:1.8; text-align:left;">
+  <div style="margin-top:16px; padding:16px 20px; background:#1e293b; border-radius:12px; color:#64748b; font-size:16px; line-height:1.8; text-align:left;">
     📝 このアプリはMahitoが脳梗塞のリハビリ中に個人で作成した学習用ドリルです。問題・解説の正確性は保証できません。最新の試験情報・正式な出題範囲は必ずGUGA公式サイト（guga.or.jp）でご確認ください。本アプリの利用により生じた損害について、作者は責任を負いません。<br>これらをご了承の上、マーニャとアイと一緒にAIパスポート合格を目指してください🐈🐈‍⬛
   </div>
 </div>
@@ -807,7 +817,7 @@ function check(ok,btn,q){
     document.getElementById("nextBtn").style.display="block";
 }
 
-function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); window.scrollTo(0,0); } else { finish(); } }
+function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); window.scrollTo({top:0,behavior:'instant'}); } else { finish(); } }
 
 function finish(){
     clearInterval(timer);
@@ -840,7 +850,7 @@ function finish(){
             listArea.innerHTML += `<div class="review-item"><strong>問: ${q.q}</strong><br><span style='color:#ef4444;'>❌ 正解: ${q.a[q.c]}</span><br><small>💡 ${q.d}</small></div>`;
         });
     }
-    window.scrollTo(0,0);
+    window.scrollTo({top:0,behavior:"instant"});
 }
 
 function retryWrong(){ if(wrongList.length>0){ currentQuiz=JSON.parse(JSON.stringify(wrongList)); currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false); timeLeft=3600; document.getElementById("final-screen").style.display="none"; document.getElementById("game-screen").style.display="block"; startTimer(); show(); } }
@@ -951,7 +961,7 @@ function answerOX(userAnswer) {
         document.getElementById("ox-true-btn").style.opacity = "0.3";
     }
     document.getElementById("ox-next-btn").style.display = "block";
-    window.scrollTo(0, 0);
+    window.scrollTo({top:0,behavior:"instant"});
 }
 
 function nextOX() {
@@ -981,7 +991,7 @@ function finishOX() {
         j.innerHTML = "💦 あと少し！（正答率" + pct + "%）<br><small style='font-size:16px;'>4択クイズで復習してにゃ🐈</small>";
         j.style.background = "#fff1f2"; j.style.color = "#7f1d1d"; j.style.border = "3px solid #ef4444";
     }
-    window.scrollTo(0, 0);
+    window.scrollTo({top:0,behavior:"instant"});
 }
 
 // ===== チートシート =====
@@ -1054,7 +1064,7 @@ const cheatData = [
 function showCheat() {
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("cheat-screen").style.display = "block";
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:"instant"});
 
   const list = document.getElementById("cheat-list");
   list.innerHTML = "";
@@ -1077,7 +1087,7 @@ function showCheat() {
 function hideCheat() {
   document.getElementById("cheat-screen").style.display = "none";
   document.getElementById("start-screen").style.display = "block";
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:"instant"});
 }
 </script>
 
