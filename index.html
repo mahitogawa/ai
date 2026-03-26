@@ -126,18 +126,18 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== 表紙（スタート画面）===== -->
 <div id="start-screen">
-  <p class="cover-title">Mahito's Edition 2026</p>
+  <p class="cover-title" style="text-align:center;">Mahito's Edition 2026</p>
   <div class="cover-image-wrapper">
     <!-- 画像ファイルをGitHubに置いていない場合は下の fallback が表示されます -->
     <img src="image_0aff13.png" alt="AIパスポート模試" 
          onerror="this.style.display='none'; document.getElementById('cover-fallback').style.display='block';">
     <div id="cover-fallback" class="cover-fallback" style="display:none;">
-      <div class="big-title">🐱 生成AIパスポート</div>
-      <div class="big-title">最新200問搭載！</div>
+      <div class="big-title" style="text-align:center; font-size:34px;">🐱 生成AIパスポート</div>
+      <div class="big-title" style="text-align:center;">200問からランダム！</div>
       <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
     </div>
   </div>
-  <button id="start-btn" class="top-btn" onclick="startQuiz()">🐱 ランダム200問から60問に挑戦！</button>
+  <button id="start-btn" class="top-btn" onclick="startQuiz()">200問からランダム！</button>
   <button onclick="toggleCategoryMenu()" id="cat-toggle-btn" class="top-btn">🐱 カテゴリ別練習</button>
   <div id="cat-menu" style="display:none;width:90%;max-width:420px;margin:0 auto 0;background:#1e293b;border-radius:16px;padding:16px;text-align:left;">
       <p style="color:#94a3b8;font-size:16px;margin:0 0 12px 4px;">苦手分野を集中練習にゃ🐱</p>
@@ -149,8 +149,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（20問）</button>
       <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（16問）</button>
     </div>
-  <button onclick="startOX()" id="ox-btn" class="top-btn">🐱 ○×クイズに挑戦！</button>
-  <button onclick="showCheat()" id="cheat-btn" class="top-btn">🐱 略語チートシートを見る</button>
+  <button onclick="startOX()" id="ox-btn" class="top-btn">🐈〇✖クイズに挑戦！</button>
+  <button onclick="showCheat()" id="cheat-btn" class="top-btn">📖 略語チートシート</button>
   <p class="edition-note">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
   <script>
@@ -160,7 +160,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       .catch(() => { document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
   </script>
   <div style="margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em;">
-    猫と学べるAIパスポート最強ドリル🐈
+    猫と学べるAIパスポート<br>最強ドリル🐈
   </div>
   <div style="margin-top:16px; padding:14px 18px; background:#1e293b; border-radius:12px; color:#64748b; font-size:14px; line-height:1.7; text-align:left;">
     🐈 このアプリはMahitoが脳梗塞のリハビリ中に個人で作成した学習用ドリルです。問題・解説の正確性は保証できません。最新の試験情報・正式な出題範囲は必ずGUGA公式サイト（guga.or.jp）でご確認ください。本アプリの利用により生じた損害について、作者は責任を負いません。これらをご了承の上、マーニャとアイと一緒にAIパスポート合格を目指してください🐈🐈‍⬛
@@ -180,7 +180,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== クイズ画面（元のコードそのまま）===== -->
 <div id="game-screen" class="container" style="display:none;">
-    <h2>AIパスポート実戦</h2>
+    <h2>AIパスポート実戦！</h2>
     <div class="menu">
         <button onclick="retryWrong()">❌ミス</button>
         <button onclick="retryFlagged()">🚩フラグ</button>
@@ -216,7 +216,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== ○×クイズ画面 ===== -->
 <div id="ox-screen" class="container" style="display:none;">
-  <h2>⭕ ○×クイズ</h2>
+  <h2>🐈〇✖クイズ</h2>
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <div id="ox-progress" style="font-weight:bold; color:#64748b;"></div>
     <button onclick="retryAll()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">🔄 リセット</button>
