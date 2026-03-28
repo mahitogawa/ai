@@ -250,7 +250,9 @@ body { padding-bottom: 80px; }
     実際のGUGA試験に近いUIで練習できるにゃ🐈<br>
     4択形式・20問・解説付き
   </div>
+  <div style="color:#64748b;font-size:14px;margin-bottom:12px;">シンプル版：本番練習と重要20問だけに整理</div>
   <button id="begin-btn" onclick="startExam()">▶ 練習をはじめる</button>
+  <button id="important20-local-btn" onclick="startImportant20Mode()" style="display:block; width:90%; max-width:400px; margin:12px auto 0; padding:18px; background:linear-gradient(135deg,#ef4444,#f59e0b); color:#fff; border:none; border-radius:50px; font-size:19px; font-weight:bold;">🔥 最重要20問で仕上げる</button>
   <button id="home-btn" onclick="location.href='index.html'">← TOPに戻る</button>
   <p class="note">
     🐈 このモードはMahitoが作った練習用アプリです。<br>
@@ -280,6 +282,7 @@ body { padding-bottom: 80px; }
   <div id="result-bar-wrap"><div id="result-bar-fill"></div></div>
   <div id="result-msg"></div>
   <button id="retry-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button id="important20-result-btn" onclick="startImportant20Mode()" style="display:block; width:90%; max-width:400px; margin:14px auto 0; padding:16px; background:linear-gradient(135deg,#ef4444,#f59e0b); color:#fff; border:none; border-radius:50px; font-size:18px; font-weight:bold;">🔥 最重要20問へ</button>
   <button id="home-btn" onclick="location.href='index.html'">← TOPに戻る</button>
   <p style="margin-top:20px; font-size:14px; color:#94a3b8;">
     20問モードでサクッと復習できるにゃ🐈
@@ -290,6 +293,49 @@ body { padding-bottom: 80px; }
 // ===== 問題データ（本体から共有） =====
 // index.htmlと同じquizDataをここに埋め込む
 // ※ 下記はサンプル10問。本番利用時はindex.htmlのquizDataをそのままコピーしてください
+
+const important20Data = [
+    {q:"GPTとは何か？",a:["画像認識AI","文章生成AI","音声認識AI","セキュリティ技術"],cat:'tech',c:1,
+     d:"GPTは文章を作るAIにゃ。ChatGPTの中心になる仕組みで、会話・要約・文章作成が得意にゃ。"},
+    {q:"LLMとは？",a:["小型AI","音声AI","大規模言語モデル","画像処理モデル"],cat:'tech',c:2,
+     d:"LLMは大規模言語モデルのこと。大量の文章を学習して、人の言葉を理解したり作ったりするAIの土台にゃ。"},
+    {q:"APIとは？",a:["データ保存","アプリ同士をつなぐ仕組み","セキュリティ強化","画像処理"],cat:'tech',c:1,
+     d:"APIはアプリ同士をつなぐ橋にゃ。別のサービスの機能を借りて使う時によく使われるにゃ。"},
+    {q:"SaaSとは？",a:["ソフトを買う","クラウドでそのまま使う","自分で開発","無料ソフト"],cat:'business',c:1,
+     d:"SaaSはインストールせず、ネット経由ですぐ使えるサービスにゃ。GmailやGoogleドキュメントのような形に近いにゃ。"},
+    {q:"DXとは？",a:["データ削除","デジタルによる変革","AIの種類","セキュリティ"],cat:'business',c:1,
+     d:"DXはデジタル技術で仕事や生活の仕組みそのものを良く変えることにゃ。単なるパソコン化ではないにゃ。"},
+    {q:"OCRとは？",a:["音声認識","画像生成","文字読み取り","データ圧縮"],cat:'tech',c:2,
+     d:"OCRは画像や紙の文字を読み取って、テキストデータに変える技術にゃ。請求書や書類の読み取りでよく使うにゃ。"},
+    {q:"RPAとは？",a:["人が操作","作業の自動化","通信技術","AIモデル"],cat:'tech',c:1,
+     d:"RPAは定型作業を自動化する仕組みにゃ。毎回同じクリックや入力を代わりにやってくれるにゃ。"},
+    {q:"IoTとは？",a:["AIの種類","モノがネットにつながる","データ削除","音声処理"],cat:'tech',c:1,
+     d:"IoTは家電や機械などのモノがネットにつながることにゃ。スマート家電が代表例にゃ。"},
+    {q:"VPNとは？",a:["高速通信","安全な通信経路","データ保存","AIモデル"],cat:'security',c:1,
+     d:"VPNは安全な通信トンネルを作る仕組みにゃ。外出先から会社のネットに安全につなぐ時などに使うにゃ。"},
+    {q:"MFAとは？",a:["1つのパスワード","複数の認証で守る","データ圧縮","通信速度向上"],cat:'security',c:1,
+     d:"MFAは複数の認証を組み合わせて守る方法にゃ。パスワードだけより安全性が上がるにゃ。"},
+    {q:"RAGとは？",a:["検索してから答える仕組み","画像だけを作る技術","音声を強くする技術","通信速度を上げる仕組み"],cat:'tech',c:0,
+     d:"RAGは外部情報を検索してから答える仕組みにゃ。最新情報や社内資料を見ながら答える時に強いにゃ。"},
+    {q:"ハルシネーションとは？",a:["AIが事実と違う内容をもっともらしく答えること","AIが急に速くなること","画像が高画質になること","通信が暗号化されること"],cat:'tech',c:0,
+     d:"ハルシネーションはAIの作り話にゃ。自信ありげに間違えることがあるので、重要情報は確認が必要にゃ。"},
+    {q:"プロンプトとは？",a:["AIへの指示文","暗号化の方法","画像の保存形式","ネット料金"],cat:'prompt',c:0,
+     d:"プロンプトはAIへのお願いや指示を書く文章にゃ。ここが上手いほど、答えも良くなりやすいにゃ。"},
+    {q:"個人情報をAIに入力する時の基本対策は？",a:["そのまま全部入れる","匿名化・マスキングしてから使う","毎回長文にする","画像だけで送る"],cat:'law',c:1,
+     d:"個人情報はそのまま入れず、匿名化やマスキングが基本にゃ。社外サービスでは特に注意が必要にゃ。"},
+    {q:"著作権侵害の判断で重要な2つの要素は？",a:["速度と画質","類似性と依拠性","価格と人気","文字数と色"],cat:'law',c:1,
+     d:"著作権侵害では、元ネタに似ているか（類似性）と、元ネタを参考にしたか（依拠性）が大事にゃ。"},
+    {q:"DXといっしょに出やすいBPRとは？",a:["業務を根本から見直すこと","画像を圧縮すること","通信を速くすること","パスワードを保存すること"],cat:'business',c:0,
+     d:"BPRは業務の流れを根本から作り直すことにゃ。AI導入では今の仕事をそのまま残さず、最適化まで考えるにゃ。"},
+    {q:"AI事業者ガイドラインで重視される考え方は？",a:["透明性・安全性・公平性","速度・価格・広告","人気・話題性・色","売上・在庫・配送"],cat:'policy',c:0,
+     d:"AI事業者ガイドラインでは、透明性・安全性・公平性などが大事にされるにゃ。安心して使う土台にゃ。"},
+    {q:"ヒューマン・イン・ザ・ループとは？",a:["最終判断に人が関わること","AIだけで全部決めること","ネットを切ること","画像を回転すること"],cat:'policy',c:0,
+     d:"ヒューマン・イン・ザ・ループは、AI任せにせず大事なところで人が確認する考え方にゃ。"},
+    {q:"NDAとは？",a:["秘密保持契約","広告契約","売買契約","保険契約"],cat:'law',c:0,
+     d:"NDAは秘密保持契約にゃ。機密情報を安全に扱う時の基本になるにゃ。"},
+    {q:"AIリテラシーとは？",a:["AIを理解して安全に使う力","タイピング速度","画像編集の技術","電池を長持ちさせる方法"],cat:'business',c:0,
+     d:"AIリテラシーは、AIの便利さ・弱点・危険を理解して上手に使う力にゃ。試験の中心テーマにゃ。"}
+];
 
 const quizData = [
     {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],cat:'tech',c:0,
@@ -729,8 +775,8 @@ function shuffle(a) {
   }
 }
 
-function startExam() {
-  currentData = JSON.parse(JSON.stringify(quizData));
+function beginWithData(data, titleText) {
+  currentData = JSON.parse(JSON.stringify(data));
   shuffle(currentData);
   currentData = currentData.slice(0, Math.min(20, currentData.length));
   currentData.forEach(q => {
@@ -739,11 +785,25 @@ function startExam() {
     q.c = q.a.indexOf(cor);
   });
   currentIndex = 0; score = 0;
+  document.querySelector('.start-title').innerHTML = titleText;
   document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
   document.getElementById('quiz-screen').style.display = 'block';
   document.getElementById('header').style.display = 'flex';
   document.getElementById('progress-bar-wrap').style.display = 'block';
   showQuestion();
+}
+
+function startImportant20Mode() {
+  beginWithData(typeof important20Data !== 'undefined' ? important20Data : quizData.slice(0,20), '生成AIパスポート<br>最重要20問モード');
+}
+
+function startFinal20Mode() {
+  beginWithData(final20Data, '生成AIパスポート<br>絶対出る20問モード');
+}
+
+function startExam() {
+  beginWithData(quizData, '生成AIパスポート<br>本番UI練習モード');
 }
 
 function showQuestion() {

@@ -112,6 +112,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #cat-toggle-btn{ background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 16px rgba(5,150,105,0.4); }
 #ox-btn        { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
 #cheat-btn     { background: linear-gradient(135deg, #1e40af, #3b82f6); box-shadow: 0 4px 16px rgba(37,99,235,0.4); }
+#important20-btn{ background: linear-gradient(135deg, #dc2626, #f59e0b); box-shadow: 0 4px 16px rgba(220,38,38,0.42); }
+#important20-nav-btn{ background: linear-gradient(135deg, #dc2626, #f59e0b); color:#fff; }
 .cat-btn { display:block; width:100%; padding:14px 20px; margin-bottom:8px; background:#0f172a; color:#f1f5f9; border:2px solid #334155; border-radius:12px; font-size:18px; font-weight:bold; text-align:left; cursor:pointer; transition:background 0.15s,border-color 0.15s; }
 .cat-btn:hover { background:#1e3a5f; border-color:#3b82f6; }
 .cat-btn:last-child { margin-bottom:0; }
@@ -143,6 +145,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
     </div>
   </div>
+  <div style="color:#94a3b8;font-size:15px;margin:6px 0 10px;">おすすめの順で並べたにゃ</div>
   <button id="start-btn" class="top-btn" onclick="startQuiz()">🐱 200問からランダム！</button>
   <button onclick="toggleCategoryMenu()" id="cat-toggle-btn" class="top-btn">🐱 カテゴリ別練習</button>
   <div id="cat-menu" style="display:none;width:90%;max-width:420px;margin:0 auto 0;background:#1e293b;border-radius:16px;padding:16px;text-align:left;">
@@ -155,12 +158,14 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（20問）</button>
       <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（16問）</button>
     </div>
+  <button onclick="startImportant20()" id="important20-btn" class="top-btn">🐱 最重要20問だけ</button>
+  <div style="color:#94a3b8;font-size:15px;margin:14px 0 8px;">復習・補助メニュー</div>
   <button onclick="startOX()" id="ox-btn" class="top-btn">🐱 ○×クイズに挑戦！</button>
   <button onclick="showCheat()" id="cheat-btn" class="top-btn">🐱 略語チートシート</button>
   <button id="advanced-link-btn" class="top-btn" onclick="location.href='guga.html'">🐱 本番UI練習モード</button>
 <br><br>
 
-<a href="https://youtube.com/shorts/q34M03EFqUI">
+<a href="https://www.youtube.com/shorts/7apvLFZ7WdU?feature=share">
   ▶ 使い方を見る（30秒）
 </a>
 <p class="edition-note">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
@@ -187,7 +192,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   </div>
   <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
   <div id="cheat-list"></div>
-  <button onclick="hideCheat()" style="display:block; width:100%; margin-top:24px; padding:20px; background:#334155; color:#fff; border:none; border-radius:16px; font-size:22px; font-weight:bold; cursor:pointer; touch-action:manipulation;">🐈 TOPに戻る</button>
+  <button onclick="startImportant20()" id="important20-nav-btn" style="display:block; width:100%; margin-top:24px; padding:20px; border:none; border-radius:16px; font-size:22px; font-weight:bold; cursor:pointer; touch-action:manipulation;">🔥 最重要20問へ</button>
+  <button onclick="hideCheat()" style="display:block; width:100%; margin-top:14px; padding:20px; background:#334155; color:#fff; border:none; border-radius:16px; font-size:22px; font-weight:bold; cursor:pointer; touch-action:manipulation;">🐈 TOPに戻る</button>
 </div>
 
 <!-- ===== クイズ画面（元のコードそのまま）===== -->
@@ -224,6 +230,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
         <div id="review-list"></div>
     </div>
     <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:30px;">🔄 最初からやり直す</button>
+    <button onclick="startImportant20()" id="important20-nav-btn" style="padding:22px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:14px;">🔥 最重要20問へ</button>
 </div>
 
 <!-- ===== ○×クイズ画面 ===== -->
@@ -262,9 +269,54 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     </div>
   </div>
   <button onclick="retryAll()" style="background:#27ae60; color:#fff; padding:25px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:20px;">🔄 最初からやり直す</button>
+  <button onclick="startImportant20()" id="important20-nav-btn" style="padding:22px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:14px;">🔥 最重要20問へ</button>
 </div>
 
 <script>
+
+const important20Data = [
+    {q:"GPTとは何か？",a:["画像認識AI","文章生成AI","音声認識AI","セキュリティ技術"],cat:'tech',c:1,
+     d:"GPTは文章を作るAIにゃ。ChatGPTの中心になる仕組みで、会話・要約・文章作成が得意にゃ。"},
+    {q:"LLMとは？",a:["小型AI","音声AI","大規模言語モデル","画像処理モデル"],cat:'tech',c:2,
+     d:"LLMは大規模言語モデルのこと。大量の文章を学習して、人の言葉を理解したり作ったりするAIの土台にゃ。"},
+    {q:"APIとは？",a:["データ保存","アプリ同士をつなぐ仕組み","セキュリティ強化","画像処理"],cat:'tech',c:1,
+     d:"APIはアプリ同士をつなぐ橋にゃ。別のサービスの機能を借りて使う時によく使われるにゃ。"},
+    {q:"SaaSとは？",a:["ソフトを買う","クラウドでそのまま使う","自分で開発","無料ソフト"],cat:'business',c:1,
+     d:"SaaSはインストールせず、ネット経由ですぐ使えるサービスにゃ。GmailやGoogleドキュメントのような形に近いにゃ。"},
+    {q:"DXとは？",a:["データ削除","デジタルによる変革","AIの種類","セキュリティ"],cat:'business',c:1,
+     d:"DXはデジタル技術で仕事や生活の仕組みそのものを良く変えることにゃ。単なるパソコン化ではないにゃ。"},
+    {q:"OCRとは？",a:["音声認識","画像生成","文字読み取り","データ圧縮"],cat:'tech',c:2,
+     d:"OCRは画像や紙の文字を読み取って、テキストデータに変える技術にゃ。請求書や書類の読み取りでよく使うにゃ。"},
+    {q:"RPAとは？",a:["人が操作","作業の自動化","通信技術","AIモデル"],cat:'tech',c:1,
+     d:"RPAは定型作業を自動化する仕組みにゃ。毎回同じクリックや入力を代わりにやってくれるにゃ。"},
+    {q:"IoTとは？",a:["AIの種類","モノがネットにつながる","データ削除","音声処理"],cat:'tech',c:1,
+     d:"IoTは家電や機械などのモノがネットにつながることにゃ。スマート家電が代表例にゃ。"},
+    {q:"VPNとは？",a:["高速通信","安全な通信経路","データ保存","AIモデル"],cat:'security',c:1,
+     d:"VPNは安全な通信トンネルを作る仕組みにゃ。外出先から会社のネットに安全につなぐ時などに使うにゃ。"},
+    {q:"MFAとは？",a:["1つのパスワード","複数の認証で守る","データ圧縮","通信速度向上"],cat:'security',c:1,
+     d:"MFAは複数の認証を組み合わせて守る方法にゃ。パスワードだけより安全性が上がるにゃ。"},
+    {q:"RAGとは？",a:["検索してから答える仕組み","画像だけを作る技術","音声を強くする技術","通信速度を上げる仕組み"],cat:'tech',c:0,
+     d:"RAGは外部情報を検索してから答える仕組みにゃ。最新情報や社内資料を見ながら答える時に強いにゃ。"},
+    {q:"ハルシネーションとは？",a:["AIが事実と違う内容をもっともらしく答えること","AIが急に速くなること","画像が高画質になること","通信が暗号化されること"],cat:'tech',c:0,
+     d:"ハルシネーションはAIの作り話にゃ。自信ありげに間違えることがあるので、重要情報は確認が必要にゃ。"},
+    {q:"プロンプトとは？",a:["AIへの指示文","暗号化の方法","画像の保存形式","ネット料金"],cat:'prompt',c:0,
+     d:"プロンプトはAIへのお願いや指示を書く文章にゃ。ここが上手いほど、答えも良くなりやすいにゃ。"},
+    {q:"個人情報をAIに入力する時の基本対策は？",a:["そのまま全部入れる","匿名化・マスキングしてから使う","毎回長文にする","画像だけで送る"],cat:'law',c:1,
+     d:"個人情報はそのまま入れず、匿名化やマスキングが基本にゃ。社外サービスでは特に注意が必要にゃ。"},
+    {q:"著作権侵害の判断で重要な2つの要素は？",a:["速度と画質","類似性と依拠性","価格と人気","文字数と色"],cat:'law',c:1,
+     d:"著作権侵害では、元ネタに似ているか（類似性）と、元ネタを参考にしたか（依拠性）が大事にゃ。"},
+    {q:"DXといっしょに出やすいBPRとは？",a:["業務を根本から見直すこと","画像を圧縮すること","通信を速くすること","パスワードを保存すること"],cat:'business',c:0,
+     d:"BPRは業務の流れを根本から作り直すことにゃ。AI導入では今の仕事をそのまま残さず、最適化まで考えるにゃ。"},
+    {q:"AI事業者ガイドラインで重視される考え方は？",a:["透明性・安全性・公平性","速度・価格・広告","人気・話題性・色","売上・在庫・配送"],cat:'policy',c:0,
+     d:"AI事業者ガイドラインでは、透明性・安全性・公平性などが大事にされるにゃ。安心して使う土台にゃ。"},
+    {q:"ヒューマン・イン・ザ・ループとは？",a:["最終判断に人が関わること","AIだけで全部決めること","ネットを切ること","画像を回転すること"],cat:'policy',c:0,
+     d:"ヒューマン・イン・ザ・ループは、AI任せにせず大事なところで人が確認する考え方にゃ。"},
+    {q:"NDAとは？",a:["秘密保持契約","広告契約","売買契約","保険契約"],cat:'law',c:0,
+     d:"NDAは秘密保持契約にゃ。機密情報を安全に扱う時の基本になるにゃ。"},
+    {q:"AIリテラシーとは？",a:["AIを理解して安全に使う力","タイピング速度","画像編集の技術","電池を長持ちさせる方法"],cat:'business',c:0,
+     d:"AIリテラシーは、AIの便利さ・弱点・危険を理解して上手に使う力にゃ。試験の中心テーマにゃ。"}
+];
+
 const quizData = [
     {q:"LLMが文章を処理する際の最小単位は？",a:["トークン","ビット","パケット","セグメント"],cat:'tech',c:0,
      d:"「トークン」はAIが言葉を理解するための最小のかけら。「東京」は1〜2トークン。日本語は英語より多く分割されやすく、APIコストに直結するにゃ。"},
@@ -738,6 +790,21 @@ function startCategory(cat) {
 }
 
 // 表紙からクイズへ
+
+function startImportant20() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+    document.querySelector("#game-screen h2").textContent = "最重要20問モード";
+    document.getElementById("timer").style.display = "none";
+    clearInterval(timer);
+    currentQuiz = JSON.parse(JSON.stringify(important20Data));
+    shuffle(currentQuiz);
+    currentQuiz.forEach(q => { const cor=q.a[q.c]; shuffle(q.a); q.c=q.a.indexOf(cor); });
+    currentIndex=0; score=0; wrongList=[]; flagged=new Array(currentQuiz.length).fill(false);
+    timeLeft=0;
+    show();
+}
+
 function startQuiz() {
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("game-screen").style.display = "block";
