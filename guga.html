@@ -2,13 +2,13 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>生成AIパスポート 本番UI練習</title>
 <style>
 html { -webkit-text-size-adjust: 100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  background: #f0f4f8; margin: 0; padding: 0;
+  background: #f0f4f8; margin: 0; padding: 0; padding-bottom: calc(80px + env(safe-area-inset-bottom));
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -50,7 +50,7 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 #question-num { color: #60a5fa; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-#question-text { color: #f1f5f9; font-size: 19px; font-weight: bold; line-height: 1.7; }
+#question-text { color: #f1f5f9; font-size: 19px; font-weight: bold; line-height: 1.7; word-break: break-word; }
 
 /* 選択肢 */
 .choice-btn {
@@ -68,6 +68,8 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
   line-height: 1.5;
   transition: border-color 0.15s, background 0.15s;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  white-space: normal;
+  word-break: break-word;
 }
 .choice-btn:active { transform: scale(0.98); }
 .choice-btn.correct { background: #d1fae5; border-color: #10b981; color: #064e3b; }
@@ -189,7 +191,21 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
 #footer-banner .cat-icon { font-size: 28px; }
 #footer-banner .banner-text { font-size: 15px; line-height: 1.4; }
 #footer-banner .banner-cta { font-size: 20px; font-weight: bold; }
-body { padding-bottom: 80px; }
+body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+.home-btn-link {
+  display: block;
+  width: 90%;
+  max-width: 400px;
+  margin: 14px auto 0;
+  padding: 16px;
+  background: #e2e8f0;
+  color: #0d3349;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+}
+#quiz-container, #result-screen, #start-screen { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
 
 /* ===== 追加: スコア保存 / 上級編 ===== */
 #saved-score-box{
@@ -253,7 +269,7 @@ body { padding-bottom: 80px; }
   <div style="color:#64748b;font-size:14px;margin-bottom:12px;">シンプル版：本番練習と重要20問だけに整理</div>
   <button id="begin-btn" onclick="startExam()">▶ 練習をはじめる</button>
   <button id="important20-local-btn" onclick="startImportant20Mode()" style="display:block; width:90%; max-width:400px; margin:12px auto 0; padding:18px; background:linear-gradient(135deg,#ef4444,#f59e0b); color:#fff; border:none; border-radius:50px; font-size:19px; font-weight:bold;">🔥 最重要20問で仕上げる</button>
-  <button id="home-btn" onclick="location.href='index.html'">← TOPに戻る</button>
+  <button class="home-btn-link" onclick="location.href='index.html'">← TOPに戻る</button>
   <p class="note">
     🐈 このモードはMahitoが作った練習用アプリです。<br>
     問題の正確性は保証できません。<br>
@@ -283,7 +299,7 @@ body { padding-bottom: 80px; }
   <div id="result-msg"></div>
   <button id="retry-btn" onclick="location.reload()">🔄 もう一度</button>
   <button id="important20-result-btn" onclick="startImportant20Mode()" style="display:block; width:90%; max-width:400px; margin:14px auto 0; padding:16px; background:linear-gradient(135deg,#ef4444,#f59e0b); color:#fff; border:none; border-radius:50px; font-size:18px; font-weight:bold;">🔥 最重要20問へ</button>
-  <button id="home-btn" onclick="location.href='index.html'">← TOPに戻る</button>
+  <button class="home-btn-link" onclick="location.href='index.html'">← TOPに戻る</button>
   <p style="margin-top:20px; font-size:14px; color:#94a3b8;">
     20問モードでサクッと復習できるにゃ🐈
   </p>
@@ -827,7 +843,7 @@ function showQuestion() {
     btn.onclick = () => answer(i === q.c, btn, q);
     choices.appendChild(btn);
   });
-  window.scrollTo({top: 0, behavior: 'instant'});
+  window.scrollTo({top: 0, behavior: 'auto'});
 }
 
 function answer(isCorrect, btn, q) {
@@ -883,7 +899,7 @@ function showResult() {
     msg.style.background = '#fff1f2'; msg.style.color = '#7f1d1d'; msg.style.border = '2px solid #ef4444';
     msg.innerHTML = '💦 あと少し！（正答率' + pct + '%）<br><small>200問ドリルで復習するにゃ🐈</small>';
   }
-  window.scrollTo({top:0, behavior:'instant'});
+  window.scrollTo({top:0, behavior:'auto'});
 }
 
 renderSavedScore();
