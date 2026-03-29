@@ -1,4 +1,4 @@
-# AIパスポート無料ドリル🐱
+# 生成AIパスポート無料ドリル🐱
 
 👉 https://mahitogawa.github.io/ai/
 
@@ -26,4 +26,5 @@
 ---
 
 ## 使い方
-上のリンクからすぐ挑戦できます📱
+ここから▼からすぐ挑戦できます📱
+👉 https://mahitogawa.github.io/ai/
