@@ -10,7 +10,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  background:#f4f7f6; padding:15px; padding-bottom:calc(15px + env(safe-area-inset-bottom)); margin:0; font-size:22px;
+  background:#f0f4f8; padding:15px; padding-bottom:calc(15px + env(safe-area-inset-bottom)); margin:0; font-size:22px;
   overscroll-behavior: none;           /* iOSスワイプバック誤動作を防止 */
   -webkit-overflow-scrolling: touch;   /* iOSスクロールをなめらかに */
 }
@@ -22,18 +22,18 @@ button {
   user-select: none; -webkit-user-select: none;
 }
 .container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:15px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-h2 { font-size:26px; color:#1e293b; border-left:12px solid #2563eb; padding-left:15px; }
+h2 { font-size:26px; color:#f1f5f9; background:#0d3349; border-left:8px solid #10b981; padding:14px 16px; border-radius:10px; margin-bottom:16px; }
 .menu { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.menu button { background:#111827; color:#fff; font-size:16px; padding:14px 4px; border-radius:10px; border:none; font-weight:bold; }
+.menu button { background:#0d3349; color:#fff; font-size:16px; padding:14px 4px; border-radius:10px; border:none; font-weight:bold; }
 #flagBtn { background:#f59e0b; color:#fff; margin-bottom:15px; padding:20px; font-size:22px; border-radius:12px; border:none; width:100%; font-weight:bold; display:none; }
-#resetBtn { background:#2563eb !important; box-shadow:0 3px 0 #1741a6; }
+#resetBtn { background:#1e5f8a !important; box-shadow:0 3px 0 #0d3349; }
 .is-flagged { background:#ef4444 !important; }
-#question { font-size:26px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; line-height:1.6; word-break:break-word; }
-button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #cbd5e1; background:#fff; font-size:22px; font-weight:bold; text-align:left; line-height:1.5; white-space:normal; word-break:break-word; }
+#question { font-size:26px; font-weight:bold; margin:20px 0; background:#0d3349; color:#f1f5f9; padding:20px; border-radius:12px; border:none; line-height:1.6; word-break:break-word; }
+button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; border:2px solid #e2e8f0; background:#fff; font-size:22px; font-weight:bold; text-align:left; line-height:1.5; white-space:normal; word-break:break-word; }
 .correct { background:#d1fae5 !important; border-color:#10b981 !important; color:#064e3b; }
 .wrong { background:#fee2e2 !important; border-color:#ef4444 !important; color:#7f1d1d; }
 #result { margin-top:15px; font-weight:bold; font-size:20px; padding:15px; border-radius:10px; display:none; border:2px solid #ddd; line-height:1.7; }
-#nextBtn { background:#2563eb; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; display:none; margin-top:20px; }
+#nextBtn { background:#1e5f8a; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; display:none; margin-top:20px; box-shadow:0 3px 0 #0d3349; }
 #final-screen { display:none; text-align:center; }
 .review-box { text-align:left; background:#fff1f2; padding:15px; margin-top:20px; border-radius:10px; border-left:8px solid #ef4444; }
 .review-item { margin-bottom:20px; border-bottom:1px solid #fda4af; padding-bottom:10px; font-size:20px; line-height:1.7; }
@@ -205,7 +205,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== クイズ画面（元のコードそのまま）===== -->
 <div id="game-screen" class="container safe-bottom-pad" style="display:none;">
-    <h2>AIパスポート実戦</h2>
+    <h2>AIパスポート実戦60分</h2>
     <div class="menu">
         <button onclick="retryWrong()">✕ ミス</button>
         <button style="background:#f59e0b;" onclick="retryFlagged()">★ フラグ</button>
@@ -859,7 +859,7 @@ function startImportant20() {
 function startQuiz() {
     hideAllMainScreens();
     document.getElementById("game-screen").style.display = "block";
-    document.querySelector("#game-screen h2").textContent = "AIパスポート実戦";
+    document.querySelector("#game-screen h2").textContent = "AIパスポート実戦60分";
     document.getElementById("timer").style.display = "block";
     init();
 }
