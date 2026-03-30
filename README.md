@@ -2,7 +2,7 @@
 
 <img width="448" height="228" alt="アプリ画面" src="https://github.com/user-attachments/assets/16ef1cc9-b9b5-4ea4-ad85-750f1a70e0e7" />
 
-👉 https://mahitogawa.github.io/ai/
+👉 **https://mahitogawa.github.io/ai/**
 
 🔥 9割が間違えるAIクイズに挑戦  
 無料で使えるAIパスポート対策アプリ  
@@ -33,7 +33,7 @@ GitHubの⭐が増えると開発の励みになります🙏
 
 ## 📱 使い方
 👇 今すぐ挑戦（スマホOK）  
-👉 https://mahitogawa.github.io/ai/
+👉 **https://mahitogawa.github.io/ai/**
 
 ---
 
