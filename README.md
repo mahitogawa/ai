@@ -1,6 +1,6 @@
 # 🐱 生成AIパスポート無料ドリル🐱
 
-<img width="448" height="228" alt="アプリ画面" src="https://github.com/user-attachments/assets/16ef1cc9-b9b5-4ea4-ad85-750f1a70e0e7" />
+<img src="./screenshot.png" width="448" />
 
 👉 **https://mahitogawa.github.io/ai/**
 
