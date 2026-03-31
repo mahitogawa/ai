@@ -1948,5 +1948,51 @@ function hideCheat() {
 
 <script data-goatcounter="https://mahito.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+
+<script>
+const gugaExtraQuestions = [
+{
+  q: "RAG（検索拡張生成）を利用する主な目的として最も適切なのはどれか？",
+  choices: ["AIの処理速度を向上させる","外部情報を参照して回答精度を高める","AIの学習を完全に不要にする","生成AIの計算量を削減する"],
+  answer: 1,
+  explanation: "RAGは外部データを参照することで回答の精度や最新性を向上させる仕組み"
+},
+{
+  q: "AIエージェントの特徴として最も適切なのはどれか？",
+  choices: ["常に人間の指示なしで完全に独立して動作する","タスクを自律的に分解し処理できる","単純な計算のみを行う","学習機能を持たない"],
+  answer: 1,
+  explanation: "AIエージェントは目的達成のためにタスクを分解し実行する能力を持つ"
+},
+{
+  q: "AI新法に関する説明として最も適切なのはどれか？",
+  choices: ["AIの利用を全面禁止する法律","AIの研究開発と活用を促進するための法律","個人利用のみを制限する法律","AI開発者のみを対象とする法律"],
+  answer: 1,
+  explanation: "AI新法はAIの安全な活用と発展を目的とした枠組み"
+},
+{
+  q: "ディープフェイクに関するリスクとして最も適切なのはどれか？",
+  choices: ["通信速度の低下","偽情報の拡散","データ容量の増加","計算精度の低下"],
+  answer: 1,
+  explanation: "ディープフェイクは偽情報の拡散など社会的リスクがある"
+},
+{
+  q: "Zero-shotプロンプティングの特徴として正しいものはどれか？",
+  choices: ["例を複数提示する","例を与えずに指示のみで実行させる","学習データを追加する","モデルを再学習する"],
+  answer: 1,
+  explanation: "Zero-shotは例なしで指示のみを与える手法"
+},
+{
+  q: "Few-shotプロンプティングの特徴として正しいものはどれか？",
+  choices: ["例を与えずに実行する","複数の例を提示して精度を高める","モデルを停止させる","出力を制限する"],
+  answer: 1,
+  explanation: "Few-shotは例を与えることで出力の精度を向上させる"
+}
+];
+
+if (typeof questions !== "undefined") {
+  questions.push(...gugaExtraQuestions);
+}
+</script>
+
 </body>
 </html>
