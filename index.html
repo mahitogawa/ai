@@ -39,99 +39,393 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 .review-item { margin-bottom:20px; border-bottom:1px solid #fda4af; padding-bottom:10px; font-size:20px; line-height:1.7; }
 
 /* ===== 表紙（スタート画面）専用CSS ===== */
+
+/* ---- レイアウト本体 ---- */
 #start-screen {
   display: block;
-  max-width: 700px;
+  max-width: 480px;
   margin: auto;
   text-align: center;
-  background: #0f172a;
+  background: #1a0e08;
   border-radius: 20px;
-  padding: 30px 20px 40px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-#start-screen .cover-title {
-  color: #f1f5f9;
-  font-size: 18px;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-  opacity: 0.7;
-}
-#start-screen .cover-image-wrapper {
-  background: linear-gradient(135deg, #1e3a5f, #0f172a);
-  border: 3px solid #ef4444;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 0 30px rgba(239,68,68,0.35);
-}
-#start-screen .cover-image-wrapper img {
-  width: 100%;
-  max-width: 520px;
-  height: auto;
-  border-radius: 10px;
-  display: block;
-  margin: auto;
-}
-/* 画像がない場合の代替表示 */
-#start-screen .cover-fallback {
-  padding: 30px 10px;
-  color: #f1f5f9;
-}
-#start-screen .cover-fallback .big-title {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #fbbf24;
-}
-#start-screen .cover-fallback .sub {
-  font-size: 18px;
-  color: #94a3b8;
-}
-/* ===== TOPボタン共通：等幅・等高・スマホ最適化 ===== */
-.top-btn {
-  display: block;
-  width: 90%;
-  max-width: 420px;
-  margin: 10px auto 0;
-  padding: 0;
-  height: 76px;
-  line-height: 76px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  transition: transform 0.15s;
-  white-space: nowrap;
+  padding: 0 0 32px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
   overflow: hidden;
-  text-overflow: ellipsis;
-}
-.top-btn:hover { transform: scale(1.03); }
-.top-btn:active { transform: scale(0.97); }
-#start-btn     { background: linear-gradient(135deg, #ef4444, #f59e0b); box-shadow: 0 4px 16px rgba(239,68,68,0.4); margin-top: 0; }
-#cat-toggle-btn{ background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 16px rgba(5,150,105,0.4); }
-#ox-btn        { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
-#cheat-btn     { background: linear-gradient(135deg, #1e40af, #3b82f6); box-shadow: 0 4px 16px rgba(37,99,235,0.4); }
-#important20-btn{ background: linear-gradient(135deg, #dc2626, #f59e0b); box-shadow: 0 4px 16px rgba(220,38,38,0.42); }
-.important20-nav-btn{ background: linear-gradient(135deg, #dc2626, #f59e0b); color:#fff; }
-.safe-bottom-pad{ padding-bottom:calc(20px + env(safe-area-inset-bottom)); }
-.cat-btn { display:block; width:100%; padding:14px 20px; margin-bottom:8px; background:#0f172a; color:#f1f5f9; border:2px solid #334155; border-radius:12px; font-size:18px; font-weight:bold; text-align:left; cursor:pointer; transition:background 0.15s,border-color 0.15s; }
-.cat-btn:hover { background:#1e3a5f; border-color:#3b82f6; }
-.cat-btn:last-child { margin-bottom:0; }
-#start-screen .edition-note {
-  color: #64748b;
-  font-size: 16px;
-  margin-top: 8px;
+  position: relative;
 }
 
-#advanced-link-btn{
-  background: linear-gradient(135deg, #f97316, #fb923c);
-  box-shadow: 0 4px 16px rgba(249,115,22,0.42);
+/* ---- ヒーローゾーン（上部・ビジュアル全面） ---- */
+#start-screen .hero-zone {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  background:
+    radial-gradient(ellipse at 70% 40%, rgba(200,90,20,0.55) 0%, transparent 65%),
+    radial-gradient(ellipse at 20% 70%, rgba(120,40,10,0.4) 0%, transparent 60%),
+    linear-gradient(170deg, #2a1205 0%, #1a0e08 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px 16px 0;
 }
-#fuzuki-btn {
-  background: linear-gradient(135deg, #0891b2, #06b6d4);
-  box-shadow: 0 4px 16px rgba(8,145,178,0.42);
+
+/* ざらっとしたテクスチャオーバーレイ */
+#start-screen .hero-zone::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 警告マーク：右上の装飾 */
+#start-screen .hero-zone::after {
+  content: '⚠';
+  position: absolute;
+  top: 14px; right: 18px;
+  font-size: 38px;
+  opacity: 0.75;
+  filter: drop-shadow(0 0 12px #f59e0b);
+  animation: pulse-warn 2.4s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes pulse-warn {
+  0%,100% { transform: scale(1); opacity: 0.75; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+/* ---- キャッチコピー ---- */
+#start-screen .catch-wrap {
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  width: 100%;
+  padding: 0 4px;
+}
+#start-screen .catch-main {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #ffffff;
+  text-shadow:
+    3px 3px 0 #7c2d12,
+    0 0 24px rgba(251,191,36,0.5);
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+}
+#start-screen .catch-main span {
+  color: #fbbf24;
+}
+#start-screen .catch-sub {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fde68a;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  margin: 0 0 12px;
+}
+
+/* ---- ネコ画像エリア ---- */
+#start-screen .cat-area {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+}
+#start-screen .cat-area img {
+  width: 72%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.7));
+  margin-right: -8px;
+}
+/* 画像なし時のフォールバック */
+#start-screen .cat-fallback {
+  font-size: 120px;
+  line-height: 1;
+  margin: 0 auto 12px;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
+  animation: float-cat 3s ease-in-out infinite;
+}
+@keyframes float-cat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* ---- 光の輪（ネコ後ろ） ---- */
+.cat-glow {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.22) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---- メインCTAボタン（赤・立体） ---- */
+#start-screen .main-cta-wrap {
+  padding: 16px 16px 0;
+  position: relative;
+  z-index: 3;
+}
+#start-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  height: 72px;
+  line-height: 72px;
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  background: linear-gradient(180deg, #ff6b35 0%, #dc2626 40%, #9b1c1c 100%);
+  box-shadow:
+    0 6px 0 #7f1d1d,
+    0 10px 24px rgba(220,38,38,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+#start-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%);
+  border-radius: 40px 40px 0 0;
+  pointer-events: none;
+}
+#start-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #7f1d1d, 0 4px 12px rgba(220,38,38,0.4);
+}
+#start-btn:hover { transform: translateY(-2px); }
+
+/* ---- 機能3アイコングリッド ---- */
+#start-screen .icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+.icon-card {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(200,90,20,0.35) 0%, transparent 70%),
+    linear-gradient(170deg, #2d1a0e 0%, #1a0e08 100%);
+  border: 1px solid rgba(251,191,36,0.25);
+  border-radius: 14px;
+  padding: 16px 8px 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s, border-color 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.icon-card:active { transform: scale(0.95); }
+.icon-card:hover  { border-color: rgba(251,191,36,0.6); transform: translateY(-2px); }
+.icon-card .ic-emoji {
+  font-size: 30px;
+  display: block;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 2px 6px rgba(251,191,36,0.4));
+}
+.icon-card .ic-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fde68a;
+  line-height: 1.3;
+}
+
+/* ---- セクション区切りラベル ---- */
+.section-label {
+  color: #92400e;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 18px 16px 6px;
+  text-align: left;
+  border-top: 1px solid rgba(251,191,36,0.12);
+  margin-top: 10px;
+}
+.section-label::before {
+  content: '▶ ';
+  color: #f59e0b;
+}
+
+/* ---- サブボタン群（縦並び） ---- */
+.sub-btn-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== TOPボタン共通（サブ）===== */
+.top-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 16px;
+  height: 62px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, filter 0.12s;
+  letter-spacing: 0.01em;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+  max-width: 100%;
+}
+.top-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+  pointer-events: none;
+}
+.top-btn:active  { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+.top-btn:hover   { filter: brightness(1.08); }
+
+/* start-btn は別定義（上の.main-cta-wrapに独立）なので残す */
+#cat-toggle-btn  { background: linear-gradient(135deg, #047857, #10b981); box-shadow: 0 4px 0 #064e3b, 0 6px 16px rgba(16,185,129,0.3); }
+#ox-btn          { background: linear-gradient(135deg, #5b21b6, #8b5cf6); box-shadow: 0 4px 0 #3b0764, 0 6px 16px rgba(139,92,246,0.3); }
+#cheat-btn       { background: linear-gradient(135deg, #1d4ed8, #3b82f6); box-shadow: 0 4px 0 #1e3a8a, 0 6px 16px rgba(59,130,246,0.3); }
+#important20-btn { background: linear-gradient(180deg, #ff6b35 0%, #dc2626 100%); box-shadow: 0 4px 0 #7f1d1d, 0 6px 16px rgba(220,38,38,0.35); }
+#advanced-link-btn { background: linear-gradient(135deg, #c2410c, #f97316); box-shadow: 0 4px 0 #7c2d12, 0 6px 16px rgba(249,115,22,0.35); }
+#fuzuki-btn      { background: linear-gradient(135deg, #0e7490, #06b6d4); box-shadow: 0 4px 0 #164e63, 0 6px 16px rgba(6,182,212,0.3); }
+
+.important20-nav-btn { background: linear-gradient(180deg, #ff6b35 0%, #dc2626 100%); color:#fff; }
+.safe-bottom-pad { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+
+/* カテゴリメニュー */
+#cat-menu {
+  display: none;
+  background: #120c06;
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 8px 0 0;
+  text-align: left;
+}
+.cat-btn {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  margin-bottom: 7px;
+  background: linear-gradient(135deg, #2d1a0e, #1a0e08);
+  color: #fde68a;
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.cat-btn:hover   { background: linear-gradient(135deg, #3d2010, #2d1a0e); border-color: rgba(251,191,36,0.5); }
+.cat-btn:last-child { margin-bottom: 0; }
+
+/* フッター情報 */
+#start-screen .edition-note {
+  color: #78350f;
+  font-size: 14px;
+  margin-top: 6px;
+  padding: 0 16px;
+}
+
+/* YouTube リンク */
+.yt-link {
+  display: block;
+  background: linear-gradient(135deg, #1a0e08, #2d1a0e);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 14px;
+  padding: 12px;
+  text-decoration: none;
+  margin: 0 16px;
+}
+.yt-thumb-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0f0a05;
+}
+.yt-thumb-wrap img { width: 100%; display: block; }
+.yt-play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  background: #ef4444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.yt-play-triangle {
+  width: 0; height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 18px solid #fff;
+  margin-left: 4px;
+}
+.yt-label   { color: #fde68a; font-size: 14px; font-weight: 700; margin-top: 9px; }
+.yt-sub     { color: #10b981; font-size: 12px; font-weight: 700; margin-top: 3px; }
+
+/* 免責リンク */
+.disclaimer-link {
+  display: block;
+  margin: 14px 16px 0;
+  background: linear-gradient(135deg, #120c06, #1a0e08);
+  border: 1px solid rgba(251,191,36,0.15);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+  text-decoration: none;
+}
+.disclaimer-link-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+
+/* 訪問者数 */
+#gc-visits {
+  color: #78350f;
+  font-size: 14px;
+  margin-top: 6px;
+  padding: 0 16px;
 }
 
 </style>
@@ -140,58 +434,94 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 <!-- ===== 表紙（スタート画面）===== -->
 <div id="start-screen">
-  <p class="cover-title">Mahito's Edition 2026</p>
-  <div class="cover-image-wrapper">
-    <!-- 画像ファイルをGitHubに置いていない場合は下の fallback が表示されます -->
-    <img src="image_0aff13.png" alt="AIパスポート模試" 
-         onerror="this.style.display='none'; document.getElementById('cover-fallback').style.display='block';">
-    <div id="cover-fallback" class="cover-fallback" style="display:none;">
-      <div style="text-align:center; margin-bottom:4px; font-size:36px;">🐱</div><div class="big-title" style="text-align:center;">生成AIパスポート</div>
-      <div class="big-title">最新200問搭載！</div>
-      <div class="sub">2026年新シラバス対応 ／ 4択形式</div>
-    </div>
-  </div>
-  <div style="color:#94a3b8;font-size:18px;margin:6px 0 10px;">おすすめの順で並べたにゃ</div>
-  <button id="start-btn" class="top-btn" onclick="startQuiz()">🐱 200問からランダム！</button>
-  <button onclick="toggleCategoryMenu()" id="cat-toggle-btn" class="top-btn">🐱 カテゴリ別練習</button>
-  <div id="cat-menu" style="display:none;width:90%;max-width:420px;margin:0 auto 0;background:#1e293b;border-radius:16px;padding:16px;text-align:left;">
-      <p style="color:#94a3b8;font-size:16px;margin:0 0 12px 4px;">苦手分野を集中練習にゃ🐱</p>
-      <button onclick="startCategory('tech')" class="cat-btn">🐱 第1-3章｜AI技術・生成AI基礎（70問）</button>
-      <button onclick="startCategory('models')" class="cat-btn">🐱 第2章｜主要生成AIモデル（9問）</button>
-      <button onclick="startCategory('prompt')" class="cat-btn">🐱 第5章｜プロンプト技術（24問）</button>
-      <button onclick="startCategory('law')" class="cat-btn">🐱 第4章｜法律・著作権・個人情報（27問）</button>
-      <button onclick="startCategory('business')" class="cat-btn">🐱 第3-5章｜ビジネス活用（34問）</button>
-      <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（20問）</button>
-      <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（16問）</button>
-    </div>
-  <button onclick="startImportant20()" id="important20-btn" class="top-btn">🐱 最重要20問だけ</button>
-  <div style="color:#94a3b8;font-size:18px;margin:14px 0 8px;">復習・補助メニュー</div>
-  <button onclick="startOX()" id="ox-btn" class="top-btn">🐱 ○×クイズに挑戦！</button>
-  <button onclick="startFuzuki()" id="fuzuki-btn" class="top-btn">🎯 不適切形式トレーニング</button>
-  <button onclick="showCheat()" id="cheat-btn" class="top-btn">🐱 略語チートシート</button>
-  <button id="advanced-link-btn" class="top-btn" onclick="location.href='guga.html'">🐱 本番UI練習モード</button>
-<br><br>
 
-<a href="https://www.youtube.com/shorts/7apvLFZ7WdU?feature=share" style="display:block; background:#0d3349; border-radius:12px; padding:12px; text-decoration:none; margin:10px auto; max-width:420px; text-align:center;">
-  <div style="position:relative; width:100%; border-radius:8px; overflow:hidden; background:#1e4d6b;">
-    <img src="https://img.youtube.com/vi/7apvLFZ7WdU/mqdefault.jpg" alt="使い方動画" style="width:100%; display:block;">
-    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:40px; height:40px; background:#ef4444; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-      <div style="width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:18px solid #fff; margin-left:4px;"></div>
+  <!-- ヒーローゾーン：キャッチ＋ネコ -->
+  <div class="hero-zone">
+    <div class="cat-glow"></div>
+
+    <!-- キャッチコピー -->
+    <div class="catch-wrap">
+      <p class="catch-main">その勉強法、<br><span>間違ってます！</span></p>
+      <p class="catch-sub">これで一発対策！</p>
+    </div>
+
+    <!-- ネコ画像（画像があれば表示、なければ絵文字） -->
+    <div class="cat-area">
+      <img src="image_0aff13.png" alt="驚くネコ"
+           onerror="this.style.display='none'; document.getElementById('cat-fallback').style.display='block';">
+      <div id="cat-fallback" class="cat-fallback" style="display:none;">😱</div>
     </div>
   </div>
-  <div style="color:#f1f5f9; font-size:15px; font-weight:bold; margin-top:10px;">使い方を見る</div>
-  <div style="color:#10b981; font-size:13px; font-weight:bold; margin-top:4px;">YouTube Shorts（30秒）</div>
-</a>
-<p class="edition-note">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
-  <p id="gc-visits" style="color:#64748b; font-size:16px; margin-top:4px;">👀 訪問者数：読み込み中...</p>
+
+  <!-- メインCTAボタン -->
+  <div class="main-cta-wrap">
+    <button id="start-btn" onclick="startImportant20()">🔥 最重要20問を今すぐ挑戦！ ＞</button>
+  </div>
+
+  <!-- 3アイコングリッド -->
+  <div class="icon-grid">
+    <div class="icon-card" onclick="startQuiz()">
+      <span class="ic-emoji">🔀</span>
+      <div class="ic-label">全200問<br>ランダム演習</div>
+    </div>
+    <div class="icon-card" onclick="toggleCategoryMenu()">
+      <span class="ic-emoji">📂</span>
+      <div class="ic-label">カテゴリ別<br>対策</div>
+    </div>
+    <div class="icon-card" onclick="startOX()">
+      <span class="ic-emoji">⭕</span>
+      <div class="ic-label">○×クイズ<br>に挑戦！</div>
+    </div>
+  </div>
+
+  <!-- カテゴリメニュー（トグル） -->
+  <div id="cat-menu" style="display:none; margin: 0 16px; background:#120c06; border:1px solid rgba(251,191,36,0.2); border-radius:14px; padding:14px; text-align:left;">
+    <p style="color:#92400e;font-size:14px;font-weight:700;margin:0 0 10px 4px;">苦手分野を集中練習にゃ🐱</p>
+    <button onclick="startCategory('tech')" class="cat-btn">🐱 第1-3章｜AI技術・生成AI基礎（70問）</button>
+    <button onclick="startCategory('models')" class="cat-btn">🐱 第2章｜主要生成AIモデル（9問）</button>
+    <button onclick="startCategory('prompt')" class="cat-btn">🐱 第5章｜プロンプト技術（24問）</button>
+    <button onclick="startCategory('law')" class="cat-btn">🐱 第4章｜法律・著作権・個人情報（27問）</button>
+    <button onclick="startCategory('business')" class="cat-btn">🐱 第3-5章｜ビジネス活用（34問）</button>
+    <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（20問）</button>
+    <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（16問）</button>
+  </div>
+
+  <!-- サブメニューラベル -->
+  <p class="section-label">復習・補助メニュー</p>
+
+  <!-- サブボタン群 -->
+  <div class="sub-btn-list">
+    <button id="important20-btn" class="top-btn" onclick="startImportant20()">🔥 最重要20問だけ</button>
+    <button id="ox-btn" class="top-btn" onclick="startOX()">🐱 ○×クイズに挑戦！</button>
+    <button id="fuzuki-btn" class="top-btn" onclick="startFuzuki()">🎯 不適切形式トレーニング</button>
+    <button id="cheat-btn" class="top-btn" onclick="showCheat()">🐱 略語チートシート</button>
+
+  </div>
+
+  <!-- セクション：YouTube -->
+  <p class="section-label" style="margin-top:18px;">使い方動画</p>
+  <a href="https://www.youtube.com/shorts/7apvLFZ7WdU?feature=share" class="yt-link">
+    <div class="yt-thumb-wrap">
+      <img src="https://img.youtube.com/vi/7apvLFZ7WdU/mqdefault.jpg" alt="使い方動画">
+      <div class="yt-play-btn"><div class="yt-play-triangle"></div></div>
+    </div>
+    <div class="yt-label">使い方を見る</div>
+    <div class="yt-sub">YouTube Shorts（30秒）</div>
+  </a>
+
+  <!-- 訪問者数・メモ -->
+  <p class="edition-note" style="margin-top:14px;">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
+  <p id="gc-visits">👀 訪問者数：読み込み中...</p>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
       .then(r => r.json())
       .then(d => { document.getElementById('gc-visits').textContent = '👀 訪問者数：' + d.count + ' 人'; })
       .catch(() => { document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
   </script>
-  <a href="disclaimer.html" target="_blank" style="display:block; margin-top:20px; background:#1e293b; border-radius:12px; padding:20px 24px; text-align:center; text-decoration:none;">
-    <div style="font-size:22px; font-weight:bold; color:#fbbf24; letter-spacing:0.05em; line-height:1.7;">
+
+  <!-- 免責リンク -->
+  <a href="https://mahitogawa.github.io/ai/disclaimer.html" target="_blank" class="disclaimer-link">
+    <div class="disclaimer-link-text">
       ネコと学べるAIパスポート<br>🐱最強ドリル🐱
     </div>
   </a>
@@ -815,10 +1145,10 @@ function toggleCategoryMenu() {
     const btn = document.getElementById("cat-toggle-btn");
     if (menu.style.display === "none") {
         menu.style.display = "block";
-        btn.textContent = "📚 カテゴリ別練習 ▲";
+        if(btn) btn.textContent = "📚 カテゴリ別練習 ▲";
     } else {
         menu.style.display = "none";
-        btn.textContent = "📚 カテゴリ別練習";
+        if(btn) btn.textContent = "📚 カテゴリ別練習";
     }
 }
 
