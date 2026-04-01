@@ -186,7 +186,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   font-weight: 900;
   color: #fff;
   border: none;
-  border-radius: 40px;
+  border-radius: 14px;
   background: linear-gradient(180deg, #ff6b35 0%, #dc2626 40%, #9b1c1c 100%);
   box-shadow:
     0 6px 0 #7f1d1d,
@@ -222,7 +222,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  padding: 14px 16px 0;
+  padding: 10px 16px 0;
 }
 .icon-card {
   background:
@@ -239,12 +239,23 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 .icon-card:active { transform: scale(0.95); }
 .icon-card:hover  { border-color: rgba(251,191,36,0.6); transform: translateY(-2px); }
-.icon-card .ic-emoji {
-  font-size: 30px;
-  display: block;
-  margin-bottom: 6px;
-  filter: drop-shadow(0 2px 6px rgba(251,191,36,0.4));
+.icon-card .ic-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  font-size: 24px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
 }
+.ic-badge-blue   { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+.ic-badge-amber  { background: linear-gradient(135deg, #b45309, #f59e0b); }
+.ic-badge-red    { background: linear-gradient(135deg, #9b1c1c, #ef4444); }
+.ic-badge-green  { background: linear-gradient(135deg, #065f46, #10b981); }
+.ic-badge-purple { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
+.ic-badge-cyan   { background: linear-gradient(135deg, #164e63, #06b6d4); }
 .icon-card .ic-label {
   font-size: 13px;
   font-weight: 700;
@@ -457,21 +468,21 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
   <!-- メインCTAボタン -->
   <div class="main-cta-wrap">
-    <button id="start-btn" onclick="startImportant20()">🔥 最重要20問を今すぐ挑戦！</button>
+    <button id="start-btn" onclick="startImportant20()">🔥 最重要20問に今すぐ挑戦！</button>
   </div>
 
   <!-- 3アイコングリッド -->
   <div class="icon-grid">
     <div class="icon-card" onclick="startQuiz()">
-      <span class="ic-emoji">🔀</span>
+      <div class="ic-badge" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">🔀</div>
       <div class="ic-label">全問<br>ランダム演習</div>
     </div>
     <div class="icon-card" onclick="toggleCategoryMenu()">
-      <span class="ic-emoji">📂</span>
+      <div class="ic-badge" style="background:linear-gradient(135deg,#b45309,#f59e0b);">📂</div>
       <div class="ic-label">カテゴリ別<br>対策</div>
     </div>
     <div class="icon-card" onclick="startCategory('case')">
-      <span class="ic-emoji">🎯</span>
+      <div class="ic-badge" style="background:linear-gradient(135deg,#9b1c1c,#ef4444);">🎯</div>
       <div class="ic-label">実戦ケース<br>問題🆕</div>
     </div>
   </div>
@@ -489,29 +500,36 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <button onclick="startCategory('case')" class="cat-btn" style="border-color:rgba(251,191,36,0.55);color:#fbbf24;background:linear-gradient(135deg,#3d2a00,#2d1a0e);">🎯 実戦ケース問題｜判断力トレーニング（38問）🆕</button>
   </div>
 
-  <!-- サブメニューラベル -->
-  <p class="section-label">補助メニュー</p>
-
-  <!-- サブボタン群 -->
-  <div class="sub-btn-list">
-    <button id="ox-btn" class="top-btn" onclick="startOX()">⭕ ○×クイズに挑戦！</button>
-    <button id="fuzuki-btn" class="top-btn" onclick="startFuzuki()">🎯 不適切形式トレーニング</button>
-    <button id="cheat-btn" class="top-btn" onclick="showCheat()">🐱 略語チートシート</button>
+  <!-- 補助メニュー 6枚グリッド -->
+  <div class="icon-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="icon-card" onclick="startImportant20()">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#9b1c1c,#ef4444);">🔥</div>
+      <div class="ic-label">最重要<br>20問</div>
+    </div>
+    <div class="icon-card" id="ox-btn" onclick="startOX()">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#5b21b6,#8b5cf6);">⭕</div>
+      <div class="ic-label">○×<br>クイズ</div>
+    </div>
+    <div class="icon-card" id="fuzuki-btn" onclick="startFuzuki()">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#164e63,#06b6d4);">🚫</div>
+      <div class="ic-label">不適切<br>トレーニング</div>
+    </div>
+    <div class="icon-card" id="cheat-btn" onclick="showCheat()">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">📋</div>
+      <div class="ic-label">略語<br>チートシート</div>
+    </div>
+    <div class="icon-card" onclick="location.href='https://www.youtube.com/shorts/7apvLFZ7WdU?feature=share'">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#991b1b,#ef4444);">▶</div>
+      <div class="ic-label">使い方<br>動画</div>
+    </div>
+    <div class="icon-card" onclick="location.href='https://mahitogawa.github.io/ai/disclaimer.html'">
+      <div class="ic-badge" style="background:linear-gradient(135deg,#1f2937,#4b5563);">📄</div>
+      <div class="ic-label">免責<br>事項</div>
+    </div>
   </div>
 
-  <!-- セクション：YouTube -->
-  <p class="section-label" style="margin-top:18px;">使い方動画</p>
-  <a href="https://www.youtube.com/shorts/7apvLFZ7WdU?feature=share" class="yt-link">
-    <div class="yt-thumb-wrap">
-      <img src="https://img.youtube.com/vi/7apvLFZ7WdU/mqdefault.jpg" alt="使い方動画">
-      <div class="yt-play-btn"><div class="yt-play-triangle"></div></div>
-    </div>
-    <div class="yt-label">使い方を見る</div>
-    <div class="yt-sub">YouTube Shorts（30秒）</div>
-  </a>
-
   <!-- 訪問者数・メモ -->
-  <p class="edition-note" style="margin-top:14px;">全200問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
+  <p class="edition-note" style="margin-top:14px;">全271問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits">👀 訪問者数：読み込み中...</p>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
@@ -519,13 +537,6 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
       .then(d => { document.getElementById('gc-visits').textContent = '👀 訪問者数：' + d.count + ' 人'; })
       .catch(() => { document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
   </script>
-
-  <!-- 免責リンク -->
-  <a href="https://mahitogawa.github.io/ai/disclaimer.html" target="_blank" class="disclaimer-link">
-    <div class="disclaimer-link-text">
-      ネコと学べるAIパスポート<br>🐱最強ドリル🐱
-    </div>
-  </a>
 </div>
 
 <!-- ===== チートシート画面 ===== -->
