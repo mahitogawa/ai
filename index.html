@@ -512,7 +512,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     </div>
     <div class="icon-card" id="fuzuki-btn" onclick="startFuzuki()">
       <div class="ic-badge" style="background:linear-gradient(135deg,#164e63,#06b6d4);">🚫</div>
-      <div class="ic-label">不適切<br>トレーニング</div>
+      <div class="ic-label">不適切<br>問題対策</div>
     </div>
     <div class="icon-card" id="cheat-btn" onclick="showCheat()">
       <div class="ic-badge" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">📋</div>
@@ -529,7 +529,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   </div>
 
   <!-- 訪問者数・メモ -->
-  <p class="edition-note" style="margin-top:14px;">全271問収録 ／ 毎回60問ランダム出題 ／ キジトラ応援団🐈</p>
+  <p class="edition-note" style="margin-top:14px;">🔥全308問収録 ／ 60問ランダム出題 ／ キジトラ応援団🐈</p>
   <p id="gc-visits">👀 訪問者数：読み込み中...</p>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
@@ -627,9 +627,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <button onclick="startImportant20()" class="important20-nav-btn" style="padding:22px; width:100%; border:none; border-radius:15px; font-weight:bold; font-size:22px; cursor:pointer; margin-top:14px;">🔥 最重要20問へ</button>
 </div>
 
-<!-- ===== 不適切形式トレーニング画面 ===== -->
+<!-- ===== 不適切問題対策画面 ===== -->
 <div id="fuzuki-screen" class="container safe-bottom-pad" style="display:none;">
-  <h2>🎯 不適切形式トレーニング</h2>
+  <h2>🎯 不適切問題対策</h2>
   <div style="background:#fff7ed; border:2px solid #f97316; border-radius:12px; padding:12px 16px; margin-bottom:16px; font-size:17px; color:#9a3412; line-height:1.7;">
     ⚠️ この練習は「<strong>不適切・誤っているものを選べ</strong>」形式に特化しているにゃ。<br>問題文をよく読んで、<strong>間違っているもの</strong>を選ぶにゃ🐱
   </div>
@@ -643,7 +643,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <button id="fz-next-btn" onclick="nextFZ()" style="display:none; background:#0891b2; color:#fff; padding:22px; font-size:24px; width:100%; border:none; border-radius:15px; font-weight:bold; margin-top:20px; touch-action:manipulation;">次の問題へ ➔</button>
 </div>
 
-<!-- ===== 不適切形式トレーニング結果画面 ===== -->
+<!-- ===== 不適切問題対策結果画面 ===== -->
 <div id="fuzuki-final-screen" class="container safe-bottom-pad" style="display:none;">
   <h2>🎯 トレーニング結果</h2>
   <div id="fz-final-score" style="font-size:60px; font-weight:bold; color:#0891b2;"></div>
@@ -1584,7 +1584,7 @@ function finishOX() {
     window.scrollTo({top:0,behavior:"auto"});
 }
 
-// ===== 不適切形式トレーニング =====
+// ===== 不適切問題対策形式 =====
 const fuzukiData = [
   {q:"ハルシネーションに関して<strong>不適切な</strong>説明はどれか？",
    a:["AIが事実と異なる内容をもっともらしく生成する現象",
