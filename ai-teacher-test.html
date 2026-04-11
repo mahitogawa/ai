@@ -2181,14 +2181,16 @@ function hideCheat() {
 <script data-goatcounter="https://mahito.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 
+<script type="importmap">
+{"imports": {"@google/generative-ai": "https://esm.run/@google/generative-ai"}}
+</script>
 <script type="module">
-import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// ★ここにAPIキーを貼ってください
 const API_KEY = "AIzaSyDGBIoAgvgsQRl6D6b2cIwAc1Xhpu4kyXQ";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-window.askAI = async function() {
+async function askAI() {
     const btn     = document.getElementById("aiBtn");
     const respDiv = document.getElementById("ai-response");
     const q       = btn.dataset.question    || "";
@@ -2205,14 +2207,16 @@ window.askAI = async function() {
         const prompt = "AIパスポート試験の問題です。\n問題：" + q + "\n正解：" + correct + "\nヒント：" + hint + "\n\nこの問題を中学生にもわかる例え話を使って、短く優しく解説してください。最後にMahitoさんを応援する一言を添えてください。";
         const result = await model.generateContent(prompt);
         respDiv.innerHTML = "🐱 <strong>AI先生の解説</strong><br><br>" + 
-            (await result.response).text().replace(/\n/g, "<br>");
+            result.response.text().replace(/\n/g, "<br>");
     } catch(e) {
-        respDiv.innerHTML = "❌ エラーが出たにゃ。APIキーを確認してね！<br><small>" + e.message + "</small>";
+        respDiv.innerHTML = "❌ エラーが出たにゃ。<br><small>" + e.message + "</small>";
     } finally {
         btn.disabled = false;
         btn.textContent = "🐱 AI先生に解説を聞く";
     }
-};
+}
+
+window.askAI = askAI;
 </script>
 </body>
 </html>
