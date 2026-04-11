@@ -2203,7 +2203,7 @@ async function askAI() {
     respDiv.innerHTML = "⏳ 考え中...";
 
     try {
-        const model  = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model  = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const prompt = "AIパスポート試験の問題です。\n問題：" + q + "\n正解：" + correct + "\nヒント：" + hint + "\n\nこの問題を中学生にもわかる例え話を使って、短く優しく解説してください。最後にMahitoさんを応援する一言を添えてください。";
         const result = await model.generateContent(prompt);
         respDiv.innerHTML = "🐱 <strong>AI先生の解説</strong><br><br>" + 
