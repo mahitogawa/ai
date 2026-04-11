@@ -1594,7 +1594,7 @@ function show(){
         btn.textContent=String.fromCharCode(65+i)+": "+text;
         btn.onclick=()=>check(i===q.c,btn,q); area.appendChild(btn);
     });
-    document.getElementById("result").style.display="none"; document.getElementById("nextBtn").style.display="none";
+    document.getElementById("result").style.display="none"; document.getElementById("nextBtn").style.display="none"; document.getElementById("aiBtn").style.display="none"; document.getElementById("ai-response").style.display="none";
 }
 
 function toggleFlag(){ flagged[currentIndex]=!flagged[currentIndex]; show(); }
@@ -1616,6 +1616,7 @@ function check(ok,btn,q){
     }
     document.getElementById("nextBtn").style.display="block";
     // AI解説ボタンを表示
+    console.log("check() called, q=", q);
     const aiBtn = document.getElementById("aiBtn");
     const aiResp = document.getElementById("ai-response");
     if(aiBtn){ aiBtn.style.display="block"; aiBtn.dataset.question=q.q; aiBtn.dataset.correct=q.a[q.c]; aiBtn.dataset.explanation=q.d||""; }
@@ -2184,7 +2185,7 @@ function hideCheat() {
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
 // ★ここにAPIキーを貼ってください
-const API_KEY = "AIzaSyDGBIoAgvgsQRl6D6b2cIwAc1Xhpu4kyXQ";
+const API_KEY = "YOUR_GEMINI_API_KEY";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 window.askAI = async function() {
@@ -2201,16 +2202,10 @@ window.askAI = async function() {
 
     try {
         const model  = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = `AIパスポート試験の問題です。
-問題：${q}
-正解：${correct}
-ヒント：${hint}
-
-この問題を中学生にもわかる例え話を使って、短く優しく解説してください。最後にMahitoさんを応援する一言を添えてください。`;
+        const prompt = "AIパスポート試験の問題です。\n問題：" + q + "\n正解：" + correct + "\nヒント：" + hint + "\n\nこの問題を中学生にもわかる例え話を使って、短く優しく解説してください。最後にMahitoさんを応援する一言を添えてください。";
         const result = await model.generateContent(prompt);
         respDiv.innerHTML = "🐱 <strong>AI先生の解説</strong><br><br>" + 
-            (await result.response).text().replace(/
-/g, "<br>");
+            (await result.response).text().replace(/\n/g, "<br>");
     } catch(e) {
         respDiv.innerHTML = "❌ エラーが出たにゃ。APIキーを確認してね！<br><small>" + e.message + "</small>";
     } finally {
