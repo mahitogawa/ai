@@ -16,9 +16,10 @@
     </div>
 
     <script type="module">
+        // 1. 【ここが重要！】最新のライブラリ（住所）に変更しました
         import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm";
 
-        // MahitoさんのAPIキーをここにセット済みです
+        // 2. Mahitoさんの最新APIキーです
         const API_KEY = "AIzaSyB384rT6-nc0rgt_v0ULI8ewFODF-BKLak";
         const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -26,9 +27,10 @@
             const responseText = document.getElementById("response-text");
             const questionText = document.getElementById("question").innerText;
             
-            responseText.innerText = "マーニャちゃんとアイちゃんも応援してるよ！AI先生が考え中...";
+            responseText.innerText = "マーニャちゃんとアイちゃんも見守ってるよ！AI先生が考え中...";
             
             try {
+                // 3. モデル名を「gemini-1.5-flash」に固定します
                 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
                 const prompt = questionText + " この問題を、中学生でもわかる「日常の例え話」で3行以内で解説して。最後にMahitoさんを応援して。";
                 
@@ -37,7 +39,7 @@
                 responseText.innerText = response.text();
             } catch (error) {
                 console.error(error);
-                responseText.innerText = "ごめんね、エラーが出ちゃった。ネットの接続を確認してみてにゃ。";
+                responseText.innerText = "エラーが出ちゃった。APIキーの権限設定か、ネットの接続を確認してみてにゃ。";
             }
         }
     </script>
