@@ -41,28 +41,36 @@ body{
   position:sticky;top:0;z-index:100;
 }
 .hd-inner{
-  padding:16px 20px 0;
+  padding:14px 16px 10px;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:space-between;
+  cursor:pointer;
+  gap:6px;
 }
-.logo{
+.hd-top-row{
   display:flex;align-items:center;gap:10px;
 }
 .logo-icon{
-  width:52px;height:52px;
-  background:rgba(255,255,255,.18);
-  border-radius:16px;
+  width:44px;height:44px;
+  background:rgba(255,255,255,.2);
+  border-radius:14px;
   display:flex;align-items:center;justify-content:center;
-  font-size:30px;
+  font-size:26px;flex-shrink:0;
 }
 .logo-text{
   font-size:26px;font-weight:900;color:#fff;
-  letter-spacing:.02em;
+  letter-spacing:.04em;
 }
 .logo-date{
-  font-size:18px;color:rgba(255,255,255,.85);
-  font-weight:900;margin-top:4px;
+  font-size:clamp(38px,11vw,58px);
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1.1;
+  text-align:center;
+  width:100%;
+  text-shadow:0 3px 12px rgba(0,0,0,.22);
 }
 
 /* タブ */
@@ -265,23 +273,6 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 .kpi-val{font-size:32px;font-weight:900;color:var(--ink)}
 
 .range-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.range-btn{
-  border:2px solid var(--line);
-  background:#fff;border-radius:999px;
-  padding:8px 16px;font-size:13px;font-weight:900;
-  cursor:pointer;font-family:inherit;color:var(--muted);
-  transition:.15s;
-}
-.range-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
-
-.doctor-box{
-  background:var(--amber-bg);
-  border:1.5px solid #f0c040;
-  border-radius:16px;
-  padding:16px;
-}
-.doctor-label{font-size:14px;font-weight:900;color:var(--amber);letter-spacing:.06em;margin-bottom:6px}
-.doctor-text{font-size:17px;font-weight:900;line-height:1.7;color:#78350f}
 
 /* バッジ */
 .badge{
@@ -378,14 +369,12 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 <body>
 
 <div class="hd">
-  <div class="hd-inner">
-    <div class="logo">
+  <div class="hd-inner" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="TOPへ戻る">
+    <div class="hd-top-row">
       <div class="logo-icon">🐱</div>
-      <div>
-        <div class="logo-text">にゃんログ</div>
-        <div class="logo-date" id="dateEl"></div>
-      </div>
+      <div class="logo-text">にゃんログ</div>
     </div>
+    <div class="logo-date" id="dateEl"></div>
   </div>
   <div class="tabs">
     <button class="tab on" data-tab="rec">📝 記録</button>
@@ -536,6 +525,11 @@ function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{ret
 function store(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function loadSigns(){try{return JSON.parse(localStorage.getItem(SIGN_KEY)||'null')||DEFAULT_SIGNS.slice()}catch{return DEFAULT_SIGNS.slice()}}
 function storeSigns(s){localStorage.setItem(SIGN_KEY,JSON.stringify(s))}
+// 日付キー：ローカル時刻でYYYY-MM-DD（タイムゾーンズレ防止）
+function localDayKey(d){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 
 // 気になったことグリッド描画
 function renderSignGrid(){
@@ -596,7 +590,7 @@ function saveRecord(){
   const signs=[...document.querySelectorAll('.sign-btn.on')].map(b=>b.textContent.trim());
   const memo=document.getElementById('memo').value.trim();
   const now=new Date();
-  const dayKey=now.toISOString().slice(0,10);
+  const dayKey=localDayKey(now);
   const today={at:now.toISOString(),dayKey,drug:med,mood,signs,memo};
   const records=load();
   const idx=records.findIndex(r=>r.dayKey===dayKey);
@@ -644,7 +638,8 @@ function setRange(el){
 function renderSum(){
   const now=new Date();
   const from=new Date(now);from.setDate(now.getDate()-range+1);
-  const records=load().filter(r=>{const d=new Date(r.dayKey);return d>=from;});
+  const fromKey=localDayKey(from);
+  const records=load().filter(r=>r.dayKey>=fromKey);
   const drug=records.filter(r=>r.drug==='yes').length;
   const shindoi=records.filter(r=>r.mood==='しんどい').length;
   const genki=records.filter(r=>r.mood==='元気').length;
@@ -665,17 +660,28 @@ function renderSum(){
     pieces.push(`服薬できた日は${drug}日、できなかった日は${records.length-drug}日です。`);
     if(top.length) pieces.push(`気になったことでは「${top.slice(0,3).map(v=>v[0]).join('・')}」が多く見られます。`);
     document.getElementById('doctorText').textContent=pieces.join(' ');
+  } else {
+    document.getElementById('doctorText').textContent='記録が増えると自動でまとめが出るにゃ📋';
   }
 }
 
 // 設定
 function renderCfg(){
   const signs=loadSigns();
-  document.getElementById('signTags').innerHTML=signs.map(s=>`
+  const container=document.getElementById('signTags');
+  container.innerHTML=signs.map((s,i)=>`
     <span class="concern-tag">
-      ${s}
-      <button class="remove-btn" onclick="removeSign('${s.replace(/'/g,"\\'")}')">×</button>
+      ${s.replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+      <button class="remove-btn" data-sign-index="${i}" aria-label="削除">×</button>
     </span>`).join('');
+  container.querySelectorAll('.remove-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const idx=Number(this.dataset.signIndex);
+      const s=loadSigns();
+      s.splice(idx,1);
+      storeSigns(s);renderSignGrid();renderCfg();
+    });
+  });
 }
 function addSign(){
   const val=document.getElementById('newSign').value.trim();
@@ -715,9 +721,16 @@ function exportJson(){
 function clearAll(){
   if(!confirm('全データを削除しますにゃ。元に戻せないにゃ。よろしい？'))return;
   localStorage.removeItem(KEY);localStorage.removeItem(SIGN_KEY);
-  renderSignGrid();renderHist();renderSum();renderCfg();
+  // UIリセット
+  med=null;
+  document.getElementById('medYes').className='drug-btn';
+  document.getElementById('medNo').className='drug-btn';
+  document.querySelectorAll('.mood-btn,.sign-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('memo').value='';
   document.getElementById('catMsg').textContent='今日はどうだったにゃ？ 記録してにゃ🐾';
   document.getElementById('nurseCard').classList.remove('show');
+  document.getElementById('doctorText').textContent='記録が増えると自動でまとめが出るにゃ📋';
+  renderSignGrid();renderHist();renderSum();renderCfg();
 }
 
 renderSignGrid();
