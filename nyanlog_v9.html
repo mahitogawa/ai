@@ -687,12 +687,13 @@ function buildNurse(today,records){
   const tiredDays=w.filter(r=>r.signs.includes('体がだるい')).length;
   const shindoi=w.filter(r=>r.mood==='しんどい').length;
   const drugNo=w.filter(r=>r.drug==='no').length;
-  if(drugNo>=2) return'服薬できていない日が続いています。理由があれば次の診察で相談してください。';
-  if(dizzDays>=3) return`めまい・ふらつきが${dizzDays}日続いています。転倒に注意し、担当の方に伝えてください。`;
-  if(wordDays>=3) return`言葉が出にくい日が${wordDays}日続いています。次の診察で伝える材料になります。`;
-  if(tiredDays>=3) return`体のだるさが${tiredDays}日続いています。水分・睡眠を意識してみてください。`;
-  if(shindoi>=3) return`気分がしんどい日が${shindoi}日続いています。無理せず周囲のサポートを活用してください。`;
-  return null;
+  const msgs=[];
+  if(drugNo>=2)   msgs.push('服薬できていない日が続いています。理由があれば次の診察で相談してください。');
+  if(dizzDays>=3) msgs.push(`めまい・ふらつきが${dizzDays}日続いています。転倒に注意し、担当の方に伝えてください。`);
+  if(wordDays>=3) msgs.push(`言葉が出にくい日が${wordDays}日続いています。次の診察で伝える材料になります。`);
+  if(tiredDays>=3)msgs.push(`体のだるさが${tiredDays}日続いています。水分・睡眠を意識してみてください。`);
+  if(shindoi>=3)  msgs.push(`気分がしんどい日が${shindoi}日続いています。無理せず周囲のサポートを活用してください。`);
+  return msgs.length ? msgs : null;
 }
 
 // 記録する
@@ -711,10 +712,15 @@ function saveRecord(){
   if(idx>=0)records[idx]=today; else records.unshift(today);
   store(records);
   catEl.textContent=buildCat(today,records);
-  const nc=buildNurse(today,records);
+  const ncs=buildNurse(today,records);
   const nurseCard=document.getElementById('nurseCard');
-  if(nc){document.getElementById('nurseMsg').textContent=nc;nurseCard.classList.add('show');}
-  else{nurseCard.classList.remove('show');}
+  const nurseMsg=document.getElementById('nurseMsg');
+  if(ncs){
+    nurseMsg.innerHTML=ncs.map(t=>`<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid rgba(240,192,144,.4)">${t}</div>`).join('').replace(/<div style="[^"]*">([^<]*)<\/div>$/,'<div>$1</div>');
+    nurseCard.classList.add('show');
+  } else {
+    nurseCard.classList.remove('show');
+  }
   // スタンプ
   const ov=document.getElementById('stampOv');
   ov.classList.add('show');
@@ -790,8 +796,9 @@ function setRange(el){
 }
 function renderSum(){
   const now=new Date();
-  const from=new Date(now);from.setDate(now.getDate()-range+1);
-  const fromKey=localDayKey(from);
+  // from を「range-1日前の00:00:00」に固定してズレをなくす
+  const from=new Date(now.getFullYear(),now.getMonth(),now.getDate()-range+1);
+  const fromKey=localDayKey(from); // from は必ず00:00なので文字列比較が正確
   const records=load().filter(r=>r.dayKey>=fromKey);
   const drug=records.filter(r=>r.drug==='yes').length;
   const shindoi=records.filter(r=>r.mood==='しんどい').length;
