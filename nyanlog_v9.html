@@ -49,6 +49,11 @@ body{
   align-items:center;
   cursor:pointer;
   gap:8px;
+  width:100%;
+  background:none;
+  border:none;
+  font-family:inherit;
+  -webkit-tap-highlight-color:rgba(255,255,255,.15);
 }
 .hd-top-row{
   display:flex;align-items:center;gap:12px;
@@ -122,7 +127,6 @@ body{
   border:1.5px solid var(--line);
   padding:20px;
   margin-bottom:14px;
-  min-width:0;overflow:hidden;
 }
 .card-title{
   font-size:20px;font-weight:900;
@@ -438,13 +442,13 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 <body>
 
 <div class="hd">
-  <div class="hd-inner" onclick="document.documentElement.scrollTop=0;document.body.scrollTop=0;" title="TOPへ戻る ↑" style="cursor:pointer;-webkit-tap-highlight-color:rgba(255,255,255,.15);">
+  <button class="hd-inner" id="toTopBtn" title="TOPへ戻る ↑">
     <div class="hd-top-row">
       <div class="logo-icon">🐱</div>
       <div class="logo-text">にゃんログ</div>
     </div>
     <div class="logo-date" id="dateEl"></div>
-  </div>
+  </button>
   <div class="tabs">
     <button class="tab on" data-tab="rec">📝 記録</button>
     <button class="tab" data-tab="hist">📅 履歴</button>
@@ -592,6 +596,14 @@ let range=7;
   const w=['日','月','火','水','木','金','土'];
   document.getElementById('dateEl').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${w[d.getDay()]}）`;
 })();
+
+// TOPへ戻るボタン
+document.getElementById('toTopBtn').addEventListener('click',function(e){
+  e.stopPropagation();
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(err){window.scrollTo(0,0);}
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+});
 
 // タブ
 document.querySelectorAll('.tab').forEach(t=>{
@@ -963,10 +975,20 @@ function exportPdf(){
   .doctor-label{font-size:13px;font-weight:900;color:#d97706;letter-spacing:.06em;margin-bottom:6px}
   .doctor-text{font-size:15px;font-weight:700;line-height:1.8;color:#78350f}
   .footer{margin-top:28px;font-size:12px;color:#999;text-align:center;border-top:1px solid #eee;padding-top:12px}
-  @media print{body{padding:12px}button{display:none}}
+  @media print{
+    .no-print{display:none!important}
+    body{padding:12px}
+  }
+  .print-btn{
+    display:block;margin:0 auto 20px;padding:14px 32px;
+    background:#2d6a4f;color:#fff;border:none;border-radius:12px;
+    font-size:17px;font-weight:900;cursor:pointer;font-family:inherit;
+  }
+  .print-btn:hover{background:#245a40}
 </style>
 </head>
 <body>
+<button class="print-btn no-print" onclick="window.print()">🖨️ このページを印刷 / PDFで保存</button>
 <h1>🐱 にゃんログ まとめ</h1>
 <div class="subtitle">出力日：${todayStr}　　記録件数：全 ${allRec.length} 件</div>
 
@@ -1003,15 +1025,19 @@ ${top.length?top.map(([n,c])=>`<span class="badge">${n}　${c}回</span>`).join(
 </div>
 
 <div class="footer">🐱 にゃんログ　／　データはこの端末のブラウザにのみ保存されています</div>
-<script>window.print();<\/script>
 </body>
 </html>`;
 
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob);
-  const win=window.open(url,'_blank');
-  if(!win){alert('ポップアップをゆるしてにゃ🐱 ブラウザの設定でポップアップを許可してください。');}
-  setTimeout(()=>URL.revokeObjectURL(url),30000);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='nyanlog-report-'+new Date().toISOString().slice(0,10)+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  alert('📄 レポートをダウンロードしましたにゃ🐱\nダウンロードしたファイルを開いて「印刷」ボタンを押すと印刷・PDF保存ができます。');
 }
 function exportJson(){
   const records=load();
