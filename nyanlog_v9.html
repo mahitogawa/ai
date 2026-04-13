@@ -334,6 +334,33 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   color:var(--danger);font-weight:900;
   cursor:pointer;font-size:20px;line-height:1;
 }
+/* 候補管理トグル */
+.cfg-section-label{font-size:14px;font-weight:900;color:var(--muted);letter-spacing:.06em;margin:14px 0 8px;}
+.sign-manage-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:14px;margin-bottom:6px;
+  border:1.5px solid var(--line);background:var(--sand);transition:.15s;
+}
+.sign-manage-row.off{background:#f5f5f5;border-color:#ddd;}
+.sign-manage-name{font-size:16px;font-weight:900;color:var(--ink);flex:1;}
+.sign-manage-row.off .sign-manage-name{color:#bbb;}
+.tog{position:relative;width:50px;height:28px;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;position:absolute;}
+.tog-track{position:absolute;inset:0;border-radius:99px;background:#ddd;cursor:pointer;transition:.2s;}
+.tog input:checked+.tog-track{background:var(--brand);}
+.tog-track::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.tog input:checked+.tog-track::after{left:25px;}
+.sign-manage-del{background:none;border:none;color:#ccc;font-size:18px;cursor:pointer;padding:0;font-weight:900;line-height:1;transition:.15s;}
+.sign-manage-del:hover{color:var(--danger);}
+.restore-section{margin-top:12px;padding-top:12px;border-top:1.5px dashed var(--line);}
+.restore-label{font-size:13px;font-weight:900;color:var(--muted);margin-bottom:6px;letter-spacing:.04em;}
+.restore-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#f0f0f0;border:1.5px dashed #ccc;border-radius:999px;
+  padding:6px 14px;font-size:15px;font-weight:900;color:#999;
+  margin:3px 3px 0 0;cursor:pointer;transition:.15s;
+}
+.restore-tag:hover{background:var(--brand-light);border-color:var(--brand);color:var(--brand);}
 .export-btn{
   width:100%;padding:18px;
   background:var(--sand);border:1.5px solid var(--line);
@@ -347,7 +374,36 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   color:var(--danger);cursor:pointer;
 }
 
-/* スタンプ */
+/* まとめ画面 nurse カード */
+.sum-nurse-box{
+  background:var(--warn-bg);
+  border:1.5px solid #f0c090;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+}
+.sum-nurse-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.sum-nurse-icon{font-size:28px;flex-shrink:0;}
+.sum-nurse-title{font-size:18px;font-weight:900;color:var(--warn);}
+.sum-nurse-subtitle{font-size:13px;font-weight:700;color:#b45309;margin-top:1px;}
+.sum-nurse-msg{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:12px 14px;
+  background:#fff;
+  border-radius:12px;
+  border-left:4px solid var(--warn);
+  margin-bottom:8px;
+}
+.sum-nurse-msg:last-child{margin-bottom:0;}
+.sum-nurse-msg-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.sum-nurse-msg-text{font-size:16px;font-weight:900;line-height:1.7;color:#7c3d12;}
+.sum-nurse-msg.green{border-left-color:var(--brand);background:#f0faf5;}
+.sum-nurse-msg.green .sum-nurse-msg-text{color:#1a4a35;}
+.sum-nurse-msg.empty{border-left-color:#ccc;background:#fafafa;}
+.sum-nurse-msg.empty .sum-nurse-msg-text{color:var(--muted);}
 .stamp-ov{
   position:fixed;inset:0;pointer-events:none;
   display:flex;align-items:center;justify-content:center;
@@ -472,6 +528,17 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
     <div class="doctor-label">🩺 診察向けメモ</div>
     <div class="doctor-text" id="doctorText">記録が増えると自動でまとめが出るにゃ📋</div>
   </div>
+
+  <div class="sum-nurse-box">
+    <div class="sum-nurse-header">
+      <div class="sum-nurse-icon">🩺</div>
+      <div>
+        <div class="sum-nurse-title">医療従事者・ケアスタッフへ</div>
+        <div class="sum-nurse-subtitle">記録をもとにした自動コメントです</div>
+      </div>
+    </div>
+    <div id="sumNurseMsgs"><div class="sum-nurse-msg empty"><span class="sum-nurse-msg-icon">📋</span><span class="sum-nurse-msg-text">記録が3件以上になると表示されます</span></div></div>
+  </div>
 </div>
 
 <!-- 設定 -->
@@ -481,6 +548,10 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
     <div class="input-row">
       <input class="text-input" id="newSign" placeholder="例：食欲がない"/>
       <button class="add-btn" onclick="addSign()">追加</button>
+    </div>
+    <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:10px;line-height:1.6">
+      🔘 トグルで表示／非表示を切り替えられます。非表示にしても候補は残ります。<br>
+      🗑 ゴミ箱で完全に削除できます。
     </div>
     <div id="signTags"></div>
   </div>
@@ -501,7 +572,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 
 <script>
 const KEY='nyanlog_final_v1';
-const SIGN_KEY='nyanlog_signs_v1';
+const SIGN_KEY='nyanlog_signs_v1';        // 有効な候補（記録画面に出る）
+const SIGN_MASTER_KEY='nyanlog_signs_master_v1'; // 全候補マスター（削除しても残る）
 const DEFAULT_SIGNS=['言葉が出にくい','忘れっぽい','集中できない','体がだるい','痛み・不快感','めまい・ふらつき','不安','食欲がない','眠れない','イライラ','頭が重い','そわそわする'];
 let med=null;
 let range=7;
@@ -529,9 +601,22 @@ document.querySelectorAll('.tab').forEach(t=>{
 // データ
 function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function store(r){localStorage.setItem(KEY,JSON.stringify(r))}
+// 有効候補（記録画面に表示する）
 function loadSigns(){try{return JSON.parse(localStorage.getItem(SIGN_KEY)||'null')||DEFAULT_SIGNS.slice()}catch{return DEFAULT_SIGNS.slice()}}
 function storeSigns(s){localStorage.setItem(SIGN_KEY,JSON.stringify(s))}
-// 日付キー：ローカル時刻でYYYY-MM-DD（タイムゾーンズレ防止）
+// マスター候補（全て。削除しても残る）
+function loadMaster(){
+  try{
+    const m=JSON.parse(localStorage.getItem(SIGN_MASTER_KEY)||'null');
+    if(m) return m;
+    // 初回：デフォルト＋有効リストをマージしてマスター作成
+    const merged=[...new Set([...DEFAULT_SIGNS,...loadSigns()])];
+    localStorage.setItem(SIGN_MASTER_KEY,JSON.stringify(merged));
+    return merged;
+  }catch{return DEFAULT_SIGNS.slice()}
+}
+function storeMaster(m){localStorage.setItem(SIGN_MASTER_KEY,JSON.stringify(m))}
+// 日付キー：ローカル時刻でYYYY-MM-DD
 function localDayKey(d){
   const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
@@ -634,6 +719,45 @@ function renderHist(){
   }).join('');
 }
 
+// まとめ用 医療従事者コメント（複数）
+function buildSumNurse(records, range){
+  if(records.length<3) return null;
+  const msgs=[];
+  const drug=records.filter(r=>r.drug==='yes').length;
+  const drugNo=records.filter(r=>r.drug==='no').length;
+  const shindoi=records.filter(r=>r.mood==='しんどい').length;
+  const genki=records.filter(r=>r.mood==='元気').length;
+  const dizzDays=records.filter(r=>r.signs.includes('めまい・ふらつき')).length;
+  const wordDays=records.filter(r=>r.signs.includes('言葉が出にくい')).length;
+  const tiredDays=records.filter(r=>r.signs.includes('体がだるい')).length;
+  const anxDays=records.filter(r=>r.signs.includes('不安')).length;
+  const sleepDays=records.filter(r=>r.signs.includes('眠れない')).length;
+  const total=records.length;
+  const drugRate=Math.round(drug/total*100);
+
+  // 服薬
+  if(drugRate===100) msgs.push({type:'green',icon:'💊',text:`この期間（${range}日）、毎日服薬できています。とても安定しています。`});
+  else if(drugRate>=80) msgs.push({type:'green',icon:'💊',text:`服薬率${drugRate}%（${drug}/${total}日）。おおむね安定しています。`});
+  else if(drugNo>=2) msgs.push({type:'warn',icon:'💊',text:`服薬できていない日が${drugNo}日あります（服薬率${drugRate}%）。理由の確認をおすすめします。`});
+
+  // 気分
+  if(shindoi>=Math.ceil(total*0.5)) msgs.push({type:'warn',icon:'😔',text:`しんどい日が${shindoi}日（${Math.round(shindoi/total*100)}%）と多めです。本人の負担感を直接確認してください。`});
+  else if(shindoi>=3) msgs.push({type:'warn',icon:'😔',text:`しんどいと感じた日が${shindoi}日ありました。疲労・ストレスの蓄積に注意してください。`});
+  if(genki>=Math.ceil(total*0.6)) msgs.push({type:'green',icon:'😄',text:`元気な日が${genki}日（${Math.round(genki/total*100)}%）と多く、良好な状態が続いています。`});
+
+  // 症状別
+  if(dizzDays>=3) msgs.push({type:'warn',icon:'🌀',text:`めまい・ふらつきが${dizzDays}日記録されています。転倒リスクに注意し、必要に応じて環境整備を検討してください。`});
+  if(wordDays>=3) msgs.push({type:'warn',icon:'💬',text:`言葉が出にくい日が${wordDays}日あります。次の診察で状態を詳しく確認することをおすすめします。`});
+  if(tiredDays>=3) msgs.push({type:'warn',icon:'😴',text:`体のだるさが${tiredDays}日続いています。水分・睡眠・栄養の状態も合わせて確認してください。`});
+  if(anxDays>=3) msgs.push({type:'warn',icon:'😟',text:`不安を感じた日が${anxDays}日あります。日常の声かけや傾聴の機会を増やすと良いかもしれません。`});
+  if(sleepDays>=3) msgs.push({type:'warn',icon:'🌙',text:`眠れない日が${sleepDays}日記録されています。睡眠の質について本人に確認してください。`});
+
+  // 問題なし
+  if(msgs.length===0) msgs.push({type:'green',icon:'✅',text:`この期間、特に気になる傾向は見られませんでした。引き続き見守りをお願いします。`});
+
+  return msgs;
+}
+
 // まとめ
 function setRange(el){
   range=Number(el.dataset.range);
@@ -669,35 +793,90 @@ function renderSum(){
   } else {
     document.getElementById('doctorText').textContent='記録が増えると自動でまとめが出るにゃ📋';
   }
+  // 医療従事者コメント
+  const nurseEl=document.getElementById('sumNurseMsgs');
+  const nurseMsgs=buildSumNurse(records,range);
+  if(nurseMsgs){
+    nurseEl.innerHTML=nurseMsgs.map(m=>`
+      <div class="sum-nurse-msg ${m.type==='green'?'green':''}">
+        <span class="sum-nurse-msg-icon">${m.icon}</span>
+        <span class="sum-nurse-msg-text">${m.text}</span>
+      </div>`).join('');
+  } else {
+    nurseEl.innerHTML='<div class="sum-nurse-msg empty"><span class="sum-nurse-msg-icon">📋</span><span class="sum-nurse-msg-text">記録が3件以上になると表示されます</span></div>';
+  }
 }
 
 // 設定
 function renderCfg(){
-  const signs=loadSigns();
+  const master=loadMaster();
+  const enabled=loadSigns();
+  const enabledSet=new Set(enabled);
   const container=document.getElementById('signTags');
-  container.innerHTML=signs.map((s,i)=>`
-    <span class="concern-tag">
-      ${s.replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-      <button class="remove-btn" data-sign-index="${i}" aria-label="削除">×</button>
-    </span>`).join('');
-  container.querySelectorAll('.remove-btn').forEach(btn=>{
-    btn.addEventListener('click',function(){
+
+  // 有効・無効それぞれ描画
+  container.innerHTML=master.map((s,i)=>{
+    const on=enabledSet.has(s);
+    const safe=s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<div class="sign-manage-row${on?'':' off'}" data-name="${safe}">
+      <span class="sign-manage-name">${safe}</span>
+      <label class="tog" title="${on?'非表示にする':'表示する'}">
+        <input type="checkbox" ${on?'checked':''} data-sign-index="${i}">
+        <span class="tog-track"></span>
+      </label>
+      <button class="sign-manage-del" data-del-index="${i}" title="完全に削除">🗑</button>
+    </div>`;
+  }).join('');
+
+  // トグル：有効/無効切り替え
+  container.querySelectorAll('.tog input').forEach(inp=>{
+    inp.addEventListener('change',function(){
       const idx=Number(this.dataset.signIndex);
-      const s=loadSigns();
-      s.splice(idx,1);
-      storeSigns(s);renderSignGrid();renderCfg();
+      const m=loadMaster();
+      const name=m[idx];
+      const cur=loadSigns();
+      const newEnabled=this.checked?[...cur,name]:cur.filter(s=>s!==name);
+      storeSigns(newEnabled);
+      renderSignGrid();
+      renderCfg();
+    });
+  });
+
+  // 完全削除ボタン（マスターからも消す）
+  container.querySelectorAll('.sign-manage-del').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const idx=Number(this.dataset.delIndex);
+      const m=loadMaster();
+      const name=m[idx];
+      if(!confirm(`「${name}」を完全に削除しますにゃ。よろしい？`))return;
+      m.splice(idx,1);
+      storeMaster(m);
+      const cur=loadSigns().filter(s=>s!==name);
+      storeSigns(cur);
+      renderSignGrid();
+      renderCfg();
     });
   });
 }
 function addSign(){
   const val=document.getElementById('newSign').value.trim();
   if(!val) return;
-  const signs=loadSigns();
-  if(!signs.includes(val)){signs.push(val);storeSigns(signs);renderSignGrid();}
+  const master=loadMaster();
+  const enabled=loadSigns();
+  if(!master.includes(val)){
+    master.push(val);
+    storeMaster(master);
+  }
+  if(!enabled.includes(val)){
+    enabled.push(val);
+    storeSigns(enabled);
+    renderSignGrid();
+  }
   document.getElementById('newSign').value='';
   renderCfg();
 }
 function removeSign(name){
+  // 後方互換用（現在は使われないが残す）
   const signs=loadSigns().filter(s=>s!==name);
   storeSigns(signs);renderSignGrid();renderCfg();
 }
@@ -851,7 +1030,7 @@ function exportJson(){
 }
 function clearAll(){
   if(!confirm('全データを削除しますにゃ。元に戻せないにゃ。よろしい？'))return;
-  localStorage.removeItem(KEY);localStorage.removeItem(SIGN_KEY);
+  localStorage.removeItem(KEY);localStorage.removeItem(SIGN_KEY);localStorage.removeItem(SIGN_MASTER_KEY);
   // UIリセット
   med=null;
   document.getElementById('medYes').className='drug-btn';
