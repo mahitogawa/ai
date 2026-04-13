@@ -53,7 +53,9 @@ body{
   background:none;
   border:none;
   font-family:inherit;
-  -webkit-tap-highlight-color:rgba(255,255,255,.15);
+  text-decoration:none;
+  color:inherit;
+  -webkit-tap-highlight-color:rgba(255,255,255,.2);
 }
 .hd-top-row{
   display:flex;align-items:center;gap:12px;
@@ -439,16 +441,16 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 }
 </style>
 </head>
-<body>
+<body id="top">
 
 <div class="hd">
-  <button class="hd-inner" id="toTopBtn" title="TOPへ戻る ↑">
+  <a class="hd-inner" href="#top" id="toTopBtn" title="TOPへ戻る ↑">
     <div class="hd-top-row">
       <div class="logo-icon">🐱</div>
       <div class="logo-text">にゃんログ</div>
     </div>
     <div class="logo-date" id="dateEl"></div>
-  </button>
+  </a>
   <div class="tabs">
     <button class="tab on" data-tab="rec">📝 記録</button>
     <button class="tab" data-tab="hist">📅 履歴</button>
@@ -599,8 +601,9 @@ let range=7;
 
 // TOPへ戻るボタン
 document.getElementById('toTopBtn').addEventListener('click',function(e){
+  e.preventDefault();
   e.stopPropagation();
-  try{window.scrollTo({top:0,behavior:'smooth'});}catch(err){window.scrollTo(0,0);}
+  window.scrollTo(0,0);
   document.documentElement.scrollTop=0;
   document.body.scrollTop=0;
 });
