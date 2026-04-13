@@ -75,8 +75,8 @@ body{
 }
 .tab{
   flex:1;
-  padding:10px 4px;
-  font-size:13px;
+  padding:12px 4px;
+  font-size:15px;
   font-weight:900;
   color:rgba(255,255,255,.65);
   background:none;
@@ -85,7 +85,7 @@ body{
   border-radius:12px 12px 0 0;
   font-family:inherit;
   transition:.15s;
-  letter-spacing:.02em;
+  letter-spacing:.01em;
 }
 .tab.on{
   background:var(--cream);
@@ -105,10 +105,10 @@ body{
   margin-bottom:14px;
 }
 .card-title{
-  font-size:15px;font-weight:900;
+  font-size:20px;font-weight:900;
   color:var(--muted);
-  letter-spacing:.06em;
-  margin-bottom:14px;
+  letter-spacing:.04em;
+  margin-bottom:16px;
   display:flex;align-items:center;gap:6px;
 }
 
@@ -118,7 +118,7 @@ body{
   background:var(--sand);
   border:2.5px solid transparent;
   border-radius:18px;
-  height:80px;
+  height:92px;
   cursor:pointer;
   transition:.18s;
   display:flex;flex-direction:column;
@@ -126,8 +126,8 @@ body{
   gap:6px;
   font-family:inherit;
 }
-.mood-emoji{font-size:30px;line-height:1}
-.mood-label{font-size:13px;font-weight:900;color:var(--muted)}
+.mood-emoji{font-size:36px;line-height:1}
+.mood-label{font-size:16px;font-weight:900;color:var(--muted)}
 .mood-btn:active{transform:scale(.95)}
 .mood-btn.on{
   border-color:var(--purple);
@@ -141,8 +141,8 @@ body{
   background:var(--sand);
   border:2.5px solid transparent;
   border-radius:18px;
-  height:64px;
-  font-size:16px;font-weight:900;
+  height:74px;
+  font-size:19px;font-weight:900;
   cursor:pointer;
   font-family:inherit;
   color:var(--ink);
@@ -165,13 +165,13 @@ body{
   background:var(--sand);
   border:2.5px solid transparent;
   border-radius:14px;
-  height:62px;
-  font-size:13px;font-weight:900;
+  height:72px;
+  font-size:16px;font-weight:900;
   color:var(--ink);
   cursor:pointer;
   font-family:inherit;
   transition:.18s;
-  line-height:1.35;
+  line-height:1.4;
   padding:4px 2px;
 }
 .sign-btn:active{transform:scale(.95)}
@@ -183,7 +183,7 @@ textarea{
   border:2px solid var(--line);
   border-radius:14px;
   padding:14px;
-  font-size:15px;
+  font-size:18px;
   font-family:inherit;
   font-weight:700;
   color:var(--ink);
@@ -198,11 +198,11 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 
 /* ===== 記録ボタン ===== */
 .save-btn{
-  width:100%;height:64px;
+  width:100%;height:70px;
   background:var(--brand);
   color:#fff;
   border:none;border-radius:20px;
-  font-size:18px;font-weight:900;
+  font-size:20px;font-weight:900;
   cursor:pointer;
   font-family:inherit;
   letter-spacing:.04em;
@@ -221,8 +221,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   display:flex;gap:12px;align-items:flex-start;
   margin-bottom:10px;
 }
-.cat-avatar{font-size:32px;flex-shrink:0;margin-top:2px}
-.cat-text{font-size:16px;font-weight:900;line-height:1.7;color:#1a4a35}
+.cat-avatar{font-size:36px;flex-shrink:0;margin-top:2px}
+.cat-text{font-size:18px;font-weight:900;line-height:1.7;color:#1a4a35}
 
 .nurse-card{
   background:var(--warn-bg);
@@ -236,8 +236,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
 .nurse-card.show{display:flex}
 .nurse-icon{font-size:28px;flex-shrink:0;margin-top:2px}
 .nurse-inner{}
-.nurse-label{font-size:12px;font-weight:900;color:var(--warn);letter-spacing:.06em;margin-bottom:4px}
-.nurse-text{font-size:15px;font-weight:900;line-height:1.7;color:#7c3d12}
+.nurse-label{font-size:14px;font-weight:900;color:var(--warn);letter-spacing:.06em;margin-bottom:4px}
+.nurse-text{font-size:17px;font-weight:900;line-height:1.7;color:#7c3d12}
 
 /* ===== 履歴リスト ===== */
 .hist-item{
@@ -250,8 +250,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   margin-bottom:8px;
   border:1.5px solid var(--line);
 }
-.hist-day{font-size:15px;font-weight:900;color:var(--ink)}
-.hist-meta{font-size:13px;font-weight:700;color:var(--muted);text-align:right}
+.hist-day{font-size:17px;font-weight:900;color:var(--ink)}
+.hist-meta{font-size:15px;font-weight:700;color:var(--muted);text-align:right}
 
 /* ===== サマリー ===== */
 .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -261,8 +261,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   padding:14px;
   border:1.5px solid var(--line);
 }
-.kpi-label{font-size:12px;font-weight:900;color:var(--muted);margin-bottom:4px}
-.kpi-val{font-size:28px;font-weight:900;color:var(--ink)}
+.kpi-label{font-size:15px;font-weight:900;color:var(--muted);margin-bottom:4px}
+.kpi-val{font-size:32px;font-weight:900;color:var(--ink)}
 
 .range-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .range-btn{
@@ -280,8 +280,8 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   border-radius:16px;
   padding:16px;
 }
-.doctor-label{font-size:12px;font-weight:900;color:var(--amber);letter-spacing:.06em;margin-bottom:6px}
-.doctor-text{font-size:15px;font-weight:900;line-height:1.7;color:#78350f}
+.doctor-label{font-size:14px;font-weight:900;color:var(--amber);letter-spacing:.06em;margin-bottom:6px}
+.doctor-text{font-size:17px;font-weight:900;line-height:1.7;color:#78350f}
 
 /* バッジ */
 .badge{
