@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>🐱 にゃんログ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --cream:#fdf8f3;
+  --sand:#f5ede0;
+  --brand:#2d6a4f;
+  --brand-light:#e8f5ef;
+  --ink:#2c2118;
+  --muted:#8b7355;
+  --line:#e8ddd0;
+  --warn:#e07b39;
+  --warn-bg:#fef3e8;
+  --danger:#c0392b;
+  --danger-bg:#fdecea;
+  --purple:#5b54c7;
+  --purple-bg:#eef0ff;
+  --amber:#d97706;
+  --amber-bg:#fff8e7;
+}
+
+body{
+  font-family:'Zen Maru Gothic',-apple-system,"Hiragino Sans",sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ===== HEADER ===== */
+.hd{
+  background:var(--brand);
+  padding:env(safe-area-inset-top,0) 0 0;
+  position:sticky;top:0;z-index:100;
+}
+.hd-inner{
+  padding:16px 20px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+}
+.logo-icon{
+  width:44px;height:44px;
+  background:rgba(255,255,255,.18);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+}
+.logo-text{
+  font-size:22px;font-weight:900;color:#fff;
+  letter-spacing:.02em;
+}
+.logo-date{
+  font-size:13px;color:rgba(255,255,255,.75);
+  font-weight:700;margin-top:2px;
+}
+
+/* タブ */
+.tabs{
+  display:flex;
+  margin-top:12px;
+  border-bottom:none;
+  gap:2px;
+  padding:0 12px;
+}
+.tab{
+  flex:1;
+  padding:10px 4px;
+  font-size:13px;
+  font-weight:900;
+  color:rgba(255,255,255,.65);
+  background:none;
+  border:none;
+  cursor:pointer;
+  border-radius:12px 12px 0 0;
+  font-family:inherit;
+  transition:.15s;
+  letter-spacing:.02em;
+}
+.tab.on{
+  background:var(--cream);
+  color:var(--brand);
+}
+
+/* ===== VIEWS ===== */
+.view{display:none;padding:20px 16px 48px;max-width:480px;margin:0 auto}
+.view.on{display:block}
+
+/* ===== カード ===== */
+.card{
+  background:#fff;
+  border-radius:20px;
+  border:1.5px solid var(--line);
+  padding:20px;
+  margin-bottom:14px;
+}
+.card-title{
+  font-size:15px;font-weight:900;
+  color:var(--muted);
+  letter-spacing:.06em;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ===== 気分ボタン ===== */
+.mood-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mood-btn{
+  background:var(--sand);
+  border:2.5px solid transparent;
+  border-radius:18px;
+  height:80px;
+  cursor:pointer;
+  transition:.18s;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:6px;
+  font-family:inherit;
+}
+.mood-emoji{font-size:30px;line-height:1}
+.mood-label{font-size:13px;font-weight:900;color:var(--muted)}
+.mood-btn:active{transform:scale(.95)}
+.mood-btn.on{
+  border-color:var(--purple);
+  background:var(--purple-bg);
+}
+.mood-btn.on .mood-label{color:var(--purple)}
+
+/* ===== 薬ボタン ===== */
+.drug-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.drug-btn{
+  background:var(--sand);
+  border:2.5px solid transparent;
+  border-radius:18px;
+  height:64px;
+  font-size:16px;font-weight:900;
+  cursor:pointer;
+  font-family:inherit;
+  color:var(--ink);
+  transition:.18s;
+}
+.drug-btn:active{transform:scale(.96)}
+#medYes.on{background:var(--brand-light);border-color:var(--brand);color:var(--brand)}
+#medNo.on{
+  background:var(--danger-bg);border-color:var(--danger);color:var(--danger);
+  animation:redglow 1s ease 2;
+}
+@keyframes redglow{
+  0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}
+  50%{box-shadow:0 0 0 8px rgba(192,57,43,.2)}
+}
+
+/* ===== 気になったことボタン ===== */
+.sign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sign-btn{
+  background:var(--sand);
+  border:2.5px solid transparent;
+  border-radius:14px;
+  height:62px;
+  font-size:13px;font-weight:900;
+  color:var(--ink);
+  cursor:pointer;
+  font-family:inherit;
+  transition:.18s;
+  line-height:1.35;
+  padding:4px 2px;
+}
+.sign-btn:active{transform:scale(.95)}
+.sign-btn.on{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+
+/* メモ */
+textarea{
+  width:100%;
+  border:2px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  font-size:15px;
+  font-family:inherit;
+  font-weight:700;
+  color:var(--ink);
+  background:var(--sand);
+  resize:none;
+  line-height:1.6;
+  margin-top:10px;
+  transition:.15s;
+}
+textarea:focus{outline:none;border-color:var(--brand);background:#fff}
+textarea::placeholder{color:#c4b49a;font-weight:700}
+
+/* ===== 記録ボタン ===== */
+.save-btn{
+  width:100%;height:64px;
+  background:var(--brand);
+  color:#fff;
+  border:none;border-radius:20px;
+  font-size:18px;font-weight:900;
+  cursor:pointer;
+  font-family:inherit;
+  letter-spacing:.04em;
+  transition:.15s;
+  margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.save-btn:active{opacity:.85;transform:scale(.98)}
+
+/* ===== コメントカード ===== */
+.cat-card{
+  background:var(--brand-light);
+  border:1.5px solid #b7dfc9;
+  border-radius:18px;
+  padding:18px;
+  display:flex;gap:12px;align-items:flex-start;
+  margin-bottom:10px;
+}
+.cat-avatar{font-size:32px;flex-shrink:0;margin-top:2px}
+.cat-text{font-size:16px;font-weight:900;line-height:1.7;color:#1a4a35}
+
+.nurse-card{
+  background:var(--warn-bg);
+  border:1.5px solid #f0c090;
+  border-radius:18px;
+  padding:18px;
+  display:none;
+  gap:12px;align-items:flex-start;
+  margin-bottom:10px;
+}
+.nurse-card.show{display:flex}
+.nurse-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.nurse-inner{}
+.nurse-label{font-size:12px;font-weight:900;color:var(--warn);letter-spacing:.06em;margin-bottom:4px}
+.nurse-text{font-size:15px;font-weight:900;line-height:1.7;color:#7c3d12}
+
+/* ===== 履歴リスト ===== */
+.hist-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 14px;
+  background:var(--sand);
+  border-radius:14px;
+  margin-bottom:8px;
+  border:1.5px solid var(--line);
+}
+.hist-day{font-size:15px;font-weight:900;color:var(--ink)}
+.hist-meta{font-size:13px;font-weight:700;color:var(--muted);text-align:right}
+
+/* ===== サマリー ===== */
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.kpi-box{
+  background:var(--sand);
+  border-radius:16px;
+  padding:14px;
+  border:1.5px solid var(--line);
+}
+.kpi-label{font-size:12px;font-weight:900;color:var(--muted);margin-bottom:4px}
+.kpi-val{font-size:28px;font-weight:900;color:var(--ink)}
+
+.range-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.range-btn{
+  border:2px solid var(--line);
+  background:#fff;border-radius:999px;
+  padding:8px 16px;font-size:13px;font-weight:900;
+  cursor:pointer;font-family:inherit;color:var(--muted);
+  transition:.15s;
+}
+.range-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+
+.doctor-box{
+  background:var(--amber-bg);
+  border:1.5px solid #f0c040;
+  border-radius:16px;
+  padding:16px;
+}
+.doctor-label{font-size:12px;font-weight:900;color:var(--amber);letter-spacing:.06em;margin-bottom:6px}
+.doctor-text{font-size:15px;font-weight:900;line-height:1.7;color:#78350f}
+
+/* バッジ */
+.badge{
+  display:inline-block;
+  background:var(--sand);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 12px;
+  font-size:13px;font-weight:900;
+  color:var(--muted);
+  margin:3px 3px 0 0;
+}
+
+/* ===== 設定 ===== */
+.input-row{display:flex;gap:8px;margin-bottom:12px}
+.text-input{
+  flex:1;border:2px solid var(--line);
+  border-radius:12px;padding:12px;
+  font:inherit;font-size:15px;font-weight:700;
+  background:var(--sand);color:var(--ink);
+}
+.text-input:focus{outline:none;border-color:var(--brand)}
+.add-btn{
+  background:var(--brand);color:#fff;
+  border:none;border-radius:12px;
+  padding:12px 18px;font:inherit;
+  font-size:15px;font-weight:900;cursor:pointer;
+}
+.concern-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--sand);border:1.5px solid var(--line);
+  border-radius:999px;padding:6px 12px;
+  font-size:13px;font-weight:900;color:var(--ink);
+  margin:3px 3px 0 0;
+}
+.remove-btn{
+  background:none;border:none;
+  color:var(--danger);font-weight:900;
+  cursor:pointer;font-size:16px;line-height:1;
+}
+
+.export-btn{
+  width:100%;padding:14px;
+  background:var(--sand);border:1.5px solid var(--line);
+  border-radius:14px;font:inherit;font-size:15px;font-weight:900;
+  color:var(--ink);cursor:pointer;margin-bottom:8px;
+}
+.clear-btn{
+  width:100%;padding:14px;
+  background:var(--danger-bg);border:1.5px solid #f5b7b1;
+  border-radius:14px;font:inherit;font-size:15px;font-weight:900;
+  color:var(--danger);cursor:pointer;
+}
+
+/* スタンプ */
+.stamp-ov{
+  position:fixed;inset:0;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+}
+.stamp-inner{
+  font-size:90px;opacity:0;transform:scale(.4) rotate(-15deg);
+}
+.stamp-ov.show .stamp-inner{animation:popin .9s ease forwards}
+@keyframes popin{
+  0%{opacity:0;transform:scale(.4) rotate(-15deg)}
+  40%{opacity:1;transform:scale(1.3) rotate(8deg)}
+  65%{transform:scale(.9) rotate(-4deg)}
+  80%{opacity:1;transform:scale(1.05) rotate(2deg)}
+  100%{opacity:0;transform:scale(1) rotate(0)}
+}
+
+@media(max-width:480px){
+  body{background:var(--cream)}
+  .view{padding:16px 12px 48px}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-inner">
+    <div class="logo">
+      <div class="logo-icon">🐱</div>
+      <div>
+        <div class="logo-text">にゃんログ</div>
+        <div class="logo-date" id="dateEl"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-tab="rec">📝 記録</button>
+    <button class="tab" data-tab="hist">📅 履歴</button>
+    <button class="tab" data-tab="sum">📊 まとめ</button>
+    <button class="tab" data-tab="cfg">⚙️ 設定</button>
+  </div>
+</div>
+
+<!-- 記録 -->
+<div class="view on" id="view-rec">
+
+  <div class="card">
+    <div class="card-title">😊 今日の気分</div>
+    <div class="mood-row">
+      <button class="mood-btn" data-mood="元気" onclick="setMood(this)">
+        <span class="mood-emoji">😄</span>
+        <span class="mood-label">元気</span>
+      </button>
+      <button class="mood-btn" data-mood="普通" onclick="setMood(this)">
+        <span class="mood-emoji">😐</span>
+        <span class="mood-label">普通</span>
+      </button>
+      <button class="mood-btn" data-mood="しんどい" onclick="setMood(this)">
+        <span class="mood-emoji">😔</span>
+        <span class="mood-label">しんどい</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💊 お薬</div>
+    <div class="drug-row">
+      <button class="drug-btn" id="medYes" onclick="setMed('yes')">✅ 飲んだ</button>
+      <button class="drug-btn" id="medNo"  onclick="setMed('no')">❌ 飲んでない</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 気になったこと <span style="font-size:12px;font-weight:700;color:#c4b49a">なくてもOK</span></div>
+    <div class="sign-grid" id="signGrid"></div>
+    <textarea id="memo" rows="2" placeholder="その他、気になったことがあれば…"></textarea>
+  </div>
+
+  <button class="save-btn" onclick="saveRecord()">
+    <span>記録する</span><span>🐾</span>
+  </button>
+
+  <div class="cat-card">
+    <div class="cat-avatar">🐱</div>
+    <div class="cat-text" id="catMsg">今日はどうだったにゃ？<br>記録してにゃ🐾</div>
+  </div>
+
+  <div class="nurse-card" id="nurseCard">
+    <div class="nurse-icon">🩺</div>
+    <div class="nurse-inner">
+      <div class="nurse-label">医療スタッフより</div>
+      <div class="nurse-text" id="nurseMsg"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 履歴 -->
+<div class="view" id="view-hist">
+  <div class="card">
+    <div class="card-title">📅 最近の記録</div>
+    <div id="histList"></div>
+  </div>
+</div>
+
+<!-- まとめ -->
+<div class="view" id="view-sum">
+  <div class="range-row">
+    <button class="range-btn on" data-range="7" onclick="setRange(this)">直近7日</button>
+    <button class="range-btn" data-range="14" onclick="setRange(this)">直近14日</button>
+    <button class="range-btn" data-range="30" onclick="setRange(this)">直近30日</button>
+  </div>
+  <div class="kpi">
+    <div class="kpi-box"><div class="kpi-label">記録日数</div><div class="kpi-val" id="kpiTotal">－</div></div>
+    <div class="kpi-box"><div class="kpi-label">服薬できた日</div><div class="kpi-val" id="kpiDrug">－</div></div>
+    <div class="kpi-box"><div class="kpi-label">しんどい日</div><div class="kpi-val" id="kpiShindoi">－</div></div>
+    <div class="kpi-box"><div class="kpi-label">元気な日</div><div class="kpi-val" id="kpiGenki">－</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📌 よく出た気になったこと</div>
+    <div id="topSigns"></div>
+  </div>
+  <div class="doctor-box">
+    <div class="doctor-label">🩺 診察向けメモ</div>
+    <div class="doctor-text" id="doctorText">記録が増えると自動でまとめが出るにゃ📋</div>
+  </div>
+</div>
+
+<!-- 設定 -->
+<div class="view" id="view-cfg">
+  <div class="card">
+    <div class="card-title">📌 気になったことの候補</div>
+    <div class="input-row">
+      <input class="text-input" id="newSign" placeholder="例：食欲がない"/>
+      <button class="add-btn" onclick="addSign()">追加</button>
+    </div>
+    <div id="signTags"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📂 データ</div>
+    <button class="export-btn" onclick="exportJson()">📤 JSONで書き出し（ドクターに渡す）</button>
+    <button class="clear-btn" onclick="clearAll()">🗑 全データ削除</button>
+  </div>
+  <div style="font-size:13px;color:var(--muted);font-weight:700;line-height:1.7;padding:0 4px">
+    データはこのブラウザのみに保存されます。外部に送信しません。
+  </div>
+</div>
+
+<div class="stamp-ov" id="stampOv">
+  <div class="stamp-inner">🐾</div>
+</div>
+
+<script>
+const KEY='nyanlog_final_v1';
+const SIGN_KEY='nyanlog_signs_v1';
+const DEFAULT_SIGNS=['言葉が出にくい','忘れっぽい','集中できない','体がだるい','痛み・不快感','めまい・ふらつき','不安','食欲がない','眠れない','イライラ','頭が重い','そわそわする'];
+let med=null;
+let range=7;
+
+// 日付
+(function(){
+  const d=new Date();
+  const w=['日','月','火','水','木','金','土'];
+  document.getElementById('dateEl').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${w[d.getDay()]}）`;
+})();
+
+// タブ
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.getElementById('view-'+t.dataset.tab).classList.add('on');
+    if(t.dataset.tab==='hist') renderHist();
+    if(t.dataset.tab==='sum') renderSum();
+    if(t.dataset.tab==='cfg') renderCfg();
+  });
+});
+
+// データ
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function store(r){localStorage.setItem(KEY,JSON.stringify(r))}
+function loadSigns(){try{return JSON.parse(localStorage.getItem(SIGN_KEY)||'null')||DEFAULT_SIGNS.slice()}catch{return DEFAULT_SIGNS.slice()}}
+function storeSigns(s){localStorage.setItem(SIGN_KEY,JSON.stringify(s))}
+
+// 気になったことグリッド描画
+function renderSignGrid(){
+  const signs=loadSigns();
+  const grid=document.getElementById('signGrid');
+  grid.innerHTML=signs.map(s=>`<button class="sign-btn" onclick="this.classList.toggle('on')">${s}</button>`).join('');
+}
+
+// 薬・気分
+function setMed(v){
+  med=v;
+  document.getElementById('medYes').className='drug-btn'+(v==='yes'?' on':'');
+  document.getElementById('medNo').className='drug-btn'+(v==='no'?' on':'');
+}
+function setMood(el){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// 猫コメント
+function buildCat(today,records){
+  const w=records.slice(0,7);
+  const drugDays=w.filter(r=>r.drug==='yes').length;
+  const tiredDays=w.filter(r=>r.signs.includes('体がだるい')||r.mood==='しんどい').length;
+  const prev=records[1];
+  if(today.drug==='no') return'今日はお薬が飲めなかったにゃ💊 理由をメモしておくと次の診察で役立つにゃ。';
+  if(today.signs.length&&today.memo) return`「${today.signs[0]}」など気になることをメモも含めて記録できたにゃ🐱 大事な記録にゃ。`;
+  if(today.signs.length) return`今日は「${today.signs.join('・')}」が気になる日だったにゃ。変化を追えるにゃ🐱`;
+  if(prev&&prev.mood==='しんどい'&&today.mood==='元気') return'昨日より気分が上がってるにゃ😄 いい変化にゃ🐱';
+  if(tiredDays>=3) return`最近しんどい日が続いてるにゃ😔 この記録を診察で見せてにゃ。`;
+  if(drugDays>=5) return`この1週間、お薬を${drugDays}日飲めてるにゃ💊 安定してるにゃ🐱`;
+  if(today.mood==='元気') return'今日は元気な日にゃ😄 この調子にゃ🐱';
+  return'記録できたにゃ🐱 続けるだけで傾向が見えてくるにゃ。えらいにゃ。';
+}
+
+// 医療コメント
+function buildNurse(today,records){
+  const w=records.slice(0,7);
+  const dizzDays=w.filter(r=>r.signs.includes('めまい・ふらつき')).length;
+  const wordDays=w.filter(r=>r.signs.includes('言葉が出にくい')).length;
+  const tiredDays=w.filter(r=>r.signs.includes('体がだるい')).length;
+  const shindoi=w.filter(r=>r.mood==='しんどい').length;
+  const drugNo=w.filter(r=>r.drug==='no').length;
+  if(drugNo>=2) return'服薬できていない日が続いています。理由があれば次の診察で相談してください。';
+  if(dizzDays>=3) return`めまい・ふらつきが${dizzDays}日続いています。転倒に注意し、担当の方に伝えてください。`;
+  if(wordDays>=3) return`言葉が出にくい日が${wordDays}日続いています。次の診察で伝える材料になります。`;
+  if(tiredDays>=3) return`体のだるさが${tiredDays}日続いています。水分・睡眠を意識してみてください。`;
+  if(shindoi>=3) return`気分がしんどい日が${shindoi}日続いています。無理せず周囲のサポートを活用してください。`;
+  return null;
+}
+
+// 記録する
+function saveRecord(){
+  const catEl=document.getElementById('catMsg');
+  if(!med){catEl.textContent='お薬の記録を選んでにゃ💊';return;}
+  const mood=document.querySelector('.mood-btn.on')?.dataset.mood||'';
+  if(!mood){catEl.textContent='今日の気分を選んでにゃ😊';return;}
+  const signs=[...document.querySelectorAll('.sign-btn.on')].map(b=>b.textContent.trim());
+  const memo=document.getElementById('memo').value.trim();
+  const now=new Date();
+  const dayKey=now.toISOString().slice(0,10);
+  const today={at:now.toISOString(),dayKey,drug:med,mood,signs,memo};
+  const records=load();
+  const idx=records.findIndex(r=>r.dayKey===dayKey);
+  if(idx>=0)records[idx]=today; else records.unshift(today);
+  store(records);
+  catEl.textContent=buildCat(today,records);
+  const nc=buildNurse(today,records);
+  const nurseCard=document.getElementById('nurseCard');
+  if(nc){document.getElementById('nurseMsg').textContent=nc;nurseCard.classList.add('show');}
+  else{nurseCard.classList.remove('show');}
+  // スタンプ
+  const ov=document.getElementById('stampOv');
+  ov.classList.add('show');
+  setTimeout(()=>ov.classList.remove('show'),950);
+  // リセット
+  med=null;
+  document.getElementById('medYes').className='drug-btn';
+  document.getElementById('medNo').className='drug-btn';
+  document.querySelectorAll('.mood-btn,.sign-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('memo').value='';
+}
+
+// 履歴
+function renderHist(){
+  const records=load();
+  const w=['日','月','火','水','木','金','土'];
+  const el=document.getElementById('histList');
+  if(!records.length){el.innerHTML='<div style="color:var(--muted);font-weight:700;font-size:15px">まだ記録なし。最初の1件を記録してにゃ🐱</div>';return;}
+  el.innerHTML=records.slice(0,10).map(r=>{
+    const dt=new Date(r.at);
+    const label=`${dt.getMonth()+1}/${dt.getDate()}（${w[dt.getDay()]}）`;
+    const drug=r.drug==='yes'?'💊✅':'💊❌';
+    const moodIcon={'元気':'😄','普通':'😐','しんどい':'😔'}[r.mood]||'';
+    return`<div class="hist-item"><span class="hist-day">${label} ${moodIcon}</span><span class="hist-meta">${drug} ${r.signs[0]||'－'}</span></div>`;
+  }).join('');
+}
+
+// まとめ
+function setRange(el){
+  range=Number(el.dataset.range);
+  document.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  renderSum();
+}
+function renderSum(){
+  const now=new Date();
+  const from=new Date(now);from.setDate(now.getDate()-range+1);
+  const records=load().filter(r=>{const d=new Date(r.dayKey);return d>=from;});
+  const drug=records.filter(r=>r.drug==='yes').length;
+  const shindoi=records.filter(r=>r.mood==='しんどい').length;
+  const genki=records.filter(r=>r.mood==='元気').length;
+  document.getElementById('kpiTotal').textContent=records.length+'日';
+  document.getElementById('kpiDrug').textContent=drug+'日';
+  document.getElementById('kpiShindoi').textContent=shindoi+'日';
+  document.getElementById('kpiGenki').textContent=genki+'日';
+  // 気になったこと集計
+  const cnt={};
+  records.forEach(r=>r.signs.forEach(s=>cnt[s]=(cnt[s]||0)+1));
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('topSigns').innerHTML=top.length?top.map(([n,c])=>`<span class="badge">${n} ${c}回</span>`).join(''):'<span style="color:var(--muted);font-size:14px;font-weight:700">まだデータなし</span>';
+  // 診察メモ
+  if(records.length>=3){
+    const pieces=[];
+    pieces.push(`直近${range}日で${records.length}件の記録があります。`);
+    if(shindoi>0) pieces.push(`しんどい日は${shindoi}日ありました。`);
+    pieces.push(`服薬できた日は${drug}日、できなかった日は${records.length-drug}日です。`);
+    if(top.length) pieces.push(`気になったことでは「${top.slice(0,3).map(v=>v[0]).join('・')}」が多く見られます。`);
+    document.getElementById('doctorText').textContent=pieces.join(' ');
+  }
+}
+
+// 設定
+function renderCfg(){
+  const signs=loadSigns();
+  document.getElementById('signTags').innerHTML=signs.map(s=>`
+    <span class="concern-tag">
+      ${s}
+      <button class="remove-btn" onclick="removeSign('${s.replace(/'/g,"\\'")}')">×</button>
+    </span>`).join('');
+}
+function addSign(){
+  const val=document.getElementById('newSign').value.trim();
+  if(!val) return;
+  const signs=loadSigns();
+  if(!signs.includes(val)){signs.push(val);storeSigns(signs);renderSignGrid();}
+  document.getElementById('newSign').value='';
+  renderCfg();
+}
+function removeSign(name){
+  const signs=loadSigns().filter(s=>s!==name);
+  storeSigns(signs);renderSignGrid();renderCfg();
+}
+function exportJson(){
+  const data={exportedAt:new Date().toISOString(),logs:load()};
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download='nyanlog-export.json';a.click();
+}
+function clearAll(){
+  if(!confirm('全データを削除しますにゃ。元に戻せないにゃ。よろしい？'))return;
+  localStorage.removeItem(KEY);localStorage.removeItem(SIGN_KEY);
+  renderSignGrid();renderHist();renderSum();renderCfg();
+  document.getElementById('catMsg').textContent='今日はどうだったにゃ？ 記録してにゃ🐾';
+  document.getElementById('nurseCard').classList.remove('show');
+}
+
+renderSignGrid();
+</script>
+</body>
+</html>
