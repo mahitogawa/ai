@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,viewport-fit=cover"/>
-<title>🐱 にゃんログ v11</title>
+<title>🐱 にゃんログ v12</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
 
@@ -551,21 +551,21 @@ textarea::placeholder{color:#c4b49a;font-weight:700}
   <div class="ai-link-card" id="aiLinkCard">
     <div class="ai-link-title">🤖 AIに相談する</div>
     <div class="ai-link-note">
-      今日の記録をもとにした質問文が自動で作られるにゃ。<br>
-      リンクを開いて貼り付けてにゃ🐱（自己責任でにゃ）
+      タップするとプロンプトをコピーしてAIが開くにゃ🐱<br>
+      開いたら貼り付けるだけにゃ（自己責任でにゃ）
     </div>
     <div class="ai-btns">
-      <a id="linkClaude" class="ai-btn" href="#" target="_blank" rel="noopener">
+      <button class="ai-btn" onclick="openAI('https://claude.ai')">
         <span class="ai-icon">🧡</span><span>Claude</span>
-      </a>
-      <a id="linkGemini" class="ai-btn" href="https://gemini.google.com" target="_blank" rel="noopener">
+      </button>
+      <button class="ai-btn" onclick="openAI('https://gemini.google.com')">
         <span class="ai-icon">💙</span><span>Gemini</span>
-      </a>
-      <a id="linkGPT" class="ai-btn" href="https://chatgpt.com" target="_blank" rel="noopener">
+      </button>
+      <button class="ai-btn" onclick="openAI('https://chatgpt.com')">
         <span class="ai-icon">💚</span><span>ChatGPT</span>
-      </a>
+      </button>
     </div>
-    <textarea id="aiPrompt" rows="4" style="margin-top:12px;font-size:14px" readonly></textarea>
+    <div id="aiCopyMsg" style="text-align:center;font-size:14px;font-weight:900;color:var(--brand);margin-top:10px;min-height:20px"></div>
   </div>
 
 </div>
@@ -818,13 +818,14 @@ function renderHist(){
 }
 
 // AIリンク生成
+let aiPromptText='';
 function buildAiLink(today){
-  const moodLabel={'元気':'元気','普通':'普通','しんどい':'しんどい'}[today.mood]||today.mood;
+  const moodLabel=today.mood||'未選択';
   const drug=today.drug==='yes'?'飲んだ':'飲んでいない';
   const signs=today.signs.length?today.signs.join('・'):'特になし';
   const memo=today.memo?`\nメモ：${today.memo}`:'';
 
-  const prompt=`今日の体調記録です。アドバイスや気になる点があれば教えてください。
+  aiPromptText=`今日の体調記録です。アドバイスや気になる点があれば教えてください。
 
 【日付】${document.getElementById('dateEl').textContent}
 【気分】${moodLabel}
@@ -833,12 +834,35 @@ function buildAiLink(today){
 
 ※これはリハビリ中の個人記録です。医療的な診断は不要で、気づきや励ましをもらえると嬉しいです。`;
 
-  document.getElementById('aiPrompt').value=prompt;
-  document.getElementById('linkClaude').href='https://claude.ai';
   document.getElementById('aiLinkCard').classList.add('show');
+  document.getElementById('aiCopyMsg').textContent='';
 }
 
-// clearAllでAIリンクも非表示に
+// ワンタップ：コピー＋開く
+function openAI(url){
+  const msg=document.getElementById('aiCopyMsg');
+  navigator.clipboard.writeText(aiPromptText).then(()=>{
+    msg.textContent='✅ コピーしたにゃ！貼り付けてにゃ🐱';
+    setTimeout(()=>{msg.textContent='';},3000);
+    window.open(url,'_blank','noopener');
+  }).catch(()=>{
+    // clipboard APIが使えない環境（HTTP等）はフォールバック
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=aiPromptText;
+      ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.focus();ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      msg.textContent='✅ コピーしたにゃ！貼り付けてにゃ🐱';
+      setTimeout(()=>{msg.textContent='';},3000);
+    }catch(e){
+      msg.textContent='⚠️ コピーできなかったにゃ。手動でコピーしてにゃ。';
+    }
+    window.open(url,'_blank','noopener');
+  });
+}
 function buildSumNurse(records, range){
   if(records.length<3) return null;
   const msgs=[];
