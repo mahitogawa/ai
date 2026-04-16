@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>AIパスポート最強アプリ【決定版】</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AIドリル">
+<link rel="apple-touch-icon" href="image_0aff13.png">
+<meta name="theme-color" content="#fbbf24">
 <meta property="og:type" content="website">
 <meta property="og:title" content="生成AIパスポート最強ドリル｜全385問2026年対応">
 <meta property="og:description" content="生成AIパスポート試験対策アプリ。全385問・2026年新シラバス対応・カテゴリ別演習・略語チートシート搭載。">
@@ -2367,5 +2374,13 @@ function hideCheat() {
 
 <script data-goatcounter="https://mahito.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/ai/sw.js')
+      .catch(e => console.log('SW登録失敗:', e));
+  });
+}
+</script>
 </body>
 </html>
