@@ -100,18 +100,18 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 /* 警告マーク：右上の装飾 */
 #start-screen .hero-zone::after {
-  content: '⚠';
+  content: '⚠️';
   position: absolute;
-  top: 14px; right: 18px;
-  font-size: 38px;
-  opacity: 0.75;
-  filter: drop-shadow(0 0 12px #f59e0b);
-  animation: pulse-warn 2.4s ease-in-out infinite;
+  top: 12px; right: 14px;
+  font-size: 48px;
+  opacity: 1;
+  filter: drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 6px #fff);
+  animation: pulse-warn 2s ease-in-out infinite;
   z-index: 1;
 }
 @keyframes pulse-warn {
-  0%,100% { transform: scale(1); opacity: 0.75; }
-  50%      { transform: scale(1.15); opacity: 1; }
+  0%,100% { transform: scale(1) rotate(-5deg); opacity: 0.9; }
+  50%      { transform: scale(1.25) rotate(5deg); opacity: 1; }
 }
 
 /* ---- キャッチコピー ---- */
@@ -248,7 +248,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #start-btn:hover { transform: translateY(-2px); }
 
 /* ---- 機能3アイコングリッド ---- */
-#start-screen .icon-grid {
+.icon-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -399,10 +399,12 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 /* フッター情報 */
 #start-screen .edition-note {
-  color: #78350f;
+  color: #fbbf24;
   font-size: 14px;
   margin-top: 6px;
   padding: 0 16px;
+  font-weight: 700;
+  letter-spacing: .02em;
 }
 
 /* YouTube リンク */
@@ -465,10 +467,11 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 /* 訪問者数 */
 #gc-visits {
-  color: #78350f;
+  color: #fde68a;
   font-size: 14px;
   margin-top: 6px;
   padding: 0 16px;
+  font-weight: 700;
 }
 
 </style>
@@ -591,10 +594,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
   <!-- ===== 下段3アイコン ===== -->
   <div class="icon-grid">
-    <button onclick="toggleAI()" class="icon-card" style="border:none;font-family:inherit;cursor:pointer;">
+    <div onclick="toggleAI()" class="icon-card" style="cursor:pointer;">
       <div class="ic-badge ic-badge-green">🐱</div>
       <div class="ic-label">AI先生<br>質問する</div>
-    </button>
+    </div>
     <a href="https://mahitogawa.github.io/nyanlog/" class="icon-card" style="text-decoration:none;display:block;">
       <div class="ic-badge ic-badge-amber">📋</div>
       <div class="ic-label">にゃんログ<br>体調記録</div>
@@ -605,33 +608,37 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     </a>
   </div>
 
-  <!-- AI先生ポップアップ -->
+  <!-- AI先生パネル -->
   <div id="ai-sensei-box" style="
     display:none;
-    background:#0d3349;border-radius:18px;
-    padding:18px 16px;margin:12px 16px 0;
+    background:radial-gradient(ellipse at 50% 20%, rgba(200,90,20,0.35) 0%, transparent 70%),linear-gradient(170deg,#2d1a0e 0%,#1a0e08 100%);
+    border:1px solid rgba(251,191,36,0.25);
+    border-radius:16px;padding:18px 16px;margin:10px 16px 0;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);
   ">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <div style="color:#fbbf24;font-size:18px;font-weight:bold;">🐱 AI先生に質問する</div>
-      <button onclick="toggleAI()" style="background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;">✕</button>
+      <div style="color:#fde68a;font-size:17px;font-weight:bold;">🐱 AI先生に質問する</div>
+      <button onclick="toggleAI()" style="background:none;border:none;color:#92400e;font-size:22px;cursor:pointer;line-height:1;">✕</button>
     </div>
     <textarea id="ai-question"
       placeholder="例：RAGとハルシネーションの違いは？"
-      style="width:100%;font-size:17px;padding:12px;
+      style="width:100%;font-size:16px;padding:12px;
              border-radius:12px;border:none;height:80px;
-             box-sizing:border-box;"
+             box-sizing:border-box;background:#1a0e08;color:#fde68a;"
     ></textarea>
     <button onclick="askAI()" style="
-      background:#10b981;color:#fff;
-      font-size:18px;font-weight:bold;
+      background:linear-gradient(135deg,#065f46,#10b981);color:#fff;
+      font-size:17px;font-weight:bold;
       padding:14px;width:100%;
       border:none;border-radius:12px;margin-top:10px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.4);
     ">AI先生に聞く！</button>
     <div id="ai-answer" style="
       display:none;margin-top:14px;
-      background:#1e293b;color:#f1f5f9;
-      font-size:17px;line-height:1.7;
+      background:#1a0e08;color:#fde68a;
+      font-size:16px;line-height:1.7;
       padding:14px;border-radius:10px;
+      border:1px solid rgba(251,191,36,0.2);
     "></div>
   </div>
 
@@ -2415,11 +2422,6 @@ function hideCheat() {
 }
 </script>
 
-<script data-goatcounter="https://mahito.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
-
-
-
 <script>
 function toggleAI() {
   const box = document.getElementById("ai-sensei-box");
@@ -2433,11 +2435,9 @@ function toggleAI() {
 async function askAI() {
   const q = document.getElementById("ai-question").value.trim();
   if (!q) return;
-
   const answerBox = document.getElementById("ai-answer");
   answerBox.style.display = "block";
   answerBox.textContent = "🐱 考え中にゃ...";
-
   try {
     const res = await fetch("https://ai-sensei.mahito-ai.workers.dev", {
       method: "POST",
@@ -2452,6 +2452,8 @@ async function askAI() {
 }
 </script>
 
+<script data-goatcounter="https://mahito.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
