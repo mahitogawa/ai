@@ -554,10 +554,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     <button onclick="startCategory('tech')" class="cat-btn">🐱 第1-3章｜AI技術・生成AI基礎（93問）</button>
     <button onclick="startCategory('models')" class="cat-btn">🐱 第2章｜主要生成AIモデル（30問）</button>
     <button onclick="startCategory('prompt')" class="cat-btn">🐱 第5章｜プロンプト技術（41問）</button>
-    <button onclick="startCategory('law')" class="cat-btn">🐱 第4章｜法律・著作権・個人情報（53問）</button>
+    <button onclick="startCategory('law')" class="cat-btn">🐱 第4章｜法律・著作権・個人情報（56問）</button>
     <button onclick="startCategory('business')" class="cat-btn">🐱 第3-5章｜ビジネス活用（45問）</button>
     <button onclick="startCategory('security')" class="cat-btn">🐱 第4章｜セキュリティ・リスク（43問）</button>
-    <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（36問）</button>
+    <button onclick="startCategory('policy')" class="cat-btn">🐱 第4章｜AI政策・倫理・ガイドライン（39問）</button>
     <button onclick="startCategory('case')" class="cat-btn" style="border-color:rgba(251,191,36,0.55);color:#fbbf24;background:linear-gradient(135deg,#3d2a00,#2d1a0e);">🎯 実戦ケース問題｜判断力トレーニング（44問）🆕</button>
   </div>
 
@@ -2294,7 +2294,35 @@ const fuzukiData = [
   {q:"推論（Inference）とは何か？",
    a:["学習済みモデルに未知のデータを入れて結果を得ること","大量のデータを読み込ませること","プログラムのバグを見つけること","GPUを冷却すること"],
    cat:"tech",c:0,
-   d:"推論（Inference）は学習が終わったモデルを使って新しいデータに対して予測・判断を行うことにゃ。学習フェーズとは別の工程にゃ。"}
+   d:"推論（Inference）は学習が終わったモデルを使って新しいデータに対して予測・判断を行うことにゃ。学習フェーズとは別の工程にゃ。"},
+  {q:"2024年4月に総務省・経済産業省が策定した、AIのガバナンスに関する統一的な指針は？",
+   a:["AI事業者ガイドライン","AI倫理憲章","デジタルAI基本法","生成AI利用規則"],
+   cat:"policy",c:0,
+   d:"総務省と経済産業省が既存のガイドラインを統合・改訂して策定した最新の統一指針にゃ。AI事業者が守るべき原則が示されてるにゃ。"},
+  {q:"文化庁が2024年に公表した見解で、AI生成物が著作物として認められるために必要な要素は？",
+   a:["創作的寄与（人間が道具として使いこなしたか）","AIの計算速度","使用したGPUの性能","プロンプトの文字数"],
+   cat:"law",c:0,
+   d:"人間がAIを道具として使い、創作的意図を持って大幅な修正を加えるなどの「創作的寄与」が必要にゃ。プロンプトを打つだけでは著作物と認められにくいにゃ。"},
+  {q:"2025年に千葉県警が書類送検した事例で、AI生成画像に著作権が認められた大きな理由は？",
+   a:["2万回以上のプロンプト修正・調整を行ったため","有料のAIサービスを利用したため","画像の解像度が非常に高かったため","世界的に有名なAIモデルを使用したため"],
+   cat:"law",c:0,
+   d:"2万回以上の反復的・精緻なプロンプト調整プロセスが「創作的寄与」として評価された注目事例にゃ。"},
+  {q:"2025年9月に全面施行された、AIの活用や研究開発を推進するための法律は？",
+   a:["人工知能（AI）法","デジタル革新推進法","AIデータ権利法","AIセキュリティ法"],
+   cat:"policy",c:0,
+   d:"日本でAI法が施行され、内閣に人工知能戦略本部が設置されるなど国を挙げた体制が強化されたにゃ。"},
+  {q:"AI事業者ガイドライン（第1.0版）で示されている、AI活用の10原則に含まれないものは？",
+   a:["AIの完全自律化","プライバシー保護","透明性","アカウンタビリティ"],
+   cat:"policy",c:0,
+   d:"ガイドラインでは「人間中心」「安全性」を重視にゃ。人間が制御できない「完全自律化」は推奨されないにゃ。"},
+  {q:"文化庁の「AIと著作権に関する考え方」において、AI学習が著作権侵害になり得るケースは？",
+   a:["著作権者の利益を不当に害する場合","研究目的で利用する場合","私的に鑑賞する場合","データの圧縮・解析のみを行う場合"],
+   cat:"law",c:0,
+   d:"著作権法第30条の4に基づき原則として学習は可能にゃ。ただし著作権者の利益を不当に害する場合は例外になるにゃ。"},
+  {q:"AI生成物であることを隠して発表することについて、国際的な法規制（EU AI Act等）での動向は？",
+   a:["AI生成物であることを明示する義務（透明性）が強まっている","完全に禁止されている","特に制限はない","有料サービスなら明示不要"],
+   cat:"policy",c:0,
+   d:"EU AI Actなどを筆頭にAI生成物であることを明示する「透明性」の義務化が世界的に進んでいるにゃ。"}
 ];
 
 let fzQuiz=[], fzIndex=0, fzScore=0, fzWrongList=[];
