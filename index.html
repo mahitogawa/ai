@@ -2537,7 +2537,7 @@ async function askAI() {
   answerBox.style.display = "block";
   answerBox.textContent = "🐱 考え中にゃ...";
   try {
-    const res = await fetch("https://ai-sensei.mahito-ai.workers.dev", {
+    const res = await fetch("https://ai-sensei2.mahito-ai.workers.dev", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: q })
