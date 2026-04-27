@@ -623,6 +623,22 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #timer-box .timer-label { font-size: 14px; font-weight: normal; }
 #timer-icon { font-size: 18px; }
 
+/* ===== モバイル最適化（iPhone対応） ===== */
+@media (max-width: 480px) {
+  #header { padding: 8px 10px; height: 56px; }
+  #header-title { font-size: 14px; letter-spacing: 0; }
+  #logo { width: 36px; height: 36px; font-size: 20px; }
+  #header-left { gap: 6px; }
+  #header-right { gap: 8px; }
+  #font-controls span { display: none; } /* 「文字サイズ」ラベル非表示 */
+  .font-btn { padding: 4px 7px; font-size: 13px; }
+  #timer-box { gap: 3px; font-size: 20px; }
+  #timer-box .timer-label { display: none; } /* 「残り時間」ラベル非表示 */
+  #timer-icon { font-size: 16px; }
+  #content { margin-top: 56px; padding: 14px 12px; }
+  #footer { height: 70px; padding: 8px 12px; }
+}
+
 /* ===== CONTENT AREA ===== */
 #content {
   margin-top: 64px;
