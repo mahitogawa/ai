@@ -850,6 +850,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 .nav-btn:active { background: var(--teal-hover); }
 .nav-btn:disabled { background: #4a6a8a; cursor: not-allowed; }
+.nav-btn-back { background: #3d5166; }
+.nav-btn-back:active { background: #2c3d50; }
+.nav-btn-back:disabled { background: #2c3d50; }
 
 #footer-right {
   display: flex;
@@ -905,60 +908,65 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   overflow-y: auto;
 }
 #overview-box h2 {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 900;
-  color: var(--navy);
-  margin-bottom: 20px;
+  color: #fff;
+  background: var(--navy);
+  margin: -28px -28px 20px;
+  padding: 16px 24px;
+  border-radius: 16px 16px 0 0;
 }
 
 #overview-grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 20px;
 }
 
 .ov-cell {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   border: 2px solid transparent;
   background: #e8eef4;
-  color: #666;
-  transition: all 0.15s;
+  color: #333;
 }
 .ov-cell:hover { border-color: var(--teal); }
 .ov-cell.answered { background: var(--teal); color: #fff; }
 .ov-cell.flagged { background: #f59e0b; color: #fff; }
-.ov-cell.current { border-color: var(--navy); }
+.ov-cell.current { border: 3px solid var(--navy); color: var(--navy); }
 
 .ov-legend {
   display: flex;
-  gap: 16px;
-  font-size: 13px;
+  gap: 20px;
+  font-size: 17px;
+  font-weight: bold;
   flex-wrap: wrap;
+  margin-bottom: 4px;
 }
-.ov-legend-item { display: flex; align-items: center; gap: 6px; }
-.ov-dot { width: 14px; height: 14px; border-radius: 3px; }
+.ov-legend-item { display: flex; align-items: center; gap: 8px; color: #333; }
+.ov-dot { width: 18px; height: 18px; border-radius: 4px; }
 
 #close-overview {
   display: block;
   width: 100%;
-  margin-top: 16px;
-  padding: 12px;
+  margin-top: 20px;
+  padding: 16px;
   background: var(--navy);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 20px;
   font-weight: 700;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 /* ===== RESULT SCREEN ===== */
@@ -3134,7 +3142,7 @@ if('serviceWorker' in navigator){
     <a onclick="toggleFlag()">⭐ 見直す問題に登録</a>
   </div>
   <div id="footer-center">
-    <button class="nav-btn" onclick="prevQ()">◀ 戻る</button>
+    <button class="nav-btn nav-btn-back" onclick="prevQ()">◀ 戻る</button>
     <button class="nav-btn" onclick="nextQ()">次へ ▶</button>
   </div>
   <div id="footer-right">
@@ -4155,8 +4163,9 @@ function finishExam() {
   quiz.forEach((q, i) => {
     if (examAnswers[i] === q.correct) {
       correct++;
-    } else {
-      wrongItems.push({ q: q.q, correct: q.a[q.correct], your: examAnswers[i] !== null ? q.a[examAnswers[i]] : '未回答', d: q.d || '' });
+    } else if (examAnswers[i] !== null) {
+      // 未回答（null）は除外、回答して間違えた問題だけ表示
+      wrongItems.push({ q: q.q, correct: q.a[q.correct], your: q.a[examAnswers[i]], d: q.d || '' });
     }
   });
 
@@ -4167,8 +4176,9 @@ function finishExam() {
   document.getElementById('result-screen').style.display = 'block';
   document.getElementById('footer').style.display = 'none';
 
+  const unanswered = examAnswers.filter(a => a === null).length;
   document.getElementById('score-display').textContent = `${correct} / ${TOTAL}`;
-  document.getElementById('score-sub').textContent = `正解率 ${pct}%`;
+  document.getElementById('score-sub').textContent = `正解率 ${pct}%${unanswered > 0 ? `　未回答 ${unanswered}問` : ''}`;
   document.getElementById('score-pct-label').textContent = `${pct}%`;
 
   const jbox = document.getElementById('judgement-box');
@@ -4181,7 +4191,7 @@ function finishExam() {
 
   const wl = document.getElementById('wrong-list');
   wl.innerHTML = wrongItems.length === 0
-    ? '<p style="color:#166534;font-weight:bold;">全問正解！素晴らしい🎉</p>'
+    ? '<p style="color:#166534;font-weight:bold;">間違えた問題なし！素晴らしい🎉</p>'
     : wrongItems.map((w, i) => `
         <div class="wrong-item">
           <div class="q-text">Q${i+1}. ${w.q}</div>
