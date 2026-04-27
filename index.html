@@ -788,9 +788,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   bottom: 0; left: 0; right: 0;
   z-index: 100;
   /* iPhoneホームバー対応 */
-  padding: 10px 16px;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
-  min-height: 80px;
+  padding: 12px 16px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  min-height: 90px;
   height: auto;
   display: flex;
   align-items: center;
@@ -806,8 +806,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #footer-left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 13px;
+  gap: 6px;
+  font-size: 16px;
 }
 #footer-left a {
   color: #90d4e8;
@@ -815,9 +815,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 0;
-  min-height: 32px;
+  gap: 6px;
+  padding: 6px 0;
+  min-height: 36px;
+  font-size: 16px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -856,8 +857,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 
 #progress-text {
-  font-size: 13px;
+  font-size: 16px;
   color: #c0d8e8;
+  font-weight: bold;
 }
 
 #end-btn {
@@ -865,11 +867,11 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   color: var(--navy);
   border: none;
   border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 14px;
+  padding: 12px 20px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
-  min-height: 40px;
+  min-height: 48px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
