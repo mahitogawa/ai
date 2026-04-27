@@ -522,7 +522,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 
 /* ===== 模擬試験オーバーレイ ===== */
-#exam-overlay { display:none; position:fixed; inset:0; z-index:9999; overflow:hidden; flex-direction:column; background:#fff; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Meiryo",sans-serif; font-size:22px; }
+#exam-overlay { display:none; position:fixed; inset:0; z-index:9999; flex-direction:column; background:#fff; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Meiryo",sans-serif; font-size:22px; }
 #exam-overlay.open { display:flex; }
 
 
@@ -545,20 +545,11 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  /* iPhoneノッチ・ステータスバー対応 */
+  flex-shrink: 0;
+  /* iPhoneノッチ対応 */
   padding: 10px 20px;
   padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
   min-height: 64px;
-  height: auto;
-  /* iOS GPU固定（点滅防止） */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
 }
 
 #header-left {
@@ -634,7 +625,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
 /* ===== モバイル最適化（iPhone対応） ===== */
 @media (max-width: 480px) {
-  #header { padding: 8px 10px; padding-top: calc(env(safe-area-inset-top, 0px) + 8px); min-height: 56px; height: auto; }
+  #header { padding: 8px 10px; padding-top: calc(env(safe-area-inset-top, 0px) + 8px); min-height: 56px; }
   #header-title { font-size: 13px; letter-spacing: 0; }
   #logo { width: 36px; height: 36px; font-size: 20px; }
   #header-left { gap: 6px; }
@@ -644,20 +635,18 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   #timer-box { gap: 3px; font-size: 20px; }
   #timer-box .timer-label { display: none; }
   #timer-icon { font-size: 16px; }
-  #content { top: calc(56px + env(safe-area-inset-top, 0px)); bottom: calc(70px + env(safe-area-inset-bottom, 0px)); padding: 14px 12px 40px; }
-  #footer { padding: 8px 12px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); min-height: 70px; height: auto; }
+  #content { padding: 14px 12px 40px; }
+  #footer { padding: 8px 12px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); min-height: 70px; }
   .nav-btn { padding: 12px 16px; font-size: 16px; }
   #footer-center { gap: 8px; }
 }
 
 /* ===== CONTENT AREA ===== */
 #content {
-  position: fixed;
-  top: calc(64px + env(safe-area-inset-top, 0px));
-  bottom: calc(100px + env(safe-area-inset-bottom, 0px));
-  left: 0; right: 0;
+  flex: 1;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 20px max(16px, calc((100% - 740px) / 2)) 40px;
   box-sizing: border-box;
 }
@@ -803,23 +792,14 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #footer {
   background: var(--navy);
   color: #fff;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 100;
+  flex-shrink: 0;
   /* iPhoneホームバー対応 */
   padding: 14px 18px;
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
   min-height: 100px;
-  height: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* iOS GPU固定（点滅防止） */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
 }
 
 #footer-left {
