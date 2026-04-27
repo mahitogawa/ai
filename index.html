@@ -522,7 +522,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 
 /* ===== 模擬試験オーバーレイ ===== */
-#exam-overlay { display:none; position:fixed; inset:0; z-index:9999; overflow-y:auto; flex-direction:column; background:#fff; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Meiryo",sans-serif; font-size:22px; }
+#exam-overlay { display:none; position:fixed; inset:0; z-index:9999; overflow-y:auto; -webkit-overflow-scrolling:touch; flex-direction:column; background:#fff; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Meiryo",sans-serif; font-size:22px; }
 #exam-overlay.open { display:flex; }
 
 
@@ -644,7 +644,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   #timer-box { gap: 3px; font-size: 20px; }
   #timer-box .timer-label { display: none; }
   #timer-icon { font-size: 16px; }
-  #content { margin-top: calc(56px + env(safe-area-inset-top, 0px)); padding: 14px 12px; margin-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+  #content { margin-top: calc(56px + env(safe-area-inset-top, 0px)); padding: 14px 12px 40px; margin-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
   #footer { padding: 8px 12px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); min-height: 70px; height: auto; }
   .nav-btn { padding: 12px 16px; font-size: 16px; }
   #footer-center { gap: 8px; }
@@ -653,8 +653,8 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 /* ===== CONTENT AREA ===== */
 #content {
   margin-top: calc(64px + env(safe-area-inset-top, 0px));
-  margin-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-  padding: 20px 16px;
+  margin-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  padding: 20px 16px 40px;
   max-width: 700px;
   width: 100%;
   margin-left: auto;
@@ -850,6 +850,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-right: 16px;
 }
 
 .nav-btn {
@@ -876,6 +877,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   flex-direction: column;
   align-items: flex-end;
   gap: 6px;
+  margin-left: 16px;
+  border-left: 1px solid rgba(255,255,255,0.15);
+  padding-left: 16px;
 }
 
 #progress-text {
