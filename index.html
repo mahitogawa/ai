@@ -35,7 +35,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  background:#f0f4f8; padding:15px; padding-bottom:calc(15px + env(safe-area-inset-bottom)); margin:0; font-size:22px;
+  background:#f0f4f8; padding:15px; padding-top:calc(15px + env(safe-area-inset-top, 0px)); padding-bottom:calc(15px + env(safe-area-inset-bottom)); margin:0; font-size:22px;
   overscroll-behavior: none;           /* iOSスワイプバック誤動作を防止 */
   -webkit-overflow-scrolling: touch;   /* iOSスクロールをなめらかに */
 }
@@ -1064,7 +1064,6 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <!-- メインCTAボタン -->
   <div class="main-cta-wrap">
     <button id="start-btn" onclick="startImportant20()">🔥 最重要20問に今すぐ挑戦！ ›</button>
-    <p class="cta-note">※まずは最重要20問で、あなたの合格ラインをチェック！</p>
   </div>
 
 
