@@ -104,18 +104,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 #start-screen .hero-zone {
   position: relative;
   width: 100%;
-  min-height: 340px;
-  background:
-    radial-gradient(ellipse at 75% 35%, rgba(0,168,198,0.45) 0%, transparent 60%),
-    radial-gradient(ellipse at 15% 75%, rgba(29,78,216,0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, rgba(0,60,120,0.4) 0%, transparent 50%),
-    linear-gradient(165deg, #0d1a2e 0%, #060d18 100%);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 36px 16px 0;
+  display: block;
+  padding: 0;
+  line-height: 0;
 }
 
 /* ざらっとしたテクスチャオーバーレイ */
@@ -128,21 +120,6 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   z-index: 0;
 }
 
-/* 右上の装飾 */
-#start-screen .hero-zone::after {
-  content: '🚀';
-  position: absolute;
-  top: 12px; right: 14px;
-  font-size: 44px;
-  opacity: 1;
-  filter: drop-shadow(0 0 18px rgba(0,168,198,0.9)) drop-shadow(0 0 8px #fff);
-  animation: pulse-warn 2.5s ease-in-out infinite;
-  z-index: 1;
-}
-@keyframes pulse-warn {
-  0%,100% { transform: scale(1) rotate(-8deg) translateY(0) translateZ(0); opacity: 0.85; }
-  50%      { transform: scale(1.2) rotate(6deg) translateY(-4px) translateZ(0); opacity: 1; }
-}
 
 /* ---- キャッチコピー ---- */
 /* アプリ名バッジ */
@@ -168,16 +145,16 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   padding: 0 4px;
 }
 #start-screen .catch-main {
-  font-size: 38px;
+  font-size: 36px;
   font-weight: 900;
-  line-height: 1.2;
+  line-height: 1.15;
   color: #ffffff;
   text-shadow:
     2px 2px 0 #0e3a5c,
     0 0 28px rgba(0,168,198,0.55);
   letter-spacing: -0.02em;
   margin: 0 0 6px;
-  max-width: 62%;
+  max-width: 65%;
 }
 #start-screen .catch-main span {
   color: #22d3ee;
@@ -191,6 +168,58 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   margin: 0 0 12px;
   max-width: 62%;
   line-height: 1.5;
+}
+
+/* ---- 問題数バッジ ---- */
+#start-screen .problem-count-badge {
+  display: inline-flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.05));
+  border: 1.5px solid rgba(251,191,36,0.5);
+  border-radius: 10px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251,191,36,0.5);
+  line-height: 1.3;
+  max-width: 62%;
+}
+#start-screen .pcount-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fde68a;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ---- ピルバッジ3つ ---- */
+#start-screen .feature-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  max-width: 62%;
+}
+#start-screen .pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ---- CTAノート ---- */
+#start-screen .cta-note {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin: 8px 0 0;
+  padding: 0 16px;
 }
 
 /* ---- ネコ画像エリア ---- */
@@ -264,10 +293,10 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   color: #fff;
   border: none;
   border-radius: 14px;
-  background: linear-gradient(180deg, #34d9f0 0%, #0891b2 45%, #0e7490 100%);
+  background: linear-gradient(180deg, #ff6b35 0%, #dc2626 55%, #b91c1c 100%);
   box-shadow:
-    0 6px 0 #075985,
-    0 10px 28px rgba(8,145,178,0.65),
+    0 6px 0 #7f1d1d,
+    0 10px 28px rgba(220,38,38,0.6),
     inset 0 1px 0 rgba(255,255,255,0.3);
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -284,13 +313,13 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 50%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
   border-radius: 40px 40px 0 0;
   pointer-events: none;
 }
 #start-btn:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 #075985, 0 4px 12px rgba(8,145,178,0.4);
+  box-shadow: 0 2px 0 #7f1d1d, 0 4px 12px rgba(220,38,38,0.4);
 }
 #start-btn:hover { transform: translateY(-2px); }
 
@@ -1023,34 +1052,27 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div class="hero-zone">
     <div class="cat-glow"></div>
 
-    <!-- キャッチコピー -->
-    <div class="catch-wrap">
-      <p class="app-name-badge">✦ 生成AIパスポート 2026</p>
-      <p class="catch-main">合格者だけが<br>知ってる<br><span>攻略法。</span></p>
-      <p class="catch-sub">全462問・解説つき<br>完全無料</p>
-    </div>
-
-    <!-- ネコ画像（画像があれば表示、なければ絵文字） -->
-    <div class="cat-area">
-      <div class="cat-top-link" onclick="retryAll()" role="button" aria-label="TOPに戻る" title="TOPに戻る">
-        <img src="image_0aff13.png" alt="驚くネコ"
-             onerror="this.style.display='none'; document.getElementById('cat-fallback').style.display='block';">
-        <div id="cat-fallback" class="cat-fallback" style="display:none;">😱</div>
-      </div>
+    <!-- ヒーロー画像 -->
+    <div style="width:100%; position:relative; z-index:2;">
+      <img src="4.webp" alt="その勉強法、間違ってます！"
+           style="width:100%; display:block; border-radius:0;"
+           onerror="this.src='4.png'; this.onerror=null;">
+      <div id="cat-fallback" class="cat-fallback" style="display:none;">😱</div>
     </div>
   </div>
 
   <!-- メインCTAボタン -->
   <div class="main-cta-wrap">
-    <button id="start-btn" onclick="startImportant20()">⚡ 最重要20問に今すぐ挑戦！</button>
+    <button id="start-btn" onclick="startImportant20()">🔥 最重要20問に今すぐ挑戦！ ›</button>
+    <p class="cta-note">※まずは最重要20問で、あなたの合格ラインをチェック！</p>
   </div>
 
 
   <!-- 3アイコングリッド -->
   <div class="icon-grid">
     <div class="icon-card" onclick="startExamMode()">
-      <div class="ic-badge" style="background:linear-gradient(135deg,#065f46,#10b981);">📝</div>
-      <div class="ic-label">🐱 模擬試験<br>60問・60分</div>
+      <div class="ic-badge" style="background:linear-gradient(135deg,#065f46,#10b981);">🐱</div>
+      <div class="ic-label">模擬試験<br>60問・60分</div>
     </div>
     <div class="icon-card" onclick="toggleCategoryMenu()">
       <div class="ic-badge" style="background:linear-gradient(135deg,#b45309,#f59e0b);">📂</div>
