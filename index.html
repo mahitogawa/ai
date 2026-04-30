@@ -1044,6 +1044,19 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 }
 
 
+
+/* ===== 文字サイズ切替 ===== */
+.fz-btn { padding:5px 12px; border:2px solid #cbd5e1; border-radius:8px; background:#fff; font-size:12px; font-weight:900; cursor:pointer; touch-action:manipulation; }
+.fz-btn.active { background:#1e5f8a; color:#fff; border-color:#1e5f8a; }
+body.fz-small #question, body.fz-small button.choice, body.fz-small #answers .choice-item .choice-text, body.fz-small #fz-answers .choice-item .choice-text { font-size:16px !important; }
+body.fz-medium #question, body.fz-medium button.choice, body.fz-medium #answers .choice-item .choice-text, body.fz-medium #fz-answers .choice-item .choice-text { font-size:22px !important; }
+body.fz-large #question, body.fz-large button.choice, body.fz-large #answers .choice-item .choice-text, body.fz-large #fz-answers .choice-item .choice-text { font-size:28px !important; }
+body.fz-small #ox-question, body.fz-small #fz-question { font-size:16px !important; }
+body.fz-medium #ox-question, body.fz-medium #fz-question { font-size:22px !important; }
+body.fz-large #ox-question, body.fz-large #fz-question { font-size:28px !important; }
+body.fz-small .q-body, body.fz-small .choice-text { font-size:16px !important; }
+body.fz-medium .q-body, body.fz-medium .choice-text { font-size:20px !important; }
+body.fz-large .q-body, body.fz-large .choice-text { font-size:26px !important; }
 </style>
 </head>
 <body>
@@ -1057,9 +1070,9 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 
     <!-- ヒーロー画像 -->
     <div style="width:100%; position:relative; z-index:2;">
-      <img src="4.webp" alt="その勉強法、間違ってます！"
+      <img src="https://mahitogawa.github.io/ai/4.webp" alt="その勉強法、間違ってます！"
            style="width:100%; display:block; border-radius:0;"
-           onerror="this.src='4.png'; this.onerror=null;">
+           onerror="this.src='https://mahitogawa.github.io/ai/4.png'; this.onerror=null;">
       <div id="cat-fallback" class="cat-fallback" style="display:none;">😱</div>
     </div>
   </div>
@@ -1074,7 +1087,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   <div class="icon-grid">
     <div class="icon-card" onclick="startExamMode()">
       <div class="ic-badge" style="background:linear-gradient(135deg,#065f46,#10b981);">🐱</div>
-      <div class="ic-label">🐱真剣模擬試験<br>60問・60分</div>
+      <div class="ic-label">🐱真剣模試<br>60問・60分</div>
     </div>
     <div class="icon-card" onclick="toggleCategoryMenu()">
       <div class="ic-badge" style="background:linear-gradient(135deg,#b45309,#f59e0b);">📂</div>
@@ -1224,7 +1237,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
         <button style="background:#0d3349;" onclick="toggleFlag()">★ フラグ</button>
         <button id="resetBtn" onclick="retryAll()">↩ TOP</button>
     </div>
-    <div id="progress" style="font-weight:bold; color:#64748b;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><div id="progress" style="font-weight:bold; color:#64748b;"></div><div style="display:flex; align-items:center; gap:5px;"><span style="font-size:12px; font-weight:700; color:#64748b;">文字サイズ</span><button onclick="setFontSize('small')" class="fz-btn fz-s">小</button><button onclick="setFontSize('medium')" class="fz-btn fz-m active">中</button><button onclick="setFontSize('large')" class="fz-btn fz-l">大</button></div></div>
     <div id="timer" style="font-weight:bold; color:#ef4444; font-size:22px; margin-bottom:15px;"></div>
     <button id="flagBtn" onclick="toggleFlag()">★ フラグを立てる</button>
     <div id="question"></div>
@@ -1264,7 +1277,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 <div id="ox-screen" class="container safe-bottom-pad" style="display:none;">
   <h2>⭕ ○×クイズ</h2>
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <div id="ox-progress" style="font-weight:bold; color:#64748b;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><div id="ox-progress" style="font-weight:bold; color:#64748b;"></div><div style="display:flex; align-items:center; gap:5px;"><span style="font-size:12px; font-weight:700; color:#64748b;">文字サイズ</span><button onclick="setFontSize('small')" class="fz-btn fz-s">小</button><button onclick="setFontSize('medium')" class="fz-btn fz-m active">中</button><button onclick="setFontSize('large')" class="fz-btn fz-l">大</button></div></div>
     <button onclick="retryAll()" style="background:#ef4444; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">↩ TOP</button>
   </div>
   <div id="ox-question" style="font-size:22px; font-weight:bold; margin:20px 0; background:#f8f9fa; padding:20px; border-radius:12px; border:1px solid #e2e8f0; line-height:1.7;"></div>
@@ -1306,7 +1319,7 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
     ⚠️ この練習は「<strong>不適切・誤っているものを選べ</strong>」形式に特化しているにゃ。<br>問題文をよく読んで、<strong>間違っているもの</strong>を選ぶにゃ🐱
   </div>
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <div id="fz-progress" style="font-weight:bold; color:#64748b;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><div id="fz-progress" style="font-weight:bold; color:#64748b;"></div><div style="display:flex; align-items:center; gap:5px;"><span style="font-size:12px; font-weight:700; color:#64748b;">文字サイズ</span><button onclick="setFontSize('small')" class="fz-btn fz-s">小</button><button onclick="setFontSize('medium')" class="fz-btn fz-m active">中</button><button onclick="setFontSize('large')" class="fz-btn fz-l">大</button></div></div>
     <button onclick="retryAll()" style="background:#ef4444; color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer;">↩ TOP</button>
   </div>
   <div id="fz-question" style="font-size:22px; font-weight:bold; margin:16px 0; background:#fff7ed; padding:20px; border-radius:12px; border:2px solid #f97316; line-height:1.6;"></div>
@@ -3056,6 +3069,15 @@ function hideCheat() {
   document.getElementById("start-screen").style.display = "block";
   window.scrollTo({top:0,behavior:"auto"});
 }
+function setFontSize(size) {
+  document.body.classList.remove('fz-small','fz-medium','fz-large');
+  document.body.classList.add('fz-' + size);
+  document.querySelectorAll('.fz-btn').forEach(btn => btn.classList.remove('active'));
+  const map = {small:'fz-s', medium:'fz-m', large:'fz-l'};
+  document.querySelectorAll('.' + map[size]).forEach(btn => btn.classList.add('active'));
+  localStorage.setItem('fontSize', size);
+}
+(function(){ const s = localStorage.getItem('fontSize'); if(s) setFontSize(s); })();
 </script>
 
 <script>
