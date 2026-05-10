@@ -1048,13 +1048,101 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
 /* ===== 文字サイズボタン ===== */
 .fz-btn { padding:5px 12px; border:2px solid #cbd5e1; border-radius:8px; background:#fff; font-size:12px; font-weight:900; cursor:pointer; touch-action:manipulation; }
 .fz-btn.active { background:#1e5f8a; color:#fff; border-color:#1e5f8a; }
-/* 通常quiz: answers/fz-answersの選択肢のみ対象 (exam-overlayには干渉しない) */
 body.fz-small #answers .choice-item .choice-text, body.fz-small #fz-answers .choice-item .choice-text { font-size:16px !important; }
 body.fz-medium #answers .choice-item .choice-text, body.fz-medium #fz-answers .choice-item .choice-text { font-size:22px !important; }
 body.fz-large #answers .choice-item .choice-text, body.fz-large #fz-answers .choice-item .choice-text { font-size:28px !important; }
 body.fz-small #ox-question { font-size:16px !important; }
 body.fz-medium #ox-question { font-size:22px !important; }
 body.fz-large #ox-question { font-size:28px !important; }
+
+/* ===== フッター再設計（2段レイアウト）===== */
+#footer {
+  background: var(--navy);
+  color: #fff;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+#footer-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 8px;
+  gap: 4px;
+}
+#footer-sub a {
+  color: #90d4e8;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  min-height: 36px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+#footer-sub a:active { color: #fff; }
+#progress-text {
+  font-size: 14px;
+  color: #c0d8e8;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+}
+.nav-btn {
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 52px;
+  min-width: 90px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-btn:active { background: var(--teal-hover); }
+.nav-btn:disabled { background: #4a6a8a; cursor: not-allowed; }
+.nav-btn-back { background: #3d5166; }
+.nav-btn-back:active { background: #2c3d50; }
+.nav-btn-back:disabled { background: #2c3d50; }
+#end-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  margin-left: auto;
+}
+#end-btn:active { background: #1e293b; color: #fff; }
 </style>
 </head>
 <body>
@@ -3089,31 +3177,21 @@ function hideCheat() {
   window.scrollTo({top:0,behavior:"auto"});
 }
 
-// ===== 文字サイズ制御 (通常quiz用 / exam-overlayには干渉しない) =====
 var _currentFontSize = 'medium';
-
 function applyFontToElements(px) {
-  // #question, #ox-question, #fz-question に直接インラインスタイル
   ['question','ox-question','fz-question'].forEach(function(id){
-    var el = document.getElementById(id);
-    if (el) el.style.fontSize = px;
+    var el = document.getElementById(id); if (el) el.style.fontSize = px;
   });
-  // #answers, #fz-answers の .choice-text に直接インラインスタイル
-  document.querySelectorAll('#answers .choice-text, #fz-answers .choice-text').forEach(function(el){
-    el.style.fontSize = px;
-  });
+  document.querySelectorAll('#answers .choice-text, #fz-answers .choice-text').forEach(function(el){ el.style.fontSize = px; });
 }
-
 function setFontSize(size) {
   _currentFontSize = size;
   document.body.classList.remove('fz-small','fz-medium','fz-large');
   document.body.classList.add('fz-' + size);
   var fontMap = {small:'16px', medium:'22px', large:'28px'};
-  var px = fontMap[size];
-  applyFontToElements(px);
+  applyFontToElements(fontMap[size]);
   document.querySelectorAll('.fz-btn').forEach(function(btn){ btn.classList.remove('active'); });
-  var map = {small:'fz-s', medium:'fz-m', large:'fz-l'};
-  document.querySelectorAll('.' + map[size]).forEach(function(btn){ btn.classList.add('active'); });
+  document.querySelectorAll('.' + {small:'fz-s',medium:'fz-m',large:'fz-l'}[size]).forEach(function(btn){ btn.classList.add('active'); });
   localStorage.setItem('fontSize', size);
 }
 (function(){ var s = localStorage.getItem('fontSize'); if(s) setFontSize(s); })();
@@ -3231,17 +3309,17 @@ if('serviceWorker' in navigator){
 
 <!-- FOOTER -->
 <div id="footer">
-  <div id="footer-left">
-    <a onclick="showOverview()">📊 回答状況を確認</a>
-    <a onclick="toggleFlag()">⭐ 見直す問題に登録</a>
-  </div>
-  <div id="footer-center">
+  <!-- 上段：ナビゲーション（大きく・操作しやすく） -->
+  <div id="footer-nav">
     <button class="nav-btn nav-btn-back" onclick="prevQ()">◀ 戻る</button>
+    <div id="progress-text">現在の問題 1/60</div>
     <button class="nav-btn" onclick="nextQ()">次へ ▶</button>
   </div>
-  <div id="footer-right">
-    <div id="progress-text">現在の問題 1/60</div>
-    <button id="end-btn" onclick="finishExam()">試験終了</button>
+  <!-- 下段：サブアクション（小さく・試験終了は誤タップ防止） -->
+  <div id="footer-sub">
+    <a onclick="showOverview()">📊 回答状況</a>
+    <a onclick="toggleFlag()">⭐ 見直す</a>
+    <button id="end-btn" onclick="confirmFinishExam()">試験終了</button>
   </div>
 </div>
 
@@ -4248,6 +4326,13 @@ function hideOverview() {
 }
 
 // ===== FINISH =====
+
+function confirmFinishExam() {
+  if (confirm('試験を終了しますか？\n（終了すると結果が表示されます）')) {
+    finishExam();
+  }
+}
+
 function finishExam() {
   clearInterval(timerInterval);
   examFinished = true;
