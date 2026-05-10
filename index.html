@@ -276,6 +276,58 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   z-index: 1;
 }
 
+/* ---- 試験選択バー ---- */
+.exam-select-bar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 0;
+}
+.exam-select-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.exam-select-btn.active {
+  background: #1d9e75;
+  color: #fff;
+}
+.exam-select-btn.inactive {
+  background: #2a4a6c;
+  color: #7ec8e3;
+  opacity: 0.8;
+}
+.exam-select-btn:active { opacity: 0.7; }
+
+/* G検定トースト */
+#g-toast {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a3a5c;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 9999;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  animation: fadeInUp 0.2s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ---- メインCTAボタン（赤・立体） ---- */
 #start-screen .main-cta-wrap {
   padding: 16px 16px 0;
@@ -1098,7 +1150,7 @@ body.fz-large #ox-question { font-size:28px !important; }
 #footer-sub a:active { color: #fff; }
 #progress-text {
   font-size: 14px;
-  color: #c0d8e8;
+  color: #ffffff;
   font-weight: bold;
   text-align: center;
   flex: 1;
@@ -1128,9 +1180,9 @@ body.fz-large #ox-question { font-size:28px !important; }
 .nav-btn-back:active { background: #2c3d50; }
 .nav-btn-back:disabled { background: #2c3d50; }
 #end-btn {
-  background: transparent;
-  color: #94a3b8;
-  border: 1px solid #475569;
+  background: #ffffff;
+  color: var(--navy);
+  border: none;
   border-radius: 8px;
   padding: 7px 12px;
   font-size: 13px;
@@ -1142,7 +1194,7 @@ body.fz-large #ox-question { font-size:28px !important; }
   -webkit-tap-highlight-color: transparent;
   margin-left: auto;
 }
-#end-btn:active { background: #1e293b; color: #fff; }
+#end-btn:active { background: #e2e8f0; color: var(--navy); }
 </style>
 </head>
 <body>
@@ -1162,6 +1214,15 @@ body.fz-large #ox-question { font-size:28px !important; }
       <div id="cat-fallback" class="cat-fallback" style="display:none;">😱</div>
     </div>
   </div>
+
+  <!-- 試験選択バー -->
+  <div class="exam-select-bar">
+    <button class="exam-select-btn active" onclick="selectExam('ai')">🤖 生成AIパスポート</button>
+    <button class="exam-select-btn inactive" onclick="selectExam('g')">🤔 G検定模試 思案中</button>
+  </div>
+
+  <!-- G検定トースト -->
+  <div id="g-toast">🤔 G検定模試、悩み中にゃ</div>
 
   <!-- メインCTAボタン -->
   <div class="main-cta-wrap">
@@ -1302,6 +1363,46 @@ body.fz-large #ox-question { font-size:28px !important; }
     "></div>
   </div>
 
+</div>
+
+<!-- ===== G検定サンプル画面 ===== -->
+<div id="g-sample-screen" class="safe-bottom-pad" style="display:none; max-width:700px; margin:auto; background:#0d2137; border-radius:20px; padding:24px 20px;">
+
+  <!-- ヘッダー -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="color:#5dcaa5; font-size:20px; font-weight:bold;">🧠 G検定 SAMPLE</div>
+    <button onclick="goTopFromG()" style="background:#1a3a5c; color:#7ec8e3; border:none; border-radius:10px; padding:8px 14px; font-size:14px; font-weight:bold;">✕ TOPへ</button>
+  </div>
+
+  <!-- 進捗 -->
+  <div id="g-progress" style="color:#7ec8e3; font-size:13px; text-align:center; margin-bottom:12px;"></div>
+
+  <!-- 問題エリア -->
+  <div id="g-question-box" style="background:#1a3a5c; border-radius:14px; padding:20px; margin-bottom:16px; color:#e0f0ff; font-size:20px; font-weight:bold; line-height:1.7;"></div>
+
+  <!-- 選択肢 -->
+  <div id="g-choices" style="display:flex; flex-direction:column; gap:12px;"></div>
+
+  <!-- 解説 -->
+  <div id="g-explanation" style="display:none; background:#0f2d1f; border:2px solid #1d9e75; border-radius:12px; padding:16px; margin-top:14px; color:#a7f3d0; font-size:16px; line-height:1.7;"></div>
+
+  <!-- 次へボタン -->
+  <button id="g-next-btn" onclick="gNextQuestion()" style="display:none; width:100%; margin-top:16px; background:#1d9e75; color:#fff; border:none; border-radius:14px; padding:18px; font-size:18px; font-weight:bold;">次の問題へ ›</button>
+
+  <!-- エンディング -->
+  <div id="g-ending" style="display:none; text-align:center; padding:10px 0;">
+    <div style="font-size:52px; margin-bottom:12px;">🤔</div>
+    <div style="color:#fff; font-size:20px; font-weight:bold; line-height:1.8; margin-bottom:24px;">
+      G検定模試、悩み中にゃ。<br>応援してくれると嬉しいにゃ🐱
+    </div>
+    <a href="https://camp-fire.jp/projects/943911" target="_blank" rel="noopener"
+       style="display:block; padding:16px; background:#dc2626; color:#fff; border-radius:14px; font-size:17px; font-weight:900; text-decoration:none; margin-bottom:12px; box-shadow:0 4px 12px rgba(220,38,38,0.35);">
+      👉 CAMPFIREで応援する
+    </a>
+    <button onclick="goTopFromG()" style="width:100%; padding:14px; background:#1a3a5c; color:#7ec8e3; border:none; border-radius:14px; font-size:16px; font-weight:bold;">
+      ◀ TOPへ戻る
+    </button>
+  </div>
 </div>
 
 <!-- ===== チートシート画面 ===== -->
@@ -2379,7 +2480,7 @@ function clearAllSavedProgress(){
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 
 function hideAllMainScreens() {
-    ["start-screen","cheat-screen","game-screen","final-screen","ox-screen","ox-final-screen","fuzuki-screen","fuzuki-final-screen"].forEach(id => {
+    ["start-screen","cheat-screen","game-screen","final-screen","ox-screen","ox-final-screen","fuzuki-screen","fuzuki-final-screen","g-sample-screen"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = "none";
     });
@@ -2424,6 +2525,130 @@ function startCategory(cat) {
 }
 
 // 表紙からクイズへ
+
+// ===== G検定サンプル =====
+const G_SAMPLE_QUESTIONS = [
+  {
+    q: "ディープラーニングの研究が急速に進んだ「第3次AIブーム」のきっかけとなった、大規模画像認識コンテストの名前はどれか。",
+    choices: ["MNIST", "ImageNet LSVRC", "CIFAR-10", "Pascal VOC"],
+    correct: 1,
+    explanation: "2012年のImageNet LSVRC（通称ImageNet）でAlexNetが圧倒的な精度を出し、ディープラーニングブームの火付け役になったにゃ🐱"
+  },
+  {
+    q: "機械学習モデルが訓練データに過剰に適合し、未知のデータでうまく機能しなくなる現象を何と呼ぶか。",
+    choices: ["アンダーフィッティング", "ドロップアウト", "過学習（オーバーフィッティング）", "正則化"],
+    correct: 2,
+    explanation: "過学習（オーバーフィッティング）は「テスト勉強で過去問を丸暗記したら、本番で応用問題が解けなかった」状態に似てるにゃ🐱"
+  },
+  {
+    q: "AIの判断根拠が人間には理解・説明できない状態を指す言葉はどれか。",
+    choices: ["ハルシネーション", "敵対的サンプル", "ブラックボックス問題", "データバイアス"],
+    correct: 2,
+    explanation: "ブラックボックス問題は「なぜその答えを出したのかがわからない」状態。医療・法律など重要な場面で大きな課題になっているにゃ🐱"
+  },
+  {
+    q: "教師あり学習において、モデルの予測値と正解値の差を数値化したものを何と呼ぶか。",
+    choices: ["活性化関数", "損失関数（コスト関数）", "バックプロパゲーション", "ドロップアウト"],
+    correct: 1,
+    explanation: "損失関数は「どれくらい間違えたか」を測るものさしにゃ。この値を小さくするように学習が進むにゃ🐱"
+  },
+  {
+    q: "自然言語処理において2017年に登場し、現在の大規模言語モデル（LLM）の基盤となっているアーキテクチャはどれか。",
+    choices: ["RNN（再帰型ニューラルネット）", "CNN（畳み込みニューラルネット）", "Transformer", "GAN（敵対的生成ネットワーク）"],
+    correct: 2,
+    explanation: "「Attention Is All You Need」という論文で発表されたTransformerにゃ。ChatGPTなどのLLMはほぼすべてこれがベースにゃ🐱"
+  }
+];
+
+let gCurrentIdx = 0;
+let gSelectedQuestions = [];
+let gAnswered = false;
+
+function selectExam(type) {
+  if (type === 'ai') return;
+  // G検定 → サンプル画面へ
+  hideAllMainScreens();
+  gSelectedQuestions = shuffle([...G_SAMPLE_QUESTIONS]).slice(0, 3);
+  gCurrentIdx = 0;
+  document.getElementById('g-sample-screen').style.display = 'block';
+  document.getElementById('g-ending').style.display = 'none';
+  renderGQuestion();
+}
+
+function renderGQuestion() {
+  const q = gSelectedQuestions[gCurrentIdx];
+  gAnswered = false;
+  document.getElementById('g-progress').textContent = `問題 ${gCurrentIdx + 1} / 3`;
+  document.getElementById('g-question-box').textContent = q.q;
+  document.getElementById('g-explanation').style.display = 'none';
+  document.getElementById('g-next-btn').style.display = 'none';
+
+  const choicesEl = document.getElementById('g-choices');
+  choicesEl.innerHTML = '';
+  q.choices.forEach((c, i) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = 'display:flex;align-items:flex-start;gap:14px;background:#1a3a5c;border:2px solid #2a5a8c;border-radius:12px;padding:16px 20px;cursor:pointer;transition:border-color 0.15s;';
+    btn.innerHTML = `<span style="color:#7ec8e3;font-weight:bold;font-size:15px;flex-shrink:0;margin-top:2px;">${['A','B','C','D'][i]}</span><span style="color:#e0f0ff;font-size:19px;line-height:1.6;">${c}</span>`;
+    btn.onclick = () => answerG(i, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function answerG(idx, btn) {
+  if (gAnswered) return;
+  gAnswered = true;
+  const q = gSelectedQuestions[gCurrentIdx];
+  const choices = document.getElementById('g-choices').children;
+
+  Array.from(choices).forEach((el, i) => {
+    el.style.pointerEvents = 'none';
+    if (i === q.correct) {
+      el.style.background = '#064e3b';
+      el.style.borderColor = '#10b981';
+    } else if (i === idx && idx !== q.correct) {
+      el.style.background = '#450a0a';
+      el.style.borderColor = '#ef4444';
+    }
+  });
+
+  const expEl = document.getElementById('g-explanation');
+  expEl.textContent = (idx === q.correct ? '✅ 正解！ ' : '❌ 不正解… ') + q.explanation;
+  expEl.style.display = 'block';
+
+  const nextBtn = document.getElementById('g-next-btn');
+  if (gCurrentIdx < 2) {
+    nextBtn.textContent = '次の問題へ ›';
+    nextBtn.style.display = 'block';
+  } else {
+    nextBtn.textContent = '結果を見る';
+    nextBtn.style.display = 'block';
+  }
+}
+
+function gNextQuestion() {
+  gCurrentIdx++;
+  if (gCurrentIdx >= 3) {
+    // エンディング表示
+    document.getElementById('g-question-box').style.display = 'none';
+    document.getElementById('g-choices').style.display = 'none';
+    document.getElementById('g-explanation').style.display = 'none';
+    document.getElementById('g-next-btn').style.display = 'none';
+    document.getElementById('g-progress').style.display = 'none';
+    document.getElementById('g-ending').style.display = 'block';
+  } else {
+    renderGQuestion();
+  }
+}
+
+function goTopFromG() {
+  hideAllMainScreens();
+  const s = document.getElementById('start-screen');
+  if (s) s.style.display = 'block';
+  // 各要素をリセット
+  document.getElementById('g-question-box').style.display = 'block';
+  document.getElementById('g-choices').style.display = 'flex';
+  document.getElementById('g-progress').style.display = 'block';
+}
 
 function startImportant20() {
     hideAllMainScreens();
