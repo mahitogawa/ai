@@ -2589,7 +2589,9 @@ function selectExam(type) {
   if (type === 'ai') return;
   // G検定 → サンプル画面へ
   hideAllMainScreens();
-  gSelectedQuestions = shuffle([...G_SAMPLE_QUESTIONS]).slice(0, 3);
+  const gArr = [...G_SAMPLE_QUESTIONS];
+  for(let i=gArr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[gArr[i],gArr[j]]=[gArr[j],gArr[i]];}
+  gSelectedQuestions = gArr.slice(0, 3);
   gCurrentIdx = 0;
   document.getElementById('g-sample-screen').style.display = 'block';
   document.getElementById('g-ending').style.display = 'none';
@@ -4620,7 +4622,4 @@ function finishExam() {
 
   const wl = document.getElementById('wrong-list');
   wl.innerHTML = wrongItems.length === 0
-    ? '<p style="color:#166534;font-weight:bold;">間違えた問題なし！素晴らしい🎉</p>'
-    : wrongItems.map((w, i) => `
-        <div class="wrong-item">
-          <div class="
+    ? '<p style="color:#166534;font-weight:bold;">間違えた問
