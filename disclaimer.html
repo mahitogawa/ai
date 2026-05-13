@@ -189,6 +189,47 @@ body{
   color:#8b7355;margin-bottom:8px;
 }
 
+/* 音声プレーヤー */
+.audio-wrap{
+  margin-top:16px;
+}
+.audio-btn{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,#2d6a4f,#40916c);
+  color:#fff;border:none;border-radius:16px;
+  padding:14px 20px;
+  font-size:15px;font-weight:900;
+  cursor:pointer;font-family:inherit;
+  box-shadow:0 4px 14px rgba(45,106,79,.3);
+  transition:.2s;
+}
+.audio-btn:active{transform:scale(.97);}
+.audio-btn.playing{background:linear-gradient(135deg,#b91c1c,#dc2626);}
+.audio-progress{
+  width:100%;
+  height:6px;
+  background:#e8ddd0;
+  border-radius:999px;
+  margin-top:10px;
+  overflow:hidden;
+  display:none;
+}
+.audio-progress-bar{
+  height:100%;
+  background:#2d6a4f;
+  border-radius:999px;
+  width:0%;
+  transition:width .5s linear;
+}
+.audio-time{
+  font-size:12px;font-weight:700;
+  color:#8b7355;
+  text-align:right;
+  margin-top:4px;
+  display:none;
+}
+
 /* フッター */
 .footer{
   text-align:center;
@@ -222,6 +263,19 @@ body{
       「AIがあるから、もう一度やれる」<br><br>
       そう思って作ったのが、このドリルです。高次脳機能障害の当事者だから作れた「世界一やさしいUI」で、誰もがAI時代に取り残されないように。<br><br>
       🐈🐈‍⬛に見守られながら、今日も開発中にゃ🐾
+    </div>
+
+    <!-- 音声プレーヤー -->
+    <div class="audio-wrap">
+      <audio id="myAudio" src="./脳梗塞から生まれた世界一やさしいAI.m4a" preload="none"></audio>
+      <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">
+        <span id="audioIcon">▶️</span>
+        <span id="audioBtnText">ストーリーを聴く</span>
+      </button>
+      <div class="audio-progress" id="audioProgress">
+        <div class="audio-progress-bar" id="audioBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime"></div>
     </div>
   </div>
 
@@ -300,5 +354,51 @@ body{
 
 </div>
 
+<script>
+const audio = document.getElementById('myAudio');
+const btn   = document.getElementById('audioBtn');
+const icon  = document.getElementById('audioIcon');
+const label = document.getElementById('audioBtnText');
+const prog  = document.getElementById('audioProgress');
+const bar   = document.getElementById('audioBar');
+const time  = document.getElementById('audioTime');
+
+function fmt(s){
+  const m = Math.floor(s/60);
+  const sec = Math.floor(s%60).toString().padStart(2,'0');
+  return m+':'+sec;
+}
+
+function toggleAudio(){
+  if(audio.paused){
+    audio.play();
+    btn.classList.add('playing');
+    icon.textContent = '⏸️';
+    label.textContent = '一時停止';
+    prog.style.display = 'block';
+    time.style.display = 'block';
+  } else {
+    audio.pause();
+    btn.classList.remove('playing');
+    icon.textContent = '▶️';
+    label.textContent = 'ストーリーを聴く';
+  }
+}
+
+audio.addEventListener('timeupdate', () => {
+  if(audio.duration){
+    const pct = (audio.currentTime / audio.duration) * 100;
+    bar.style.width = pct + '%';
+    time.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  }
+});
+
+audio.addEventListener('ended', () => {
+  btn.classList.remove('playing');
+  icon.textContent = '▶️';
+  label.textContent = 'もう一度聴く';
+  bar.style.width = '0%';
+});
+</script>
 </body>
 </html>
