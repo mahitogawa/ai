@@ -2804,6 +2804,11 @@ function retryAll(){ location.reload(); }
 
 document.addEventListener('DOMContentLoaded', () => {
     updateSavedScoreBox();
+    // URLパラメータでG検定サンプルを自動起動
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('exam') === 'g') {
+      setTimeout(() => selectExam('g'), 300);
+    }
 });
 
 // ===== ○×クイズ =====
