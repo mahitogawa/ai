@@ -4618,4 +4618,21 @@ function finishExam() {
 
   const wl = document.getElementById('wrong-list');
   wl.innerHTML = wrongItems.length === 0
-    ? '<p style="color:#166534;font-weight:bold;">間違えた問
+    ? '<p style="color:#166534;font-weight:bold;">間違えた問題はありません！</p>'
+    : wrongItems.map(item => `
+      <div class="wrong-item">
+        <p class="q-text">${item.q}</p>
+        <p class="correct-ans">✓ 正解: ${item.correct}</p>
+        <p class="your-ans">✗ あなたの答え: ${item.your}</p>
+        ${item.d ? `<p style="font-size:13px;color:#555;margin-top:6px">${item.d}</p>` : ''}
+      </div>
+    `).join('');
+}
+
+function restartExam() {
+  document.getElementById('result-screen').style.display = 'none';
+  startExam();
+}
+</script>
+</body>
+</html>
