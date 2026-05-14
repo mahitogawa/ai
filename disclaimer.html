@@ -320,9 +320,11 @@ body{
     <div class="cf-free">※ このアプリは今すぐ無料でお使いいただけます</div>
     <div style="margin-top:12px;border-top:1px dashed #f59e0b;padding-top:12px;">
       <div style="font-size:11px;font-weight:900;color:#b45309;letter-spacing:.06em;margin-bottom:6px;">📢 COMING SOON</div>
-      <a href="./index.html?exam=g" style="display:block;background:#fff;border:1px solid #fcd34d;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:900;color:#92400e;text-decoration:none;">
-        🧐 G検定模試、にゃんパス製作委員会審議中。
-      </a>
+      <button onclick="toggleGQuiz()" id="gQuizToggleBtn" style="width:100%;background:#fff;border:1px solid #fcd34d;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:900;color:#92400e;cursor:pointer;font-family:inherit;">
+        🧐 G検定模試、にゃんパス製作委員会審議中。タップでサンプル問題！
+      </button>
+      <!-- G検定クイズエリア -->
+      <div id="gQuizArea" style="display:none;margin-top:12px;"></div>
     </div>
   </div>
 
@@ -358,6 +360,85 @@ body{
 </div>
 
 <script>
+// ===== G検定サンプルクイズ =====
+const G_QS = [
+  { q:"ディープラーニングの「第3次AIブーム」のきっかけとなった大規模画像認識コンテストはどれか。", choices:["MNIST","ImageNet LSVRC","CIFAR-10","Pascal VOC"], correct:1, exp:"2012年のImageNet LSSVRCでAlexNetが圧倒的な精度を出し、ディープラーニングブームの火付け役になったにゃ🐱" },
+  { q:"機械学習モデルが訓練データに過剰に適合し、未知データでうまく機能しなくなる現象は？", choices:["アンダーフィッティング","ドロップアウト","過学習（オーバーフィッティング）","正則化"], correct:2, exp:"過去問を丸暗記したら本番で応用問題が解けなかった…あの状態にゃ🐱" },
+  { q:"AIの判断根拠が人間には理解・説明できない状態を指す言葉はどれか。", choices:["ハルシネーション","敵対的サンプル","ブラックボックス問題","データバイアス"], correct:2, exp:"「なぜその答えを出したのかわからない」状態。医療・法律など重要な場面で大きな課題にゃ🐱" },
+  { q:"教師あり学習で、モデルの予測値と正解値の差を数値化したものを何と呼ぶか。", choices:["活性化関数","損失関数（コスト関数）","バックプロパゲーション","ドロップアウト"], correct:1, exp:"損失関数は「どれくらい間違えたか」を測るものさしにゃ。この値を小さくするように学習が進むにゃ🐱" },
+  { q:"2017年に登場し、現在のLLMの基盤となっているアーキテクチャはどれか。", choices:["RNN","CNN","Transformer","GAN"], correct:2, exp:"「Attention Is All You Need」で発表されたTransformerにゃ。ChatGPTなどはほぼすべてこれがベースにゃ🐱" }
+];
+let gIdx=0, gSelected=[], gAnswered=false;
+
+function toggleGQuiz(){
+  const area = document.getElementById('gQuizArea');
+  if(area.style.display==='none'){
+    area.style.display='block';
+    document.getElementById('gQuizToggleBtn').textContent='🧐 G検定サンプル問題（閉じる）';
+    startGQuiz();
+  } else {
+    area.style.display='none';
+    document.getElementById('gQuizToggleBtn').textContent='🧐 G検定模試、にゃんパス製作委員会審議中。タップでサンプル問題！';
+  }
+}
+
+function startGQuiz(){
+  const shuffled = [...G_QS].sort(()=>Math.random()-.5);
+  gSelected = shuffled.slice(0,3);
+  gIdx=0; renderGQ();
+}
+
+function renderGQ(){
+  const area=document.getElementById('gQuizArea');
+  const q=gSelected[gIdx]; gAnswered=false;
+  area.innerHTML=`
+    <div style="font-size:12px;font-weight:900;color:#8b7355;margin-bottom:8px;">問題 ${gIdx+1} / 3</div>
+    <div style="background:#1a3a5c;border-radius:12px;padding:16px;color:#e0f0ff;font-size:15px;font-weight:700;line-height:1.7;margin-bottom:12px;">${q.q}</div>
+    <div id="gChoices" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <div id="gExp" style="display:none;background:#0f2d1f;border:2px solid #1d9e75;border-radius:10px;padding:12px;margin-top:10px;color:#a7f3d0;font-size:13px;font-weight:700;line-height:1.7;"></div>
+    <button id="gNextBtn" onclick="gNext()" style="display:none;width:100%;margin-top:10px;background:#2d6a4f;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:900;cursor:pointer;font-family:inherit;">次の問題へ ›</button>
+  `;
+  const choicesEl=document.getElementById('gChoices');
+  q.choices.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:flex-start;gap:10px;background:#1a3a5c;border:2px solid #2a5a8c;border-radius:10px;padding:12px 14px;cursor:pointer;width:100%;font-family:inherit;text-align:left;';
+    btn.innerHTML=`<span style="color:#7ec8e3;font-weight:900;font-size:13px;flex-shrink:0;margin-top:2px;">${['A','B','C','D'][i]}</span><span style="color:#e0f0ff;font-size:14px;line-height:1.6;font-weight:700;">${c}</span>`;
+    btn.onclick=()=>answerGQ(i);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function answerGQ(idx){
+  if(gAnswered)return; gAnswered=true;
+  const q=gSelected[gIdx];
+  const btns=document.getElementById('gChoices').children;
+  Array.from(btns).forEach((b,i)=>{
+    b.style.pointerEvents='none';
+    if(i===q.correct){b.style.background='#064e3b';b.style.borderColor='#10b981';}
+    else if(i===idx&&idx!==q.correct){b.style.background='#450a0a';b.style.borderColor='#ef4444';}
+  });
+  const expEl=document.getElementById('gExp');
+  expEl.style.display='block';
+  expEl.textContent=(idx===q.correct?'✅ 正解！ ':'❌ 不正解… ')+q.exp;
+  const nextBtn=document.getElementById('gNextBtn');
+  nextBtn.style.display='block';
+  if(gIdx===2) nextBtn.textContent='結果を見る 🐱';
+}
+
+function gNext(){
+  gIdx++;
+  if(gIdx<3){ renderGQ(); }
+  else {
+    document.getElementById('gQuizArea').innerHTML=`
+      <div style="text-align:center;padding:16px;background:#1a3a5c;border-radius:12px;">
+        <div style="font-size:40px;margin-bottom:8px;">🤔</div>
+        <div style="color:#e0f0ff;font-size:15px;font-weight:900;line-height:1.8;margin-bottom:16px;">G検定模試、鋭意開発中にゃ🐱<br>応援してくれると嬉しいにゃ！</div>
+        <a href="https://camp-fire.jp/projects/943911" target="_blank" rel="noopener" style="display:block;padding:12px;background:#dc2626;color:#fff;border-radius:12px;font-size:14px;font-weight:900;text-decoration:none;margin-bottom:10px;">👉 CAMPFIREで応援する</a>
+        <button onclick="startGQuiz()" style="width:100%;padding:10px;background:#2d6a4f;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;">もう一度チャレンジ 🔄</button>
+      </div>`;
+  }
+}
+// ===== 音声プレーヤー =====
 const audio = document.getElementById('myAudio');
 const btn   = document.getElementById('audioBtn');
 const icon  = document.getElementById('audioIcon');
