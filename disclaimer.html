@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>このアプリについて | 生成AIパスポート最強ドリル</title>
 <meta name="description" content="脳梗塞リハビリ中の個人開発者Mahi-Mahiが作った生成AIパスポート対策アプリの紹介ページ。全462問・無料・2026年対応。にゃんログ・こころのセルフチェックも紹介。">
-<meta name="keywords" content="生成AIパスポート,にゃんログ,こころのセルフチェック,Mahi-Mahi,脳梗塞,高次脳機能障害,個人開発,無料アプリ,AI学習,CAMPFIRE">
+<meta name="keywords" content="生成AIパスポート,にゃんログ,こころのセルフチェック,Mahi-Mahi,脳梗塞,高次脳機能障害,個人開発,無料アプリ,AI学習">
 <link rel="canonical" href="https://mahitogawa.github.io/ai/disclaimer.html">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Mahi-Mahi">
@@ -146,36 +146,6 @@ body{
 }
 .app-badge.amber{background:#fff8e7;color:#d97706;}
 
-/* CAMPFIREバナー */
-.cf-card{
-  background:linear-gradient(135deg,#fff7ed,#fef3c7);
-  border:2px solid #f59e0b;
-  border-radius:18px;
-  padding:14px 16px;
-  text-align:center;
-  margin:20px 0;
-  box-shadow:0 4px 20px rgba(245,158,11,.15);
-}
-.cf-fire{display:inline;font-size:16px;}
-.cf-title{display:inline;font-size:14px;font-weight:900;color:#92400e;}
-.cf-sub{display:none;}
-.cf-btn{
-  display:block;
-  background:#dc2626;color:#fff;
-  border-radius:12px;
-  padding:11px 20px;
-  font-size:15px;font-weight:900;
-  text-decoration:none;
-  box-shadow:0 4px 14px rgba(220,38,38,.3);
-  transition:.2s;
-  margin:10px 0 6px;
-}
-.cf-btn:active{transform:scale(.97);}
-.cf-free{
-  font-size:12px;font-weight:700;
-  color:#92400e;margin-top:4px;
-}
-
 /* 免責事項 */
 .disclaimer{
   background:#f5ede0;
@@ -311,42 +281,12 @@ body{
     </div>
   </a>
 
-  <!-- CFバナー -->
-  <div class="cf-card">
-    <div><span class="cf-fire">🔥</span> <span class="cf-title">クラウドファンディング 公開中！</span></div>
-    <a class="cf-btn" href="https://camp-fire.jp/projects/943911" target="_blank" rel="noopener">
-      👉 CAMPFIREで応援する
-    </a>
-    <div class="cf-free">※ このアプリは今すぐ無料でお使いいただけます</div>
-    <div style="margin-top:12px;border-top:1px dashed #f59e0b;padding-top:12px;">
-      <div style="font-size:11px;font-weight:900;color:#b45309;letter-spacing:.06em;margin-bottom:6px;">📢 COMING SOON</div>
-      <button onclick="toggleGQuiz()" id="gQuizToggleBtn" style="width:100%;background:#fff;border:1px solid #fcd34d;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:900;color:#92400e;cursor:pointer;font-family:inherit;">
-        🧐 G検定模試、にゃんパス製作委員会審議中。タップでサンプル問題！
-      </button>
-      <!-- G検定クイズエリア -->
-      <div id="gQuizArea" style="display:none;margin-top:12px;"></div>
-    </div>
-  </div>
-
   <!-- 免責事項 -->
   <div class="disclaimer">
     <div class="disclaimer-title">📄 免責事項</div>
     本アプリはMahi-Mahiが個人で作成した学習用ドリルです。問題・解説の正確性は保証できません。最新の試験情報・正式な出題範囲は必ずGUGA公式サイト（guga.or.jp）でご確認ください。本アプリの利用により生じた損害について、作者は一切責任を負いません。
   </div>
 
-  <!-- 応援してくださった方 -->
-  <div style="background:#fff;border-radius:20px;padding:22px;margin-top:20px;border:1px solid #e8ddd0;box-shadow:0 4px 16px rgba(44,33,24,.07);">
-    <div style="font-size:16px;font-weight:900;color:#2d6a4f;margin-bottom:14px;">🏅 応援してくださった方</div>
-    <div style="font-size:14px;font-weight:700;color:#8b7355;margin-bottom:16px;line-height:1.7;">
-      クラウドファンディングで支援してくださった方のお名前を掲載しています。<br>本当にありがとうございます🐱
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;">
-      <div style="background:#e8f5ef;border-radius:999px;padding:8px 18px;font-size:15px;font-weight:900;color:#2d6a4f;">lukeguke さん</div>
-    </div>
-    <div style="margin-top:14px;font-size:13px;font-weight:700;color:#b8a898;">
-      ※お名前はご支援時の備考欄またはご連絡いただいたものを掲載しています
-    </div>
-  </div>
 
   <a href="./index.html"
      style="display:block;text-align:center;margin-top:28px;padding:16px;background:#2d6a4f;color:#fff;border-radius:18px;font-size:16px;font-weight:900;text-decoration:none;box-shadow:0 4px 14px rgba(45,106,79,.25);">
@@ -360,34 +300,6 @@ body{
 </div>
 
 <script>
-// ===== G検定サンプルクイズ =====
-const G_QS = [
-  { q:"ディープラーニングの「第3次AIブーム」のきっかけとなった大規模画像認識コンテストはどれか。", choices:["MNIST","ImageNet LSVRC","CIFAR-10","Pascal VOC"], correct:1, exp:"2012年のImageNet LSSVRCでAlexNetが圧倒的な精度を出し、ディープラーニングブームの火付け役になったにゃ🐱" },
-  { q:"機械学習モデルが訓練データに過剰に適合し、未知データでうまく機能しなくなる現象は？", choices:["アンダーフィッティング","ドロップアウト","過学習（オーバーフィッティング）","正則化"], correct:2, exp:"過去問を丸暗記したら本番で応用問題が解けなかった…あの状態にゃ🐱" },
-  { q:"AIの判断根拠が人間には理解・説明できない状態を指す言葉はどれか。", choices:["ハルシネーション","敵対的サンプル","ブラックボックス問題","データバイアス"], correct:2, exp:"「なぜその答えを出したのかわからない」状態。医療・法律など重要な場面で大きな課題にゃ🐱" },
-  { q:"教師あり学習で、モデルの予測値と正解値の差を数値化したものを何と呼ぶか。", choices:["活性化関数","損失関数（コスト関数）","バックプロパゲーション","ドロップアウト"], correct:1, exp:"損失関数は「どれくらい間違えたか」を測るものさしにゃ。この値を小さくするように学習が進むにゃ🐱" },
-  { q:"2017年に登場し、現在のLLMの基盤となっているアーキテクチャはどれか。", choices:["RNN","CNN","Transformer","GAN"], correct:2, exp:"「Attention Is All You Need」で発表されたTransformerにゃ。ChatGPTなどはほぼすべてこれがベースにゃ🐱" }
-];
-let gIdx=0, gSelected=[], gAnswered=false;
-
-function toggleGQuiz(){
-  const area = document.getElementById('gQuizArea');
-  if(area.style.display==='none'){
-    area.style.display='block';
-    document.getElementById('gQuizToggleBtn').textContent='🧐 G検定サンプル問題（閉じる）';
-    startGQuiz();
-  } else {
-    area.style.display='none';
-    document.getElementById('gQuizToggleBtn').textContent='🧐 G検定模試、にゃんパス製作委員会審議中。タップでサンプル問題！';
-  }
-}
-
-function startGQuiz(){
-  const shuffled = [...G_QS].sort(()=>Math.random()-.5);
-  gSelected = shuffled.slice(0,3);
-  gIdx=0; renderGQ();
-}
-
 function renderGQ(){
   const area=document.getElementById('gQuizArea');
   const q=gSelected[gIdx]; gAnswered=false;
@@ -432,8 +344,7 @@ function gNext(){
     document.getElementById('gQuizArea').innerHTML=`
       <div style="text-align:center;padding:16px;background:#1a3a5c;border-radius:12px;">
         <div style="font-size:40px;margin-bottom:8px;">🤔</div>
-        <div style="color:#e0f0ff;font-size:15px;font-weight:900;line-height:1.8;margin-bottom:16px;">G検定模試、鋭意開発中にゃ🐱<br>応援してくれると嬉しいにゃ！</div>
-        <a href="https://camp-fire.jp/projects/943911" target="_blank" rel="noopener" style="display:block;padding:12px;background:#dc2626;color:#fff;border-radius:12px;font-size:14px;font-weight:900;text-decoration:none;margin-bottom:10px;">👉 CAMPFIREで応援する</a>
+        <div style="color:#e0f0ff;font-size:15px;font-weight:900;line-height:1.8;margin-bottom:16px;">G検定模試、鋭意開発中にゃ🐱</div>
         <button onclick="startGQuiz()" style="width:100%;padding:10px;background:#2d6a4f;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;">もう一度チャレンジ 🔄</button>
       </div>`;
   }
