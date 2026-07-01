@@ -416,6 +416,22 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 .icon-card:active { transform: scale(0.95); }
+.cheat-f-btn {
+  padding: 6px 14px;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.cheat-f-btn.active {
+  background: #1e3a5f;
+  border-color: #60a5fa;
+  color: #60a5fa;
+  font-weight: bold;
+}
 .icon-card:hover  { border-color: rgba(251,191,36,0.6); transform: translateY(-2px); }
 .icon-card .ic-badge {
   width: 52px;
@@ -1445,7 +1461,11 @@ body.fz-large #ox-question { font-size:28px !important; }
     <button onclick="hideCheat()" style="background:#334155; color:#fff; border:none; border-radius:20px; padding:8px 20px; font-size:16px; cursor:pointer;">← 戻る</button>
   </div>
   <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
+  <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." style="width:100%; box-sizing:border-box; padding:14px 16px; margin-bottom:12px; background:#1e293b; border:1px solid #334155; border-radius:12px; color:#f1f5f9; font-size:18px;">
+  <div id="cheat-filters" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;"></div>
+  <div id="cheat-count" style="color:#64748b; font-size:14px; margin-bottom:10px;"></div>
   <div id="cheat-list"></div>
+  <div id="cheat-noresult" style="display:none; color:#64748b; text-align:center; padding:40px 0; font-size:18px;">該当する用語が見つからないにゃ🐱</div>
   <button onclick="hideCheat()" style="display:block; width:100%; margin-top:24px; padding:20px; background:#334155; color:#fff; border:none; border-radius:16px; font-size:22px; font-weight:bold; cursor:pointer; touch-action:manipulation;">🐈 TOPに戻る</button>
 </div>
 
@@ -3606,16 +3626,55 @@ const cheatData = [
 ];
 
 
+let _cheatCurrentCat = "all";
+
 function showCheat() {
   hideAllMainScreens();
   document.getElementById("cheat-screen").style.display = "block";
   window.scrollTo({top:0,behavior:"auto"});
 
+  const filters = document.getElementById("cheat-filters");
+  filters.innerHTML = `<button class="cheat-f-btn active" data-cat="all" onclick="setCheatCat('all')">すべて</button>` +
+    cheatData.map(cat => `<button class="cheat-f-btn" data-cat="${cat.cat}" onclick="setCheatCat('${cat.cat.replace(/'/g,"\\'")}')">${cat.cat}</button>`).join("");
+
+  const searchInput = document.getElementById("cheat-search");
+  if (searchInput) searchInput.value = "";
+  _cheatCurrentCat = "all";
+  renderCheatList();
+}
+
+function setCheatCat(cat) {
+  _cheatCurrentCat = cat;
+  document.querySelectorAll('.cheat-f-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === cat);
+  });
+  renderCheatList();
+}
+
+function filterCheat() {
+  renderCheatList();
+}
+
+function renderCheatList() {
+  const searchVal = (document.getElementById("cheat-search")?.value || "").toLowerCase();
   const list = document.getElementById("cheat-list");
+  const noResult = document.getElementById("cheat-noresult");
+  const countEl = document.getElementById("cheat-count");
   list.innerHTML = "";
+
+  let totalShown = 0;
   cheatData.forEach(cat => {
-    list.innerHTML += `<div style="color:#fbbf24; font-size:22px; font-weight:bold; margin:24px 0 12px;">${cat.cat}</div>`;
-    cat.items.forEach(item => {
+    if (_cheatCurrentCat !== "all" && _cheatCurrentCat !== cat.cat) return;
+    const items = cat.items.filter(item => {
+      if (!searchVal) return true;
+      return item.term.toLowerCase().includes(searchVal) ||
+             item.read.toLowerCase().includes(searchVal) ||
+             item.desc.toLowerCase().includes(searchVal);
+    });
+    if (items.length === 0) return;
+    totalShown += items.length;
+    list.innerHTML += `<div style="color:#fbbf24; font-size:22px; font-weight:bold; margin:24px 0 12px;">${cat.cat} <span style="font-size:14px; color:#64748b; font-weight:normal;">${items.length}語</span></div>`;
+    items.forEach(item => {
       list.innerHTML += `
         <div onclick="this.querySelector('.desc').style.display=this.querySelector('.desc').style.display==='none'?'block':'none'"
              style="background:#1e293b; border-radius:10px; padding:18px 16px; margin-bottom:10px; cursor:pointer;">
@@ -3627,6 +3686,9 @@ function showCheat() {
         </div>`;
     });
   });
+
+  countEl.textContent = totalShown + "件の用語";
+  noResult.style.display = totalShown === 0 ? "block" : "none";
 }
 
 function hideCheat() {
