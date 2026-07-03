@@ -1462,7 +1462,6 @@ body.fz-large #ox-question { font-size:28px !important; }
   </div>
   <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
   <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." style="width:100%; box-sizing:border-box; padding:14px 16px; margin-bottom:12px; background:#1e293b; border:1px solid #334155; border-radius:12px; color:#f1f5f9; font-size:18px;">
-  <div id="cheat-filters" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;"></div>
   <div id="cheat-count" style="color:#64748b; font-size:14px; margin-bottom:10px;"></div>
   <div id="cheat-list"></div>
   <div id="cheat-noresult" style="display:none; color:#64748b; text-align:center; padding:40px 0; font-size:18px;">該当する用語が見つからないにゃ🐱</div>
@@ -3682,19 +3681,17 @@ const cheatData = [
 
 
 let _cheatCurrentCat = "all";
+let _cheatOpenCats = {};
 
 function showCheat() {
   hideAllMainScreens();
   document.getElementById("cheat-screen").style.display = "block";
   window.scrollTo({top:0,behavior:"auto"});
 
-  const filters = document.getElementById("cheat-filters");
-  filters.innerHTML = `<button class="cheat-f-btn active" data-cat="all" onclick="setCheatCat('all')">すべて</button>` +
-    cheatData.map(cat => `<button class="cheat-f-btn" data-cat="${cat.cat}" onclick="setCheatCat('${cat.cat.replace(/'/g,"\\'")}')">${cat.cat}</button>`).join("");
-
   const searchInput = document.getElementById("cheat-search");
   if (searchInput) searchInput.value = "";
   _cheatCurrentCat = "all";
+  _cheatOpenCats = {};
   renderCheatList();
 }
 
@@ -3703,10 +3700,16 @@ function setCheatCat(cat) {
   document.querySelectorAll('.cheat-f-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.cat === cat);
   });
+  if (cat !== "all") _cheatOpenCats[cat] = true;
   renderCheatList();
 }
 
 function filterCheat() {
+  renderCheatList();
+}
+
+function toggleCheatCat(catKey) {
+  _cheatOpenCats[catKey] = !_cheatOpenCats[catKey];
   renderCheatList();
 }
 
@@ -3718,7 +3721,8 @@ function renderCheatList() {
   list.innerHTML = "";
 
   let totalShown = 0;
-  cheatData.forEach(cat => {
+  let totalMatched = 0;
+  cheatData.forEach((cat, catIdx) => {
     if (_cheatCurrentCat !== "all" && _cheatCurrentCat !== cat.cat) return;
     const items = cat.items.filter(item => {
       if (!searchVal) return true;
@@ -3727,23 +3731,36 @@ function renderCheatList() {
              item.desc.toLowerCase().includes(searchVal);
     });
     if (items.length === 0) return;
-    totalShown += items.length;
-    list.innerHTML += `<div style="color:#fbbf24; font-size:22px; font-weight:bold; margin:24px 0 12px;">${cat.cat} <span style="font-size:14px; color:#64748b; font-weight:normal;">${items.length}語</span></div>`;
-    items.forEach(item => {
-      list.innerHTML += `
-        <div onclick="this.querySelector('.desc').style.display=this.querySelector('.desc').style.display==='none'?'block':'none'"
-             style="background:#1e293b; border-radius:10px; padding:18px 16px; margin-bottom:10px; cursor:pointer;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-            <span style="color:#f1f5f9; font-weight:bold; font-size:22px;">${item.term}</span>
-            <span style="color:#60a5fa; font-size:17px;">${item.read}</span>
-          </div>
-          <div class="desc" style="display:none; margin-top:12px; color:#ffffff; font-size:20px; line-height:1.7;">${item.desc}</div>
-        </div>`;
-    });
+    totalMatched += items.length;
+
+    const catKey = "cat" + catIdx;
+    // 検索中・カテゴリ絞り込み中は自動的に開く。それ以外はタップで開閉。
+    const isOpen = !!searchVal || _cheatCurrentCat !== "all" || !!_cheatOpenCats[catKey];
+    if (isOpen) totalShown += items.length;
+
+    list.innerHTML += `
+      <div onclick="toggleCheatCat('${catKey}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin:24px 0 12px; padding:8px 4px;">
+        <div style="color:#fbbf24; font-size:22px; font-weight:bold;">${cat.cat} <span style="font-size:14px; color:#64748b; font-weight:normal;">${items.length}語</span></div>
+        <div style="color:#fbbf24; font-size:20px; transform:rotate(${isOpen?90:0}deg); transition:transform 0.15s;">▶</div>
+      </div>`;
+
+    if (isOpen) {
+      items.forEach(item => {
+        list.innerHTML += `
+          <div onclick="event.stopPropagation(); this.querySelector('.desc').style.display=this.querySelector('.desc').style.display==='none'?'block':'none'"
+               style="background:#1e293b; border-radius:10px; padding:18px 16px; margin-bottom:10px; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <span style="color:#f1f5f9; font-weight:bold; font-size:22px;">${item.term}</span>
+              <span style="color:#60a5fa; font-size:17px;">${item.read}</span>
+            </div>
+            <div class="desc" style="display:none; margin-top:12px; color:#ffffff; font-size:20px; line-height:1.7;">${item.desc}</div>
+          </div>`;
+      });
+    }
   });
 
-  countEl.textContent = totalShown + "件の用語";
-  noResult.style.display = totalShown === 0 ? "block" : "none";
+  countEl.textContent = searchVal ? (totalMatched + "件の用語がヒット") : "カテゴリをタップして開くにゃ";
+  noResult.style.display = (searchVal && totalMatched === 0) ? "block" : "none";
 }
 
 function hideCheat() {
