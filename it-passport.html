@@ -25,23 +25,23 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
 .sample-badge { display:inline-block; margin-bottom:14px; padding:5px 12px; border-radius:4px; font-size:12px; font-weight:700; background:#e8f3ff; color:#0b4d94; border:1px solid #bcdcff; }
 
 .menu { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
-.menu button { background:#fff; color:#0071ec; font-size:14px; padding:16px 8px; border-radius:6px; border:1px solid #cfe0f5; font-weight:bold; line-height:1.5; }
+.menu button { background:#fff; color:#0071ec; font-size:14px; padding:16px 8px; border-radius:6px; border:2px solid #8fb8e8; font-weight:bold; line-height:1.5; }
 .menu button.wide { grid-column: 1 / -1; }
 .menu button.primary { background:#0071ec; color:#fff; border-color:#0071ec; }
-.menu button.secondary { background:#fff7e6; color:#92400e; border-color:#fde3a7; }
-.menu button.mini { background:#f3f0ff; color:#5b21b6; border-color:#ddd6fe; }
+.menu button.secondary { background:#fff7e6; color:#92400e; border-color:#f0b429; }
+.menu button.mini { background:#f3f0ff; color:#5b21b6; border-color:#a78bfa; }
 .menu-note { font-size:12.5px; color:#5b6b7d; margin:2px 0 18px; line-height:1.6; }
 
-.passline-box { background:#eaf3fc; border:1px solid #bcdcff; border-radius:6px; padding:14px 16px; margin:0 0 16px; font-size:12.5px; color:#334155; line-height:1.7; }
+.passline-box { background:#eaf3fc; border:2px solid #8fb8e8; border-radius:6px; padding:14px 16px; margin:0 0 16px; font-size:12.5px; color:#334155; line-height:1.7; }
 .passline-box .plt { font-size:13px; font-weight:800; color:#0b4d94; margin:0 0 6px; }
 .passline-box ul { margin:0 0 6px; padding-left:1.2em; }
 .passline-box li { margin:0 0 2px; }
 .passline-box .plnote { font-size:11.5px; color:#64748b; margin:6px 0 0; }
 
-.qcard { background:#fff; border:1px solid #dbe6f2; border-radius:6px; padding:0; overflow:hidden; margin-bottom:14px; }
+.qcard { background:#fff; border:2px solid #8fb8e8; border-radius:6px; padding:0; overflow:hidden; margin-bottom:14px; }
 .qcard .qhead { background:#eaf3fc; padding:12px 18px; border-bottom:2px solid #0071ec; }
 .qhead .catline { font-size:13px; color:#3a6ea5; font-weight:700; margin:0 0 4px; }
-.qhead .progress { font-size:12px; color:#64748b; float:right; }
+.qhead .progress { font-size:14px; color:#0b4d94; font-weight:800; float:right; background:#fff; border:1px solid #bcdcff; border-radius:12px; padding:3px 10px; }
 #question { font-size:17px; font-weight:700; line-height:1.8; padding:18px; margin:0; color:#1a1a1a; }
 
 #answers { display:flex; flex-direction:column; }
@@ -61,7 +61,8 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
 #result b { color:#0071ec; }
 
 #nextBtn { display:none; width:100%; background:#0071ec; color:#fff; border:none; padding:15px; border-radius:6px; font-size:16px; font-weight:bold; margin-bottom:8px; }
-#backBtn { display:none; width:100%; background:none; border:1px solid #cbd5e1; color:#64748b; font-size:13px; padding:10px; border-radius:6px; }
+#backBtn { display:none; width:100%; background:#fff; border:2px solid #0071ec; color:#0071ec; font-size:15px; font-weight:800; padding:13px; border-radius:6px; }
+#backBtn:hover { background:#eaf3fc; }
 
 .end-msg { background:#fff; border:1px solid #dbe6f2; border-radius:6px; padding:28px 18px; text-align:center; font-size:16px; line-height:1.8; margin-bottom:14px; }
 #reviewBtn { display:none; width:100%; background:#dc2626; color:#fff; border:none; padding:15px; border-radius:6px; font-size:16px; font-weight:bold; margin-bottom:8px; }
@@ -72,7 +73,7 @@ footer { text-align:center; color:#5b6b7d; font-size:11.5px; margin-top:10px; li
 <body>
 <div id="topHeader">
   <p class="eyebrow">ITパスポート試験 対策ドリル</p>
-  <h1>🖥️ ITパスポート対策ドリル</h1>
+  <h1>🐱 ITパスポート対策ドリル</h1>
 </div>
 <div id="subnav">分野別演習　｜　本番形式ランダム　｜　全490問ランダム</div>
 
