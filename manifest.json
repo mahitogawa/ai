@@ -1,7 +1,7 @@
 {
   "name": "生成AIパスポート最強ドリル",
   "short_name": "AIドリル",
-  "description": "生成AIパスポート試験対策アプリ。全385問・2026年新シラバス対応。",
+  "description": "生成AIパスポート試験対策アプリ。全419問・2026年新シラバス対応。",
   "start_url": "/ai/",
   "scope": "/ai/",
   "display": "standalone",
