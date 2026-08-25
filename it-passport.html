@@ -94,9 +94,9 @@ footer { text-align:center; color:#5b6b7d; font-size:11.5px; margin-top:10px; li
       <button onclick="startCategory('management')">😸 マネジメント系<br>（168問中ランダム100問）</button>
       <button onclick="startCategory('technology')">😹 テクノロジ系<br>（374問中ランダム100問）</button>
       <button class="official" onclick="startMode('official')">🙀 IPA公式問題だけ<br>（令和6〜8年度・300問中ランダム100問）</button>
-      <button class="wide secondary" onclick="startMode('all')">😽 全830問ランダム（腰を据えて総復習）</button>
+      <button class="wide secondary" onclick="startMode('all')">😽 全問ランダム総復習<br>（830問中ランダム100問）</button>
     </div>
-    <p class="menu-note">本番のITパスポート試験は100問・120分、出題比率はストラテジ系35%・マネジメント系20%・テクノロジ系45%だよ。「本番形式ランダム」はその比率のまま830問の中から100問を毎回ランダムに抽出するモード。「ミニ模試」は同じ比率のまま20問（7:4:9）だけ抽出する短時間版で、終了後に分野別の簡易評価が見られるよ。分野別演習と「IPA公式問題だけ」は問題数が多くなってきたので、1回あたり最大100問をランダム抽出する方式にしたよ（何度もやると別の100問に当たるよ）。「IPA公式問題だけ」はオリジナル問題を除いて、IPAが公開している令和6〜8年度の過去問（各問題の解説末尾に出典を明記）だけから出題するモード。オリジナル問題には計算問題・状況設定つきの問題も含まれているよ。</p>
+    <p class="menu-note">本番のITパスポート試験は100問・120分、出題比率はストラテジ系35%・マネジメント系20%・テクノロジ系45%だよ。「本番形式ランダム」はその比率のまま830問の中から100問を毎回ランダムに抽出するモード。「ミニ模試」は同じ比率のまま20問（7:4:9）だけ抽出する短時間版で、終了後に分野別の簡易評価が見られるよ。分野別演習・「IPA公式問題だけ」・「全問ランダム総復習」はどれも問題数が多くなってきたので、1回あたり最大100問をランダム抽出する方式にしたよ（何度もやると別の100問に当たるよ、結果もすぐ見られる）。「IPA公式問題だけ」はオリジナル問題を除いて、IPAが公開している令和6〜8年度の過去問（各問題の解説末尾に出典を明記）だけから出題するモード。オリジナル問題には計算問題・状況設定つきの問題も含まれているよ。</p>
 
     <div class="passline-box">
       <p class="plt">🎯 合格ライン</p>
@@ -172,7 +172,7 @@ function startMode(mode){
   if(mode==='exam'){ base = stratifiedSet(35,20,45); isScoredMode = true; }
   else if(mode==='mini'){ base = stratifiedSet(7,4,9); isScoredMode = true; }
   else if(mode==='official'){ base = shuffle(quizData.filter(q=>q.official)).slice(0, 100); isScoredMode = false; }
-  else { base = shuffle(quizData); isScoredMode = false; }
+  else { base = shuffle(quizData).slice(0, 100); isScoredMode = false; }
   current = base.map(shuffleChoices);
   resetSessionState();
   document.getElementById('menu-screen').style.display='none';
