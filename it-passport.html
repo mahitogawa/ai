@@ -7,84 +7,99 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>ITパスポート試験 対策ドリル（全830問）</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 html { -webkit-text-size-adjust: 100%; }
 * { box-sizing: border-box; }
 body {
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, -apple-system, BlinkMacSystemFont, sans-serif;
-  background:#f4f7fa; margin:0; padding:0; color:#222; font-size:16px;
+  font-family: "Zen Maru Gothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background:#f6f1e7; margin:0; padding:0; color:#4a4034; font-size:17px;
 }
 button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor:pointer; user-select:none; -webkit-user-select:none; font-family:inherit; }
 
-#topHeader { background:#fff; border-bottom:1px solid #e2e8f0; padding:14px 16px; }
-#topHeader .eyebrow { font-size:12px; color:#64748b; margin:0 0 2px; }
-#topHeader h1 { font-size:22px; margin:0; color:#0071ec; font-weight:800; }
-#subnav { background:#3a3f4b; color:#fff; padding:10px 16px; font-size:13px; font-weight:700; letter-spacing:.02em; }
-#toolbar { background:#3a3f4b; color:#fff; padding:9px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-#toolbar .toolbar-label { font-size:13px; font-weight:700; margin-right:4px; }
-#toolbar .fs-btn { background:transparent; border:1.5px solid #9fb0c9; color:#fff; padding:4px 14px; border-radius:5px; margin:0 3px; font-weight:700; font-size:13px; }
-#toolbar .fs-btn.active { background:#22c1e0; border-color:#22c1e0; color:#0b2540; }
-#toolbar .timer-group { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
-body.fs-small #question { font-size:15px; }
-body.fs-small .choice-text { font-size:14px; }
-body.fs-small .catline { font-size:12px; }
-body.fs-large #question { font-size:20px; }
-body.fs-large .choice-text { font-size:18px; }
-body.fs-large .catline { font-size:15px; }
+#topHeader { background:#efe6d4; border-bottom:1px solid #ddd0b8; padding:16px; }
+#topHeader .eyebrow { font-size:12px; color:#8a7a5c; letter-spacing:2px; margin:0 0 4px; font-weight:700; }
+#topHeader h1 { font-size:24px; margin:0; color:#5c4a30; font-weight:900; }
+#subnav { background:#7c9473; color:#fff; padding:10px 16px; font-size:14px; font-weight:700; letter-spacing:.02em; text-align:center; }
+#toolbar { background:#efe6d4; color:#5c4a30; padding:9px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid #ddd0b8; }
+#toolbar .toolbar-label { font-size:14px; font-weight:700; margin-right:4px; color:#8a7a5c; }
+#toolbar .fs-btn { background:#fffdf8; border:1.5px solid #e4d9c2; color:#8a7a5c; padding:5px 15px; border-radius:8px; margin:0 3px; font-weight:700; font-size:14px; }
+#toolbar .fs-btn.active { background:#7c9473; border-color:#7c9473; color:#fff; }
+#toolbar .timer-group { font-size:14px; font-weight:800; display:flex; align-items:center; gap:6px; color:#e9906b; }
+body.fs-small #question { font-size:17px; }
+body.fs-small .choice-text { font-size:16px; }
+body.fs-small .catline { font-size:14px; }
+body.fs-large #question { font-size:22px; }
+body.fs-large .choice-text { font-size:20px; }
+body.fs-large .catline { font-size:17px; }
+
+#crosslink { text-align:center; padding:7px 16px; background:#fffdf8; border-bottom:1px solid #e4d9c2; }
+#crosslink a { color:#7c9473; font-size:13.5px; font-weight:700; text-decoration:none; }
+#crosslink a:hover { text-decoration:underline; }
 
 .wrap { max-width:720px; margin:0 auto; padding:16px; }
-.breadcrumb { font-size:13px; color:#0071ec; margin-bottom:14px; }
-.breadcrumb span { color:#94a3b8; }
+.breadcrumb { font-size:14px; color:#7c9473; margin-bottom:14px; font-weight:700; }
+.breadcrumb span { color:#b3a58a; }
 
-.sample-badge { display:inline-block; margin-bottom:14px; padding:5px 12px; border-radius:4px; font-size:12px; font-weight:700; background:#e8f3ff; color:#0b4d94; border:1px solid #bcdcff; }
+.sample-badge { display:inline-block; margin-bottom:14px; padding:6px 15px; border-radius:20px; font-size:13px; font-weight:700; background:#eef2e6; color:#5c7a52; border:1px solid #cfe0c4; }
 
-.menu { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
-.menu button { background:#fff; color:#0071ec; font-size:14px; padding:16px 8px; border-radius:6px; border:2px solid #8fb8e8; font-weight:bold; line-height:1.5; }
+.menu { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:8px; }
+.menu button { background:#fffdf8; color:#4a4034; font-size:14.5px; padding:16px 8px; border-radius:14px; border:1.5px solid #e4d9c2; font-weight:700; line-height:1.45; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-shadow:0 2px 6px rgba(90,70,40,.06); position:relative; transition:transform .12s, box-shadow .12s, border-color .12s; }
+.menu button:hover { transform:translateY(-3px); box-shadow:0 8px 18px rgba(90,70,40,.16), 0 0 0 3px rgba(124,148,115,.5); }
+.menu button:active { transform:translateY(0); box-shadow:0 2px 6px rgba(90,70,40,.1), 0 0 0 3px rgba(124,148,115,.5); }
+.menu button .gicon { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:8px; background:#f0e9d8; border:1px solid #e4d9c2; }
 .menu button.wide { grid-column: 1 / -1; }
-.menu button.primary { background:#0071ec; color:#fff; border-color:#0071ec; }
-.menu button.secondary { background:#fff7e6; color:#92400e; border-color:#f0b429; }
-.menu button.mini { background:linear-gradient(135deg,#f3f0ff,#ede4ff); color:#5b21b6; border-color:#7c3aed; border-width:3px; box-shadow:0 2px 10px rgba(124,58,237,.25); position:relative; padding-top:20px; }
-.menu button.mini .badge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:#7c3aed; color:#fff; font-size:11px; font-weight:800; padding:3px 12px; border-radius:10px; white-space:nowrap; box-shadow:0 2px 4px rgba(0,0,0,.15); }
-.menu button.mini .mtitle { font-size:16px; }
-.menu button.official { background:#fff0f0; color:#9f1239; border-color:#fda4af; }
-.menu-note { font-size:12.5px; color:#5b6b7d; margin:2px 0 18px; line-height:1.6; }
+.menu button.primary { background:#e9906b; color:#fff; border-color:#e9906b; padding:18px 12px; font-size:16px; }
+.menu button.primary .gicon { background:rgba(255,255,255,.25); border:none; }
+.menu button.secondary { border-color:#d7c9a8; }
+.menu button.secondary .gicon { background:#efe6d4; }
+.menu button.mini { background:#7c9473; color:#fff; border-color:#7c9473; padding-top:22px; font-size:16px; }
+.menu button.mini .gicon { background:rgba(255,255,255,.22); border:none; }
+.menu button.mini .badge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:#e9906b; color:#fff; font-size:11px; font-weight:800; padding:3px 12px; border-radius:10px; white-space:nowrap; box-shadow:0 2px 4px rgba(0,0,0,.15); }
+.menu button.mini .mtitle { font-size:17px; }
+.menu button.official { border-color:#e0b8a8; }
+.menu button.official .gicon { background:#fbe6dd; }
+.menu-note { font-size:14px; color:#8a7a5c; margin:2px 0 18px; line-height:1.75; background:#fffdf8; padding:14px 16px; border-radius:10px; border-left:4px solid #7c9473; }
 
-.passline-box { background:#eaf3fc; border:2px solid #8fb8e8; border-radius:6px; padding:14px 16px; margin:0 0 16px; font-size:12.5px; color:#334155; line-height:1.7; }
-.passline-box .plt { font-size:13px; font-weight:800; color:#0b4d94; margin:0 0 6px; }
+.passline-box { background:#fffdf8; border:1.5px solid #e4d9c2; border-radius:14px; padding:14px 16px; margin:0 0 16px; font-size:14px; color:#5c4a30; line-height:1.75; }
+.passline-box .plt { font-size:16px; font-weight:900; color:#5c7a52; margin:0 0 6px; }
 .passline-box ul { margin:0 0 6px; padding-left:1.2em; }
 .passline-box li { margin:0 0 2px; }
-.passline-box .plnote { font-size:11.5px; color:#64748b; margin:6px 0 0; }
+.passline-box .plnote { font-size:13px; color:#8a7a5c; margin:6px 0 0; }
 
-.qcard { background:#fff; border:2px solid #8fb8e8; border-radius:6px; padding:0; overflow:hidden; margin-bottom:14px; }
-.qcard .qhead { background:#eaf3fc; padding:12px 18px; border-bottom:2px solid #0071ec; }
-.qhead .catline { font-size:13px; color:#3a6ea5; font-weight:700; margin:0 0 4px; }
-.qhead .progress { font-size:14px; color:#0b4d94; font-weight:800; float:right; background:#fff; border:1px solid #bcdcff; border-radius:12px; padding:3px 10px; }
-#question { font-size:17px; font-weight:700; line-height:1.8; padding:18px; margin:0; color:#1a1a1a; }
+.qcard { background:#fffdf8; border:1.5px solid #e4d9c2; border-radius:16px; padding:0; overflow:hidden; margin-bottom:14px; box-shadow:0 4px 12px rgba(90,70,40,.08); }
+.qcard .qhead { background:#efe6d4; padding:12px 18px; border-bottom:1px solid #ddd0b8; }
+.qhead .catline { font-size:15px; color:#5c7a52; font-weight:800; margin:0 0 4px; }
+.qhead .progress { font-size:15px; color:#5c7a52; font-weight:800; float:right; background:#fffdf8; border:1px solid #e4d9c2; border-radius:12px; padding:4px 11px; }
+#question { font-size:19px; font-weight:700; line-height:1.8; padding:18px; margin:0; color:#4a4034; }
 
-#answers { display:flex; flex-direction:column; }
-#answers .choice-item { display:flex; align-items:flex-start; gap:14px; background:#fff; border-top:1px solid #eef2f7; padding:16px 18px; cursor:pointer; transition:background .15s; }
-#answers .choice-item:hover { background:#f5faff; }
-#answers .choice-item .choice-label { flex-shrink:0; width:30px; height:30px; border:1px solid #9db8d8; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#3a6ea5; background:#f7fbff; }
-#answers .choice-item .choice-text { font-size:15.5px; line-height:1.7; color:#222; word-break:break-word; padding-top:4px; }
-#answers .choice-item.correct { background:#eafaf1; }
-#answers .choice-item.correct .choice-label { background:#16a34a; border-color:#16a34a; color:#fff; }
-#answers .choice-item.correct .choice-text { color:#166534; font-weight:700; }
-#answers .choice-item.wrong { background:#fdf1f1; }
-#answers .choice-item.wrong .choice-label { background:#dc2626; border-color:#dc2626; color:#fff; }
-#answers .choice-item.wrong .choice-text { color:#991b1b; }
+#answers { display:flex; flex-direction:column; gap:8px; padding:0 14px 14px; }
+#answers .choice-item { display:flex; align-items:flex-start; gap:14px; background:#fffdf8; border:1.5px solid #e4d9c2; border-radius:12px; padding:14px 16px; cursor:pointer; transition:background .15s, border-color .15s, box-shadow .15s, transform .1s; }
+#answers .choice-item:hover { background:#eef2e6; border-color:#7c9473; box-shadow:0 3px 10px rgba(90,70,40,.1), 0 0 0 3px rgba(124,148,115,.5); transform:translateY(-2px); }
+#answers .choice-item:hover .choice-label { background:#7c9473; border-color:#7c9473; color:#fff; }
+#answers .choice-item:active { transform:translateY(0); box-shadow:0 1px 4px rgba(90,70,40,.1), 0 0 0 3px rgba(124,148,115,.5); }
+#answers .choice-item .choice-label { flex-shrink:0; width:32px; height:32px; border:1px solid #e4d9c2; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#5c7a52; background:#f0e9d8; }
+#answers .choice-item .choice-text { font-size:17.5px; line-height:1.7; color:#4a4034; word-break:break-word; padding-top:4px; }
+#answers .choice-item.correct { background:#eef2e6; border-color:#7c9473; }
+#answers .choice-item.correct .choice-label { background:#7c9473; border-color:#7c9473; color:#fff; }
+#answers .choice-item.correct .choice-text { color:#3f5c3a; font-weight:700; }
+#answers .choice-item.wrong { background:#fbeee7; border-color:#e9906b; }
+#answers .choice-item.wrong .choice-label { background:#e9906b; border-color:#e9906b; color:#fff; }
+#answers .choice-item.wrong .choice-text { color:#9a4a28; }
 #answers .choice-item.disabled-item { pointer-events:none; }
 
-#result { margin:0 0 14px; font-size:14.5px; padding:16px 18px; border-radius:6px; display:none; line-height:1.8; background:#f7f9fb; border:1px solid #e2e8f0; color:#334155; }
-#result b { color:#0071ec; }
+#result { margin:0 14px 14px; font-size:16px; padding:16px 18px; border-radius:12px; display:none; line-height:1.8; background:#fbf7ee; border:1.5px solid #e9906b; color:#4a4034; }
+#result b { color:#c96b3f; }
 
-#nextBtn { display:none; width:100%; background:#0071ec; color:#fff; border:none; padding:15px; border-radius:6px; font-size:16px; font-weight:bold; margin-bottom:8px; }
-#backBtn { display:none; width:100%; background:#fff; border:2px solid #0071ec; color:#0071ec; font-size:15px; font-weight:800; padding:13px; border-radius:6px; }
-#backBtn:hover { background:#eaf3fc; }
+#nextBtn { display:none; width:100%; background:#7c9473; color:#fff; border:none; padding:16px; border-radius:12px; font-size:18px; font-weight:bold; margin-bottom:8px; }
+#backBtn { display:none; width:100%; background:#fffdf8; border:2px solid #7c9473; color:#5c7a52; font-size:16.5px; font-weight:800; padding:14px; border-radius:12px; }
+#backBtn:hover { background:#eef2e6; box-shadow:0 0 0 3px rgba(124,148,115,.5); }
+#nextBtn:hover, #reviewBtn:hover, #endBackBtn:hover { box-shadow:0 0 0 3px rgba(124,148,115,.5); filter:brightness(1.05); }
 
-.end-msg { background:#fff; border:1px solid #dbe6f2; border-radius:6px; padding:28px 18px; text-align:center; font-size:16px; line-height:1.8; margin-bottom:14px; }
-#reviewBtn { display:none; width:100%; background:#dc2626; color:#fff; border:none; padding:15px; border-radius:6px; font-size:16px; font-weight:bold; margin-bottom:8px; }
+.end-msg { background:#fffdf8; border:1.5px solid #e4d9c2; border-radius:16px; padding:28px 18px; text-align:center; font-size:18px; line-height:1.8; margin-bottom:14px; color:#4a4034; }
+#reviewBtn { display:none; width:100%; background:#e9906b; color:#fff; border:none; padding:16px; border-radius:12px; font-size:18px; font-weight:bold; margin-bottom:8px; }
 
-footer { text-align:center; color:#5b6b7d; font-size:11.5px; margin-top:10px; line-height:1.7; padding:0 8px 20px; }
+footer { text-align:center; color:#a8987a; font-size:12.5px; margin-top:10px; line-height:1.7; padding:0 8px 20px; }
 
 .fw-particle { position:fixed; border-radius:50%; pointer-events:none; z-index:9999; animation:fw-burst 1.1s ease-out forwards; }
 @keyframes fw-burst { 0% { transform:translate(0,0) scale(1); opacity:1; } 100% { transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0; } }
@@ -105,19 +120,20 @@ footer { text-align:center; color:#5b6b7d; font-size:11.5px; margin-top:10px; li
   </div>
   <div class="timer-group">🕐 残り時間 <span id="timerVal">--:--</span></div>
 </div>
+<div id="crosslink"><a href="index.html">🐱 生成AIパスポートの模擬試験アプリはこちら →</a></div>
 
 <div class="wrap">
   <div class="sample-badge">全830問収録（IPA公式問題300問を含む）</div>
 
   <div id="menu-screen">
     <div class="menu">
-      <button class="wide mini" onclick="startMode('mini')"><span class="badge">⭐ おすすめ・短時間でサクッと</span><span class="mtitle">😻 ネコと学ぶITミニ試験</span><br>（20問・35:20:45比率・結果がすぐ出る）</button>
-      <button class="wide primary" onclick="startMode('exam')">😼 本番形式ランダム（100問・35:20:45の実際の出題比率で抽出）</button>
-      <button onclick="startCategory('strategy')">😺 ストラテジ系<br>（288問中ランダム100問）</button>
-      <button onclick="startCategory('management')">😸 マネジメント系<br>（168問中ランダム100問）</button>
-      <button onclick="startCategory('technology')">😹 テクノロジ系<br>（374問中ランダム100問）</button>
-      <button class="official" onclick="startMode('official')">🙀 IPA公式問題だけ<br>（令和6〜8年度・300問中ランダム100問）</button>
-      <button class="wide secondary" onclick="startMode('all')">😽 全問ランダム総復習<br>（830問中ランダム100問）</button>
+      <button class="wide mini" onclick="startMode('mini')"><span class="badge">⭐ おすすめ・短時間でサクッと</span><div class="gicon">😻</div><span class="mtitle">ネコと学ぶITミニ試験</span><br>（20問・35:20:45比率・結果がすぐ出る）</button>
+      <button class="wide primary" onclick="startMode('exam')"><div class="gicon">😼</div>本番形式ランダム<br>（100問・35:20:45の実際の出題比率で抽出）</button>
+      <button onclick="startCategory('strategy')"><div class="gicon">😺</div>ストラテジ系<br>（288問中ランダム100問）</button>
+      <button onclick="startCategory('management')"><div class="gicon">😸</div>マネジメント系<br>（168問中ランダム100問）</button>
+      <button onclick="startCategory('technology')"><div class="gicon">😹</div>テクノロジ系<br>（374問中ランダム100問）</button>
+      <button class="wide official" onclick="startMode('official')"><div class="gicon">🙀</div>IPA公式問題だけ<br>（令和6〜8年度・300問中ランダム100問）</button>
+      <button class="wide secondary" onclick="startMode('all')"><div class="gicon">😽</div>全問ランダム総復習<br>（830問中ランダム100問）</button>
     </div>
     <p class="menu-note">本番のITパスポート試験は100問・120分、出題比率はストラテジ系35%・マネジメント系20%・テクノロジ系45%だよ。「本番形式ランダム」はその比率のまま830問の中から100問を毎回ランダムに抽出するモード。「ネコと学ぶITミニ試験」は同じ比率のまま20問（7:4:9）だけ抽出する短時間版で、終了後に分野別の簡易評価が見られるよ。分野別演習・「IPA公式問題だけ」・「全問ランダム総復習」はどれも問題数が多くなってきたので、1回あたり最大100問をランダム抽出する方式にしたよ（何度もやると別の100問に当たるよ、結果もすぐ見られる）。「IPA公式問題だけ」はオリジナル問題を除いて、IPAが公開している令和6〜8年度の過去問（各問題の解説末尾に出典を明記）だけから出題するモード。オリジナル問題には計算問題・状況設定つきの問題も含まれているよ。</p>
 
@@ -150,7 +166,7 @@ footer { text-align:center; color:#5b6b7d; font-size:11.5px; margin-top:10px; li
   <div id="end-screen" style="display:none;">
     <div class="end-msg" id="endMsg"></div>
     <button id="reviewBtn" onclick="reviewWrong()"></button>
-    <button id="endBackBtn" style="display:block;width:100%;background:#0071ec;color:#fff;border:none;padding:15px;border-radius:6px;font-size:16px;font-weight:bold;" onclick="backToMenu()">分野選択に戻る</button>
+    <button id="endBackBtn" style="display:block;width:100%;background:#7c9473;color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:bold;" onclick="backToMenu()">分野選択に戻る</button>
   </div>
 </div>
 <footer>本ドリルは、IPA公開のITパスポート試験シラバス・出題分野を参考にClaudeが独自の言い回しで作成したオリジナル問題（530問）と、IPA（情報処理推進機構）が公開している令和6・7・8年度ITパスポート試験公開問題を基にした問題（計300問、解説末尾に出典を明記）で構成されています。<br>UIは「ITパスポート試験ドットコム」の見た目を参考にデザインしています</footer>
@@ -361,7 +377,7 @@ function showEnd(){
   const pct = Math.round(score / current.length * 100);
   const baseMsg = `お疲れさま！ ${current.length}問中 ${score}問正解（正答率${pct}%）でした。`;
   const cat = catReaction(pct);
-  const catHtml = `<div style="font-size:44px;line-height:1;margin:0 0 4px;">${cat.face}</div><p style="font-size:14px;color:#475569;margin:0 0 14px;font-weight:700;">${cat.line}</p>`;
+  const catHtml = `<div style="font-size:44px;line-height:1;margin:0 0 4px;">${cat.face}</div><p style="font-size:14px;color:#8a7a5c;margin:0 0 14px;font-weight:700;">${cat.line}</p>`;
   let fireworks = false;
 
   if(isScoredMode){
@@ -386,11 +402,11 @@ function showEnd(){
         ${passed ? '🎉 合格ライン到達' : '📕 合格ラインには未到達'}
       </div>
       <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:center;margin-bottom:8px;">
-        <tr style="background:#eaf3fc;"><th style="padding:6px;">分野</th><th style="padding:6px;">正解数</th><th style="padding:6px;">簡易評価点</th><th style="padding:6px;">判定</th></tr>
+        <tr style="background:#eef2e6;"><th style="padding:6px;">分野</th><th style="padding:6px;">正解数</th><th style="padding:6px;">簡易評価点</th><th style="padding:6px;">判定</th></tr>
         ${rows}
-        <tr style="background:#eaf3fc;font-weight:800;"><td style="padding:6px;">総合</td><td style="padding:6px;">${score}/${current.length}問</td><td style="padding:6px;">${overallPoint}点</td><td style="padding:6px;">${passOverall ? '✅ 600点以上' : '❌ 600点未満'}</td></tr>
+        <tr style="background:#eef2e6;font-weight:800;"><td style="padding:6px;">総合</td><td style="padding:6px;">${score}/${current.length}問</td><td style="padding:6px;">${overallPoint}点</td><td style="padding:6px;">${passOverall ? '✅ 600点以上' : '❌ 600点未満'}</td></tr>
       </table>
-      <p style="font-size:11.5px;color:#64748b;line-height:1.6;margin:6px 0 0;">※本番のITパスポート試験は問題の難易度を考慮したIRT方式で採点され、計算方法の詳細はIPAから公表されていない。ここでの評価点は単純な正答率を1000点満点に換算した簡易的な目安で、実際の評価点とは異なるよ。</p>
+      <p style="font-size:11.5px;color:#8a7a5c;line-height:1.6;margin:6px 0 0;">※本番のITパスポート試験は問題の難易度を考慮したIRT方式で採点され、計算方法の詳細はIPAから公表されていない。ここでの評価点は単純な正答率を1000点満点に換算した簡易的な目安で、実際の評価点とは異なるよ。</p>
     `;
   } else {
     const v = verdictBox(pct);
@@ -399,7 +415,7 @@ function showEnd(){
       <p style="margin:0 0 10px;">${baseMsg}</p>
       ${catHtml}
       <div style="display:inline-block;padding:10px 24px;border-radius:8px;font-size:18px;font-weight:800;margin:4px 0 10px;background:${v.bg};color:${v.color};border:1px solid ${v.border};">${v.label}</div>
-      <p style="font-size:11.5px;color:#64748b;line-height:1.6;margin:6px 0 0;">※このモードは本番の出題比率（ストラテジ35%・マネジメント20%・テクノロジ45%）どおりではないため、あくまで参考評価だよ。正式な合否判定は「本番形式ランダム」か「ネコと学ぶITミニ試験」で確認してね。</p>
+      <p style="font-size:11.5px;color:#8a7a5c;line-height:1.6;margin:6px 0 0;">※このモードは本番の出題比率（ストラテジ35%・マネジメント20%・テクノロジ45%）どおりではないため、あくまで参考評価だよ。正式な合否判定は「本番形式ランダム」か「ネコと学ぶITミニ試験」で確認してね。</p>
     `;
   }
 
