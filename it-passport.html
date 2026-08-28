@@ -29,9 +29,44 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
 body.fs-small #question { font-size:17px; }
 body.fs-small .choice-text { font-size:16px; }
 body.fs-small .catline { font-size:14px; }
+body.fs-small .qhead .progress { font-size:13.5px; }
+body.fs-small .menu button { font-size:13px; }
+body.fs-small .menu button.primary, body.fs-small .menu button.mini { font-size:14.5px; }
+body.fs-small .menu-note { font-size:12.5px; }
+body.fs-small .passline-box { font-size:12.5px; }
+body.fs-small .passline-box .plt { font-size:14.5px; }
+body.fs-small .passline-box .plnote { font-size:12px; }
+body.fs-small .sample-badge { font-size:12px; }
+body.fs-small .breadcrumb { font-size:12.5px; }
+body.fs-small #crosslink a { font-size:12.5px; }
+body.fs-small #subnav { font-size:13px; }
+body.fs-small #toolbar .toolbar-label, body.fs-small #toolbar .fs-btn, body.fs-small #toolbar .timer-group { font-size:13px; }
+body.fs-small #result { font-size:14.5px; }
+body.fs-small #nextBtn, body.fs-small #reviewBtn { font-size:16.5px; }
+body.fs-small #backBtn, body.fs-small #endBackBtn { font-size:15px; }
+body.fs-small .end-msg { font-size:16.5px; }
+body.fs-small footer { font-size:11.5px; }
+
 body.fs-large #question { font-size:22px; }
 body.fs-large .choice-text { font-size:20px; }
 body.fs-large .catline { font-size:17px; }
+body.fs-large .qhead .progress { font-size:17px; }
+body.fs-large .menu button { font-size:16.5px; }
+body.fs-large .menu button.primary, body.fs-large .menu button.mini { font-size:18px; }
+body.fs-large .menu-note { font-size:16px; }
+body.fs-large .passline-box { font-size:16px; }
+body.fs-large .passline-box .plt { font-size:18px; }
+body.fs-large .passline-box .plnote { font-size:15px; }
+body.fs-large .sample-badge { font-size:15px; }
+body.fs-large .breadcrumb { font-size:16px; }
+body.fs-large #crosslink a { font-size:15.5px; }
+body.fs-large #subnav { font-size:16px; }
+body.fs-large #toolbar .toolbar-label, body.fs-large #toolbar .fs-btn, body.fs-large #toolbar .timer-group { font-size:16px; }
+body.fs-large #result { font-size:18px; }
+body.fs-large #nextBtn, body.fs-large #reviewBtn { font-size:20.5px; }
+body.fs-large #backBtn, body.fs-large #endBackBtn { font-size:19px; }
+body.fs-large .end-msg { font-size:20.5px; }
+body.fs-large footer { font-size:14px; }
 
 #crosslink { text-align:center; padding:7px 16px; background:#fffdf8; border-bottom:1px solid #e4d9c2; }
 #crosslink a { color:#7c9473; font-size:13.5px; font-weight:700; text-decoration:none; }
@@ -99,6 +134,7 @@ body.fs-large .catline { font-size:17px; }
 
 .end-msg { background:#fffdf8; border:1.5px solid #e4d9c2; border-radius:16px; padding:28px 18px; text-align:center; font-size:18px; line-height:1.8; margin-bottom:14px; color:#4a4034; }
 #reviewBtn { display:none; width:100%; background:#e9906b; color:#fff; border:none; padding:16px; border-radius:12px; font-size:18px; font-weight:bold; margin-bottom:8px; }
+#endBackBtn { display:block; width:100%; background:#7c9473; color:#fff; border:none; padding:15px; border-radius:12px; font-size:16px; font-weight:bold; }
 
 footer { text-align:center; color:#a8987a; font-size:12.5px; margin-top:10px; line-height:1.7; padding:0 8px 20px; }
 
@@ -167,7 +203,7 @@ footer { text-align:center; color:#a8987a; font-size:12.5px; margin-top:10px; li
   <div id="end-screen" style="display:none;">
     <div class="end-msg" id="endMsg"></div>
     <button id="reviewBtn" onclick="reviewWrong()"></button>
-    <button id="endBackBtn" style="display:block;width:100%;background:#7c9473;color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:bold;" onclick="backToMenu()">分野選択に戻る</button>
+    <button id="endBackBtn" onclick="backToMenu()">分野選択に戻る</button>
   </div>
 </div>
 <footer>本ドリルは、IPA公開のITパスポート試験シラバス・出題分野を参考にClaudeが独自の言い回しで作成したオリジナル問題（530問）と、IPA（情報処理推進機構）が公開している令和6・7・8年度ITパスポート試験公開問題を基にした問題（計300問、解説末尾に出典を明記）で構成されています。<br>UIは「ITパスポート試験ドットコム」の見た目を参考にデザインしています</footer>
