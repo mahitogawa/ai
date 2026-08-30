@@ -657,6 +657,15 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   --font-size: 16px;
 }
 
+/* 途中再開ポップアップ（メイン学習モード用） */
+.resume-game-overlay { position:fixed; inset:0; background:rgba(6,13,24,.65); display:none; align-items:center; justify-content:center; z-index:10000; padding:20px; }
+.resume-game-card { background:#fff; border-radius:16px; padding:26px 22px; max-width:360px; width:100%; text-align:center; box-shadow:0 10px 32px rgba(0,0,0,.3); }
+.resume-game-icon { font-size:38px; margin:0 0 6px; }
+.resume-game-title { font-size:16.5px; font-weight:800; color:#1a3a5c; margin:0 0 18px; line-height:1.6; }
+.resume-game-card button { display:block; width:100%; border-radius:10px; padding:12px; font-size:15px; font-weight:800; margin-bottom:9px; border:1.5px solid transparent; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+.resume-game-continue { background:#00a8c6; color:#fff; }
+.resume-game-restart { background:#fff; color:#64748b; border-color:#c8d8e8; margin-bottom:0; }
+
 
 /* ===== HEADER ===== */
 #header {
@@ -1270,6 +1279,16 @@ body.fz-large #ox-question { font-size:28px !important; }
 </style>
 </head>
 <body>
+
+<!-- 途中再開ポップアップ（メイン学習モード用） -->
+<div id="resumeGameOverlay" class="resume-game-overlay">
+  <div class="resume-game-card">
+    <div class="resume-game-icon">😼</div>
+    <p class="resume-game-title" id="resumeGameText">前回の続きから再開する？</p>
+    <button class="resume-game-continue" onclick="resumeGameSession()">続きから再開</button>
+    <button class="resume-game-restart" onclick="dismissGameResume()">最初から始める</button>
+  </div>
+</div>
 
 <!-- ===== 表紙（スタート画面）===== -->
 <div id="start-screen">
@@ -2582,6 +2601,98 @@ function clearAllSavedProgress(){
 
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
 
+// ===== 学習途中セッションの自動保存・再開（メイン学習モード用） =====
+const GAME_RUN_KEY = "ai_passport_game_run_v1";
+
+// シャッフルされた選択肢の順番に依存しない、問題を一意に識別するためのキー
+function stableQid(q){ return (q.cat||'') + '::' + (q.q||''); }
+
+function saveGameProgress(){
+  try{
+    const data = {
+      title: document.querySelector('#game-screen h2').textContent,
+      timerVisible: document.getElementById('timer').style.display !== 'none',
+      qids: currentQuiz.map(stableQid),
+      idx: currentIndex,
+      score: score,
+      wrongIds: wrongList.map(stableQid),
+      flagged: flagged,
+      timeLeft: timeLeft,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(GAME_RUN_KEY, JSON.stringify(data));
+  }catch(e){ /* 容量オーバー等は無視してアプリ動作は継続 */ }
+}
+
+function clearGameRun(){
+  try{ localStorage.removeItem(GAME_RUN_KEY); }catch(e){}
+}
+
+function loadGameRun(){
+  try{
+    const raw = localStorage.getItem(GAME_RUN_KEY);
+    if(!raw) return null;
+    const data = JSON.parse(raw);
+    if(!data || !Array.isArray(data.qids) || data.qids.length===0) return null;
+    if(typeof data.idx !== 'number' || data.idx < 0 || data.idx >= data.qids.length) return null;
+    return data;
+  }catch(e){ return null; }
+}
+
+// アプリ起動時、途中のセッションが残っていたら再開確認ポップアップを出す
+function checkGameResume(){
+  const run = loadGameRun();
+  if(!run) return;
+  document.getElementById('resumeGameText').textContent = `前回の続き（${run.title}・${run.idx+1}問目）から再開する？`;
+  document.getElementById('resumeGameOverlay').style.display = 'flex';
+}
+
+function resumeGameSession(){
+  const overlay = document.getElementById('resumeGameOverlay');
+  overlay.style.display = 'none';
+  const run = loadGameRun();
+  if(!run) return;
+  const source = [...quizData, ...important20Data];
+  const byId = {};
+  source.forEach(q=>{ byId[stableQid(q)] = q; });
+  const rebuilt = run.qids.map(id=>byId[id]).filter(Boolean);
+  if(rebuilt.length !== run.qids.length){
+    // 問題データが更新されて一部の問題が見つからない場合は、再開を諦めて最初からに切り替える
+    dismissGameResume();
+    return;
+  }
+  currentQuiz = rebuilt.map(q=>{
+    const copy = JSON.parse(JSON.stringify(q));
+    const cor = copy.a[copy.c];
+    shuffle(copy.a);
+    copy.c = copy.a.indexOf(cor);
+    return copy;
+  });
+  currentIndex = Math.min(run.idx, currentQuiz.length-1);
+  score = run.score || 0;
+  const wrongIds = Array.isArray(run.wrongIds) ? run.wrongIds : [];
+  wrongList = wrongIds.map(id=>byId[id]).filter(Boolean);
+  flagged = (Array.isArray(run.flagged) && run.flagged.length===currentQuiz.length) ? run.flagged.slice() : new Array(currentQuiz.length).fill(false);
+  hideAllMainScreens();
+  document.getElementById('game-screen').style.display = 'block';
+  document.querySelector('#game-screen h2').textContent = run.title || '';
+  clearInterval(timer);
+  if(run.timerVisible){
+    document.getElementById('timer').style.display = 'block';
+    timeLeft = run.timeLeft || 0;
+    startTimer();
+  } else {
+    document.getElementById('timer').style.display = 'none';
+    timeLeft = 0;
+  }
+  show();
+}
+
+function dismissGameResume(){
+  document.getElementById('resumeGameOverlay').style.display = 'none';
+  clearGameRun();
+}
+
 function hideAllMainScreens() {
     ["start-screen","cheat-screen","game-screen","final-screen","ox-screen","ox-final-screen","fuzuki-screen","fuzuki-final-screen","g-sample-screen"].forEach(id => {
         const el = document.getElementById(id);
@@ -2852,9 +2963,10 @@ function check(ok,btn,q){
     document.getElementById("nextBtn").style.display="block";
 }
 
-function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ show(); } else { finish(); } }
+function next(){ currentIndex++; if(currentIndex<currentQuiz.length){ saveGameProgress(); show(); } else { finish(); } }
 
 function finish(){
+    clearGameRun();
     clearInterval(timer);
     document.getElementById("game-screen").style.display="none";
     document.getElementById("final-screen").style.display="block";
@@ -2895,6 +3007,7 @@ function retryAll(){ location.reload(); }
 
 document.addEventListener('DOMContentLoaded', () => {
     updateSavedScoreBox();
+    checkGameResume();
     // URLパラメータでG検定サンプルを自動起動
     const params = new URLSearchParams(window.location.search);
     if (params.get('exam') === 'g') {
