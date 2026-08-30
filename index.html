@@ -2673,7 +2673,7 @@ function clearAllSavedProgress(){
     alert('保存記録をすべて消しました');
 }
 
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 // ===== 学習途中セッションの自動保存・再開（メイン学習モード用） =====
 const GAME_RUN_KEY = "ai_passport_game_run_v1";
@@ -5020,15 +5020,6 @@ function updateTimerDisplay() {
   el.style.color = secondsLeft < 300 ? '#ff4444' : '#fff';
 }
 
-// ===== SHUFFLE =====
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 // ===== START =====
 function startExam() {
