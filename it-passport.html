@@ -124,6 +124,22 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
   margin-bottom:16px;
 }
 
+#info-screen {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0,168,198,0.18) 0%, transparent 60%),
+    linear-gradient(170deg, #0d1e33 0%, #060d18 100%);
+  border-radius:20px;
+  padding:18px 16px 22px;
+  box-shadow:0 8px 32px rgba(0,168,198,0.18), 0 2px 40px rgba(0,0,0,0.6);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:16px;
+}
+#info-screen h2 { color:#fde68a; font-size:19px; margin:0 0 14px; }
+.info-link { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; background:rgba(255,255,255,.05); color:#7ec8e3; border:1px solid rgba(0,168,198,.35); border-radius:12px; padding:13px 10px; font-size:14.5px; font-weight:700; margin:2px 0 4px; }
+.info-link:hover { background:rgba(0,168,198,.12); }
+.info-back-btn { display:block; width:100%; background:var(--navy); color:#fff; border:none; padding:15px; border-radius:12px; font-size:16px; font-weight:bold; box-shadow:0 4px 0 var(--navy-dark); margin-top:10px; }
+
 .menu { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:8px; }
 .menu button { background:radial-gradient(ellipse at 50% 20%, rgba(0,168,198,0.18) 0%, transparent 70%), linear-gradient(170deg, #0d1e33 0%, #0a1626 100%); color:#fde68a; font-size:14.5px; padding:16px 8px; border-radius:14px; border:1px solid rgba(251,191,36,.25); font-weight:700; line-height:1.45; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05); position:relative; transition:transform .12s, box-shadow .12s, border-color .12s; }
 .menu button:hover { transform:translateY(-3px); border-color:rgba(251,191,36,.6); }
@@ -260,6 +276,11 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
       <button class="secondary" onclick="startMode('all')"><div class="gicon">😽</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（830問中ランダム100問）</div></button>
       <button class="crosslink-btn" onclick="location.href='index.html'"><div class="gicon">🐱</div><div class="mtitle">生成AIパスポート</div><div class="msub">模擬試験アプリはこちら →</div></button>
     </div>
+    <button class="info-link" onclick="showInfoScreen()">📖 出題形式・合格ラインについて →</button>
+  </div>
+
+  <div id="info-screen" style="display:none;">
+    <h2>📖 出題形式・合格ラインについて</h2>
     <p class="menu-note">本番のITパスポート試験は100問・120分、出題比率はストラテジ系35%・マネジメント系20%・テクノロジ系45%だよ。「本番形式ランダム」はその比率のまま830問の中から100問を毎回ランダムに抽出するモード。「ネコと学ぶITミニ試験」は同じ比率のまま20問（7:4:9）だけ抽出する短時間版で、終了後に分野別の簡易評価が見られるよ。分野別演習・「IPA公式問題だけ」・「全問ランダム総復習」はどれも問題数が多くなってきたので、1回あたり最大100問をランダム抽出する方式にしたよ（何度もやると別の100問に当たるよ、結果もすぐ見られる）。「IPA公式問題だけ」はオリジナル問題を除いて、IPAが公開している令和6〜8年度の過去問（各問題の解説末尾に出典を明記）だけから出題するモード。オリジナル問題には計算問題・状況設定つきの問題も含まれているよ。</p>
 
     <div class="passline-box">
@@ -271,6 +292,7 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
       <p>この2つを<b>両方</b>満たして初めて合格。総合700点取れていても、どれか1分野が300点未満なら不合格になるよ。</p>
       <p class="plnote">※この点数は単純な正答率ではなく、問題の難易度を考慮した項目応答理論（IRT）方式で採点される。100問のうち実は8問はダミー（採点対象外）で、計算方法の詳細はIPAから公表されていないよ。目安として7〜8割正解を目指すのがおすすめ。</p>
     </div>
+    <button class="info-back-btn" onclick="closeInfoScreen()">← 戻る</button>
   </div>
 
   <div id="quiz-screen" style="display:none;">
@@ -768,6 +790,17 @@ function backToMenu(){
   document.getElementById('menu-screen').style.display='block';
   renderMenuStats();
   checkResume(); // 途中で「分野選択に戻る」した場合も、その場で再開ポップアップを出す
+}
+
+function showInfoScreen(){
+  document.getElementById('menu-screen').style.display='none';
+  document.getElementById('info-screen').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function closeInfoScreen(){
+  document.getElementById('info-screen').style.display='none';
+  document.getElementById('menu-screen').style.display='block';
 }
 
 renderMenuStats();
