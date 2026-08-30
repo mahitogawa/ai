@@ -6,6 +6,26 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="app-build" content="20260830161608">
+<script>
+// 古いキャッシュされたページが開かれた場合に自動で最新版へ切り替える仕組み。
+// no-storeで実ファイルを取りに行き、埋め込まれたビルドIDを比較して、違えば
+// 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
+(function(){
+  try{
+    var LOCAL_BUILD = "20260830161608";
+    var params = new URLSearchParams(location.search);
+    if(params.get('v') === LOCAL_BUILD) return;
+    fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
+      var m = html.match(/<meta name="app-build" content="([^"]+)">/);
+      var remoteBuild = m && m[1];
+      if(remoteBuild && remoteBuild !== LOCAL_BUILD){
+        location.replace(location.pathname + '?v=' + remoteBuild);
+      }
+    }).catch(function(){});
+  }catch(e){}
+})();
+</script>
 <title>生成AIパスポート 無料対策アプリ｜全419問2026年対応【合格者続出】</title>
 <meta name="description" content="生成AIパスポート試験を無料で対策。全419問・2026年新シラバス完全対応。カテゴリ別演習・略語チートシート・AI先生に質問機能搭載。脳梗塞リハビリ中の開発者が制作。">
 <meta name="keywords" content="生成AIパスポート,AI試験,対策アプリ,無料,2026,G検定,AI資格,ドリル,問題集,419問,GUGA,AI検定,プロンプト,LLM,RAG,生成AI,資格対策,スマホ">
