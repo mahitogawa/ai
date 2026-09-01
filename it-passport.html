@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260901140000">
+<meta name="app-build" content="20260901160000">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260901140000";
+    var LOCAL_BUILD = "20260901160000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -156,7 +156,7 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .breadcrumb span { color:#94a3b8; }
 
 .sample-badge { display:inline-block; margin-bottom:14px; padding:6px 15px; border-radius:20px; font-size:13px; font-weight:700; background:rgba(34,211,238,.1); color:var(--teal); border:1px solid rgba(34,211,238,.3); }
-#gc-visits { color:var(--teal); font-size:13px; margin-top:-6px; margin-bottom:14px; font-weight:700; }
+#gc-visits { color:var(--teal); font-size:13px; margin-top:-6px; margin-bottom:14px; font-weight:700; text-align:center; }
 
 #menu-screen {
   background:
@@ -299,7 +299,7 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
 </div>
 
 <div class="wrap">
-  <div class="sample-badge">全830問収録（IPA公式問題300問を含む）</div>
+  <button class="info-link" onclick="showInfoScreen()">📖 出題形式・合格ラインについて →</button>
   <p id="gc-visits">👀 訪問者数：読み込み中...</p>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
@@ -320,7 +320,6 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
       <button class="secondary" onclick="startMode('all')"><div class="gicon">😽</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（830問中ランダム100問）</div></button>
       <button class="crosslink-btn" onclick="location.href='index.html'"><div class="gicon">🐱</div><div class="mtitle">生成AIパスポート</div><div class="msub">模擬試験アプリはこちら →</div></button>
     </div>
-    <button class="info-link" onclick="showInfoScreen()">📖 出題形式・合格ラインについて →</button>
   </div>
 
   <div id="info-screen" style="display:none;">
