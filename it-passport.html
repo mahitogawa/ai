@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260901000000">
+<meta name="app-build" content="20260901120000">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260901000000";
+    var LOCAL_BUILD = "20260901120000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -90,7 +90,7 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
   .phone-frame { width:100%; margin:0; padding:0; border-radius:0; box-shadow:none; background:transparent; }
   .phone-notch { display:none; }
   .phone-screen { height:100dvh; border-radius:0; }
-  .phone-screen > #topHeader { border-radius:0; padding-top:16px; }
+  .phone-screen > #topHeader { border-radius:0; padding-top:calc(env(safe-area-inset-top, 0px) + 16px); }
 }
 
 #topHeader { background:var(--navy); padding:16px; border-bottom:1px solid rgba(34,211,238,.25); }
