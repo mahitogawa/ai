@@ -6,14 +6,21 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260831160617">
+<meta name="app-build" content="20260901000000">
+<link rel="manifest" href="manifest-itpassport.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ITドリル">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0a1a2e">
 <script>
 // 古いキャッシュされたページが開かれた場合に自動で最新版へ切り替える仕組み。
 // no-storeで実ファイルを取りに行き、埋め込まれたビルドIDを比較して、違えば
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260831160617";
+    var LOCAL_BUILD = "20260901000000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){

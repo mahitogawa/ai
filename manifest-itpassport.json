@@ -1,0 +1,20 @@
+{
+  "name": "ITパスポート試験対策ドリル",
+  "short_name": "ITドリル",
+  "description": "ITパスポート試験対策アプリ。全830問収録（IPA公式問題300問を含む）。",
+  "start_url": "/ai/it-passport.html",
+  "scope": "/ai/it-passport.html",
+  "display": "standalone",
+  "background_color": "#0a1a2e",
+  "theme_color": "#0a1a2e",
+  "lang": "ja",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
