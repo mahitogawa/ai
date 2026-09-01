@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260901120000">
+<meta name="app-build" content="20260901140000">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260901120000";
+    var LOCAL_BUILD = "20260901140000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -96,7 +96,6 @@ button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; c
 #topHeader { background:var(--navy); padding:16px; border-bottom:1px solid rgba(34,211,238,.25); }
 #topHeader .eyebrow { font-size:12px; color:#5fd3ea; letter-spacing:2px; margin:0 0 4px; font-weight:700; }
 #topHeader h1 { font-size:24px; margin:0; color:#e0f7ff; font-weight:900; letter-spacing:.01em; }
-#subnav { background:rgba(10,26,46,.6); color:#5fd3ea; padding:10px 16px; font-size:14px; font-weight:700; letter-spacing:.02em; text-align:center; border-bottom:1px solid rgba(34,211,238,.15); }
 #toolbar { background:var(--navy-dark); color:#fff; padding:9px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid rgba(34,211,238,.15); }
 #toolbar .toolbar-label { font-size:14px; font-weight:700; margin-right:4px; color:rgba(255,255,255,.65); }
 #toolbar .fs-btn { background:transparent; border:1.5px solid rgba(34,211,238,.4); color:#fff; padding:5px 15px; border-radius:8px; margin:0 3px; font-weight:700; font-size:14px; }
@@ -115,7 +114,6 @@ body.fs-small .passline-box .plnote { font-size:12px; }
 body.fs-small .sample-badge { font-size:12px; }
 body.fs-small .breadcrumb { font-size:12.5px; }
 body.fs-small #crosslink a { font-size:12.5px; }
-body.fs-small #subnav { font-size:13px; }
 body.fs-small #toolbar .toolbar-label, body.fs-small #toolbar .fs-btn, body.fs-small #toolbar .timer-group { font-size:13px; }
 body.fs-small #result { font-size:14.5px; }
 body.fs-small #nextBtn, body.fs-small #reviewBtn { font-size:16.5px; }
@@ -139,7 +137,6 @@ body.fs-large .passline-box .plnote { font-size:15px; }
 body.fs-large .sample-badge { font-size:15px; }
 body.fs-large .breadcrumb { font-size:16px; }
 body.fs-large #crosslink a { font-size:15.5px; }
-body.fs-large #subnav { font-size:16px; }
 body.fs-large #toolbar .toolbar-label, body.fs-large #toolbar .fs-btn, body.fs-large #toolbar .timer-group { font-size:16px; }
 body.fs-large #result { font-size:18px; }
 body.fs-large #nextBtn, body.fs-large #reviewBtn { font-size:20.5px; }
@@ -159,6 +156,7 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .breadcrumb span { color:#94a3b8; }
 
 .sample-badge { display:inline-block; margin-bottom:14px; padding:6px 15px; border-radius:20px; font-size:13px; font-weight:700; background:rgba(34,211,238,.1); color:var(--teal); border:1px solid rgba(34,211,238,.3); }
+#gc-visits { color:var(--teal); font-size:13px; margin-top:-6px; margin-bottom:14px; font-weight:700; }
 
 #menu-screen {
   background:
@@ -282,7 +280,6 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
   <p class="eyebrow">ITパスポート試験 対策ドリル</p>
   <h1>🐱 ITパスポート対策ドリル</h1>
 </div>
-<div id="subnav">分野別演習　｜　本番形式ランダム　｜　全830問ランダム</div>
 <div id="toolbar">
   <div class="fs-group">
     <span class="toolbar-label">文字サイズ</span>
@@ -303,6 +300,13 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
 
 <div class="wrap">
   <div class="sample-badge">全830問収録（IPA公式問題300問を含む）</div>
+  <p id="gc-visits">👀 訪問者数：読み込み中...</p>
+  <script>
+    fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
+      .then(r => r.json())
+      .then(d => { document.getElementById('gc-visits').textContent = '👀 訪問者数：' + d.count + ' 人'; })
+      .catch(() => { document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
+  </script>
 
   <div id="menu-screen">
     <div id="statsCard"></div>
