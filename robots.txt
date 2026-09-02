@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mahitogawa.github.io/ai/sitemap.xml

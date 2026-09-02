@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260902100000">
+<meta name="app-build" content="20260902110000">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260902100000";
+    var LOCAL_BUILD = "20260902110000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -47,6 +47,60 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【全830問・無料】ITパスポート試験 過去問対策ドリル">
 <meta name="twitter:description" content="IPA公式過去問を含む全830問を完全無料で演習。本番同様の出題比率・分野別特訓・スキマ時間用ミニ試験を搭載。スマホ対応・登録不要ですぐ解けます。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ITパスポート試験 過去問対策ドリル",
+  "description": "IPA公式過去問を含む全830問を完全無料で演習できるITパスポート試験対策アプリ。",
+  "url": "https://mahitogawa.github.io/ai/it-passport.html",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ja",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ITパスポート試験の合格ラインは？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "総合評価点600点以上（1000点満点）に加えて、ストラテジ系・マネジメント系・テクノロジ系それぞれの分野別評価点が300点以上（1000点満点）である必要があります。この2つを両方満たして初めて合格となります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ITパスポート試験の出題形式は？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本番のITパスポート試験は100問・120分、出題比率はストラテジ系35%・マネジメント系20%・テクノロジ系45%です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "このドリルは何問収録されていますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "オリジナル問題530問とIPA公式過去問（令和6〜8年度）300問を合わせた、全830問を収録しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "料金はかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "完全無料で、会員登録なしですぐに利用できます。"
+      }
+    }
+  ]
+}
+</script>
 <style>
 html { -webkit-text-size-adjust: 100%; }
 * { box-sizing: border-box; }
