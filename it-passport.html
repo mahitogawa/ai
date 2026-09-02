@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260902110000">
+<meta name="app-build" content="20260902120000">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260902110000";
+    var LOCAL_BUILD = "20260902120000";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -253,7 +253,8 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
   margin-bottom:16px;
 }
 #info-screen h2 { color:#7ee8fa; font-size:19px; margin:0 0 14px; }
-.info-link { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; background:rgba(255,255,255,.05); color:#5fd3ea; border:1px dashed rgba(34,211,238,.45); border-radius:12px; padding:13px 10px; font-size:14.5px; font-weight:700; margin:2px 0 4px; }
+.info-link { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; width:100%; background:rgba(255,255,255,.05); color:#5fd3ea; border:1px dashed rgba(34,211,238,.45); border-radius:12px; padding:13px 10px; font-size:14.5px; font-weight:700; margin:2px 0 4px; }
+.info-link #gc-visits { margin:0; padding:0; font-size:12.5px; font-weight:600; }
 .info-link:hover { background:rgba(34,211,238,.1); }
 .info-back-btn { display:block; width:100%; background:rgba(34,211,238,.08); color:#d7f5fb; border:1px solid rgba(34,211,238,.4); padding:15px; border-radius:12px; font-size:16px; font-weight:bold; box-shadow:none; margin-top:10px; }
 
@@ -366,8 +367,10 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
 </div>
 
 <div class="wrap">
-  <button class="info-link" onclick="showInfoScreen()">📖 出題形式・合格ラインについて →</button>
-  <p id="gc-visits">👀 訪問者数：読み込み中...</p>
+  <button class="info-link" onclick="showInfoScreen()">
+    <span>📖 出題形式・合格ラインについて →</span>
+    <span id="gc-visits">👀 訪問者数：読み込み中...</span>
+  </button>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
       .then(r => r.json())
