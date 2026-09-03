@@ -3114,6 +3114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 表紙画面が一瞬見えてしまわないよう、待たずにすぐ切り替える
     if (params.get('screen') === 'cheat') {
       showCheat();
+      // 表紙を隠すための一時クラスはここで役目終わり。外しておかないと、
+      // 「戻る」で表紙に戻ろうとしてもCSSのdisplay:none(!important)が
+      // 効いたままになり、表紙が二度と表示されなくなってしまう
+      document.documentElement.classList.remove('jump-cheat');
     }
 });
 
