@@ -223,7 +223,7 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .breadcrumb span { color:#94a3b8; }
 
 .sample-badge { display:inline-block; margin-bottom:14px; padding:6px 15px; border-radius:20px; font-size:13px; font-weight:700; background:rgba(34,211,238,.1); color:var(--teal); border:1px solid rgba(34,211,238,.3); }
-#gc-visits { color:var(--teal); font-size:13px; margin-top:-6px; margin-bottom:14px; font-weight:700; text-align:center; }
+#gc-visits { color:var(--teal); font-size:12.5px; font-weight:700; display:inline-block; margin-top:6px; }
 
 #menu-screen {
   background:
@@ -254,7 +254,6 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 }
 #info-screen h2 { color:#7ee8fa; font-size:19px; margin:0 0 14px; }
 .info-link { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; width:100%; background:rgba(255,255,255,.05); color:#5fd3ea; border:1px dashed rgba(34,211,238,.45); border-radius:12px; padding:13px 10px; font-size:14.5px; font-weight:700; margin:2px 0 4px; }
-.info-link #gc-visits { margin:0; padding:0; font-size:12.5px; font-weight:600; }
 .info-link:hover { background:rgba(34,211,238,.1); }
 .info-back-btn { display:block; width:100%; background:rgba(34,211,238,.08); color:#d7f5fb; border:1px solid rgba(34,211,238,.4); padding:15px; border-radius:12px; font-size:16px; font-weight:bold; box-shadow:none; margin-top:10px; }
 
@@ -295,27 +294,29 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .passline-box li { margin:0 0 2px; }
 .passline-box .plnote { font-size:13px; color:rgba(190,235,245,.55); margin:6px 0 0; }
 
-.qcard { background:linear-gradient(170deg, #0d1e2e 0%, #071019 100%); border:1px solid rgba(34,211,238,.25); border-radius:16px; padding:0; overflow:hidden; margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,.4); }
-.qcard .qhead { background:var(--navy); padding:12px 18px; border-bottom:1px solid rgba(34,211,238,.2); }
-.qhead .catline { font-size:15px; color:#5fd3ea; font-weight:800; margin:0 0 4px; }
-.qhead .progress { font-size:15px; color:#fff; font-weight:800; float:right; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:4px 11px; }
-#question { font-size:19px; font-weight:700; line-height:1.8; padding:16px 18px; margin:14px; background:rgba(34,211,238,.05); border:1px solid rgba(34,211,238,.25); border-radius:10px; color:#dff6fb; }
+.qcard { background:#fdfdfd; border:1px solid #c7cbd1; border-radius:10px; padding:0; overflow:hidden; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+.qcard .qhead { background:#e9ebee; padding:12px 18px; border-bottom:1px solid #c7cbd1; }
+.qhead .catline { font-size:15px; color:#2b2f36; font-weight:800; margin:0 0 4px; }
+.qhead .progress { font-size:15px; color:#1a1d22; font-weight:800; float:right; background:#fff; border:1px solid #b7bcc4; border-radius:12px; padding:4px 11px; }
+#question { font-size:19px; font-weight:700; line-height:1.8; padding:16px 18px; margin:14px; background:#fff; border:1px solid #c7cbd1; border-radius:6px; color:#1a1d22; }
 
 #answers { display:flex; flex-direction:column; gap:10px; padding:0 14px 16px; }
-#answers .choice-item { display:flex; align-items:flex-start; gap:14px; background:rgba(255,255,255,.03); border:2px solid rgba(34,211,238,.22); border-radius:12px; padding:14px 16px; cursor:pointer; transition:background .15s, border-color .15s; }
-#answers .choice-item:hover { background:rgba(34,211,238,.08); border-color:var(--teal); }
-#answers .choice-item .choice-label { flex-shrink:0; width:32px; height:32px; border:2px solid rgba(34,211,238,.4); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#9fd8e8; background:rgba(10,26,46,.6); }
-#answers .choice-item .choice-text { font-size:17.5px; line-height:1.7; color:#dff6fb; word-break:break-word; padding-top:4px; }
-#answers .choice-item.correct { background:rgba(16,185,129,.15); border-color:#10b981; }
-#answers .choice-item.correct .choice-label { background:#10b981; border-color:#10b981; color:#fff; }
-#answers .choice-item.correct .choice-text { color:#6ee7b7; font-weight:700; }
-#answers .choice-item.wrong { background:rgba(239,68,68,.15); border-color:#ef4444; }
-#answers .choice-item.wrong .choice-label { background:#ef4444; border-color:#ef4444; color:#fff; }
-#answers .choice-item.wrong .choice-text { color:#fca5a5; }
+#answers .choice-item { display:flex; align-items:flex-start; gap:14px; background:#fff; border:1.5px solid #b7bcc4; border-radius:6px; padding:14px 16px; cursor:pointer; transition:background .15s, border-color .15s; }
+#answers .choice-item:hover { background:#f0f2f4; border-color:#7a8290; }
+#answers .choice-item .choice-label { flex-shrink:0; width:32px; height:32px; border:1.5px solid #9aa1ac; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#2b2f36; background:#eef0f2; }
+#answers .choice-item .choice-text { font-size:17.5px; line-height:1.7; color:#1a1d22; word-break:break-word; padding-top:4px; }
+#answers .choice-item.correct { background:#fff; border-color:#1a7f37; }
+#answers .choice-item.correct .choice-label { background:#1a7f37; border-color:#1a7f37; color:#fff; }
+#answers .choice-item.correct .choice-text { color:#166534; font-weight:700; }
+#answers .choice-item.wrong { background:#fff; border-color:#c0392b; }
+#answers .choice-item.wrong .choice-label { background:#c0392b; border-color:#c0392b; color:#fff; }
+#answers .choice-item.wrong .choice-text { color:#a3241a; }
 #answers .choice-item.disabled-item { pointer-events:none; }
+#answers .choice-item.picked { background:#e9ebee; border-color:#5c6672; }
+#answers .choice-item.picked .choice-label { background:#5c6672; border-color:#5c6672; color:#fff; }
 
-#result { margin:0 14px 14px; font-size:16px; padding:14px 16px; border-radius:0 10px 10px 0; display:none; line-height:1.8; background:rgba(34,211,238,.06); border-left:4px solid #22d3ee; color:#dff6fb; }
-#result b { color:var(--selected-blue); }
+#result { margin:0 0 14px; font-size:16px; padding:14px 16px; border-radius:8px; display:none; line-height:1.8; background:#f0f2f4; border-left:4px solid #7a8290; color:#1a1d22; }
+#result b { color:#1a1d22; }
 
 #nextBtn { display:none; width:100%; background:var(--teal); color:#04141f; border:none; padding:16px; border-radius:12px; font-size:18px; font-weight:bold; margin-bottom:8px; box-shadow:0 4px 0 var(--teal-hover); }
 #backBtn { display:none; width:100%; background:transparent; border:2px solid rgba(34,211,238,.5); color:#9fd8e8; font-size:16.5px; font-weight:800; padding:14px; border-radius:12px; }
@@ -369,7 +370,6 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
 <div class="wrap">
   <button class="info-link" onclick="showInfoScreen()">
     <span>📖 出題形式・合格ラインについて →</span>
-    <span id="gc-visits">👀 訪問者数：読み込み中...</span>
   </button>
   <script>
     fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
@@ -429,7 +429,7 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
     <button id="endBackBtn" onclick="backToMenu()">分野選択に戻る</button>
   </div>
 </div>
-<footer>2026年対応｜IPAシラバスVer.6.5<br>全830問｜オリジナル530問＋公開問題300問<br>© Mahito</footer>
+<footer>2026年対応｜IPAシラバスVer.6.5<br>全830問｜オリジナル530問＋公開問題300問<br>© Mahito<br><span id="gc-visits">👀 訪問者数：読み込み中...</span></footer>
 </div>
 </div>
 
@@ -784,11 +784,17 @@ function showQuestion(){
 
 function selectAnswer(i){
   const q = current[idx];
+  // 「全問ランダム総復習」だけは本番の雰囲気に寄せて、選んだ場だと正誤・解説を出さずに次へ進める
+  const examLike = (currentMode === 'all');
   const items = document.querySelectorAll('.choice-item');
   items.forEach((el,i2)=>{
     el.classList.add('disabled-item');
-    if(i2===q.c) el.classList.add('correct');
-    else if(i2===i) el.classList.add('wrong');
+    if(examLike){
+      if(i2===i) el.classList.add('picked');
+    } else {
+      if(i2===q.c) el.classList.add('correct');
+      else if(i2===i) el.classList.add('wrong');
+    }
   });
   catScore[q.cat].total++;
   const isCorrect = i===q.c;
@@ -796,8 +802,12 @@ function selectAnswer(i){
   else { wrongQuestions.push(q); saveWrongQuestion(q.qid); }
   updateStats(isCorrect);
   const result = document.getElementById('result');
-  result.style.display='block';
-  result.innerHTML = `<b>正解：${choiceLabels[q.c]}</b><br>${q.d}`;
+  if(examLike){
+    result.style.display='none';
+  } else {
+    result.style.display='block';
+    result.innerHTML = `<b>正解：${choiceLabels[q.c]}</b><br>${q.d}`;
+  }
   document.getElementById('nextBtn').style.display='block';
 }
 
