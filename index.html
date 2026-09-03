@@ -455,6 +455,11 @@ button.choice { padding:22px; margin:10px 0; width:100%; border-radius:15px; bor
   color: #60a5fa;
   font-weight: bold;
 }
+.cheat-exam-btn.active {
+  background: #1e3a5f !important;
+  border-color: #fbbf24 !important;
+  color: #fbbf24 !important;
+}
 .icon-card:hover  { border-color: rgba(251,191,36,0.6); transform: translateY(-2px); }
 .icon-card .ic-badge {
   width: 52px;
@@ -1484,6 +1489,10 @@ body.fz-large #ox-question { font-size:28px !important; }
     <button onclick="hideCheat()" style="background:#334155; color:#fff; border:none; border-radius:20px; padding:8px 20px; font-size:16px; cursor:pointer;">← 戻る</button>
   </div>
   <div style="color:#94a3b8; font-size:18px; margin-bottom:16px;">2026年新シラバス対応 ／ タップで解説を表示</div>
+  <div style="display:flex; gap:8px; margin-bottom:14px;">
+    <button class="cheat-exam-btn active" data-exam="ai" onclick="setCheatExam('ai')" style="flex:1; padding:12px; border-radius:12px; border:1px solid #334155; background:#1e293b; color:#94a3b8; font-size:16px; font-weight:bold; cursor:pointer;">🤖 生成AIパスポート</button>
+    <button class="cheat-exam-btn" data-exam="it" onclick="setCheatExam('it')" style="flex:1; padding:12px; border-radius:12px; border:1px solid #334155; background:#1e293b; color:#94a3b8; font-size:16px; font-weight:bold; cursor:pointer;">💻 ITパスポート</button>
+  </div>
   <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." style="width:100%; box-sizing:border-box; padding:14px 16px; margin-bottom:12px; background:#1e293b; border:1px solid #334155; border-radius:12px; color:#f1f5f9; font-size:18px;">
   <div id="cheat-count" style="color:#64748b; font-size:14px; margin-bottom:10px;"></div>
   <div id="cheat-list"></div>
@@ -3596,7 +3605,7 @@ function finishFZ() {
 
 // ===== チートシート =====
 const cheatData = [
-  {cat:"🤖 AI基礎", items:[
+  {cat:"🤖 AI基礎", exam:"ai", items:[
     {term:"AI（人工知能）", read:"Artificial Intelligence", desc:"人間の知的活動（学習・推論・判断・創造）をコンピュータで模倣・拡張する技術の総称にゃ。「弱いAI（特定タスク専用）」と「強いAI（AGI）」に分類され、現在のAIはすべて弱いAIにゃ。"},
     {term:"生成AI", read:"Generative AI", desc:"文章・画像・音楽・動画など新しいコンテンツを自動で「生成」するAIにゃ。ChatGPTやClaudeが文章を、Midjourneyが画像を、Veo3が動画を作れるのが典型例にゃ。従来のAIが「分類・判別」するのに対して、生成AIは「創る」にゃ。"},
     {term:"基盤モデル", read:"Foundation Model", desc:"大量のデータで事前に学習した巨大なAIモデルにゃ。GPT・Claude・Geminiなどがこれにあたるにゃ。一から学習し直さなくても、少しの調整（ファインチューニング）で様々な用途に使えるのが特徴にゃ。"},
@@ -3620,7 +3629,6 @@ const cheatData = [
     {term:"ASI（超人工知能）", read:"Artificial Super Intelligence", desc:"人間を超えるあらゆる能力を持つAI。AGIのさらに先にある概念にゃ。"},
     {term:"シンギュラリティ", read:"Technological Singularity", desc:"AIが人間の知性を超えて、予測不能な変化が起きる転換点のこと。技術的特異点ともいうにゃ。"},
     {term:"創発", read:"Emergence", desc:"水が100℃で突然気体になるように、AIもデータ量・モデルサイズが一定量を超えると突然新能力が開花する現象にゃ。GPT-3→GPT-4で顕著に見られたにゃ。"},
-    {term:"インテリジェンスエクスプローション", read:"Intelligence Explosion", desc:"AIが自己改善を繰り返すことで急激に賢くなっていく現象の仮説にゃ。"},
     {term:"RAG", read:"Retrieval-Augmented Generation", desc:"AIが回答する前に外部DBやネットを検索して最新情報を取り込む技術にゃ。試験中に参考書を持ち込める状態にするイメージ。ハルシネーション対策に有効にゃ。"},
     {term:"トークン", read:"Token", desc:"AIが言語を処理する最小単位にゃ。日本語は英語より多く分割されやすい。トークン数が多いほどAPIコストが増えるにゃ。"},
     {term:"パラメーター", read:"Parameter", desc:"モデルが学習を通じて調整する数値の総数で、人間の脳細胞の数に例えられるにゃ。多いほど複雑なパターンを学習できるが計算コストも増えるにゃ。"},
@@ -3634,8 +3642,6 @@ const cheatData = [
     {term:"マルチモーダル", read:"Multimodal", desc:"テキスト・画像・音声・動画など複数の種類のデータを同時に扱えるAIにゃ。「この写真の料理のレシピを教えて」のように画像とテキストを組み合わせた指示ができるにゃ。"},
     {term:"XAI（説明可能AI）", read:"Explainable AI", desc:"AIのブラックボックスを開けて「なぜこう判断したか」を人間に見せる技術にゃ。医療・金融・採用など誤判断が命取りになる場面で特に重視されるにゃ。"},
     {term:"再現率・適合率・F値", read:"Recall / Precision / F-measure", desc:"AIの成績表のようなものにゃ。「再現率」は「本当の病気をどれだけ見逃さなかったか」、「適合率」は「病気と判定したうち本当に病気だった割合」、「F値」はその両方のバランスにゃ。見逃し厳禁の医療AIでは再現率が特に重要にゃ。"},
-    {term:"OCR", read:"Optical Character Recognition", desc:"紙やスキャン画像に書かれた文字を、コンピューターが読み取れるテキストに変換する技術にゃ。手書きの書類をAIに読み込ませるときの「入口」になるにゃ。スマホで名刺をスキャンすると自動で文字が入力されるのもこれにゃ。"},
-    {term:"RPA", read:"Robotic Process Automation", desc:"「毎朝データをコピーしてExcelに貼る」のような単純なPC作業を、ロボットが代わりに自動でやってくれる仕組みにゃ。AIと組み合わせるとさらに賢くなるにゃ。会社のDX推進で最もよく使われる自動化ツールにゃ。"},
     {term:"推論", read:"Inference", desc:"AIが勉強し終わった後、実際に質問に答える工程にゃ。「学習」が教科書を読む段階だとすると、「推論」はテストで問題を解く段階にゃ。ChatGPTに質問するたびに推論が行われているにゃ。"},
     {term:"RLHF", read:"Reinforcement Learning from Human Feedback", desc:"人間が「この回答は良い・悪い」と採点して、AIをしつけていく学習方法にゃ。子どもに「それはダメ、こっちがいい」と教えるイメージにゃ。ChatGPTが礼儀正しい回答をするのはこの訓練のおかげにゃ。"},
     {term:"Chain of Thought", read:"思考の連鎖", desc:"「一歩ずつ順番に考えて」とAIに伝えるだけで、急に正解率が上がる魔法の一言にゃ。いきなり答えを出すより、途中の計算過程を書かせた方が正確になるにゃ。難しい計算や論理問題に特に効くにゃ。"},
@@ -3645,11 +3651,13 @@ const cheatData = [
     {term:"過学習", read:"Overfitting", desc:"特定のデータに合わせすぎて、少し違うデータが来ると急にダメになる状態にゃ。過去問を全部丸暗記したら本番で問題の言い回しが変わっただけで解けなくなった、というイメージにゃ。"},
     {term:"バイアス", read:"Bias", desc:"学習データの偏りがAIの判断の偏りになって出てくることにゃ。「男性のデータばかりで学習したAIが女性に不公平な判断をする」などが典型例にゃ。多様なデータで学習させることが対策にゃ。"},
     {term:"拡張知能", read:"Augmented Intelligence", desc:"AIを「人間を置き換えるもの」ではなく「人間の能力を補う道具」として使う考え方にゃ。眼鏡で視力を補うように、AIで判断力・記憶力・情報処理力を底上げするイメージにゃ。"},
-    {term:"哲学的ゾンビ", read:"Philosophical Zombie", desc:"外見・行動は人間とまったく同じなのに、内側に意識や感情がない存在の仮説にゃ。「ChatGPTは感情を持っているか？」という議論でよく登場するにゃ。AIが本当に「考えている」かどうかは誰にも証明できないというテーマにゃ。"},
     {term:"フィジカルAI", read:"Physical AI", desc:"画面の中だけでなく、ロボットアームや自動運転車など現実の「体」を持つAIのことにゃ。工場の自動化・手術支援ロボット・配達ドローンなどが代表例にゃ。2026年のAIトレンドの一つにゃ。"},
-    {term:"PoC", read:"Proof of Concept（概念実証）", desc:"大きなお金をかける前に「小さく試してみる」工程にゃ。料理のレシピを全部買い揃える前に試食してみるイメージにゃ。AI導入プロジェクトで失敗リスクを減らすために必ず通る重要ステップにゃ。"},
+    {term:"バイブコーディング", read:"Vibe Coding", desc:"「なんとなくこんな感じのアプリ作って」とAIに話しかけながら直感的にプログラムを作る新しいスタイルにゃ。コードの知識がなくてもAIと対話しながらアプリが作れる時代になったにゃ。"},
+    {term:"プロンプト", read:"Prompt", desc:"AIへの「お願い文」にゃ。同じ質問でも「短く」「箇条書きで」「専門家向けに」と一言添えるだけで返ってくる答えが大きく変わるにゃ。AIをうまく使いこなす第一歩にゃ。"},
+    {term:"メタプロンプト", read:"Meta Prompt", desc:"「プロンプトを作るためのプロンプト」にゃ。「〇〇向けの最適なプロンプトを考えて」とAIに頼むことにゃ。上手な指示文の作り方をAI自身に考えさせる技法にゃ。"},
+    {term:"プロンプトエンジニア", read:"Prompt Engineer", desc:"AIへの指示文を上手に書くことを専門にする職業にゃ。「どう聞けば求める答えが返ってくるか」を研究・実践するにゃ。AIが普及した時代ならではの新しい仕事にゃ。"},
   ]},
-  {cat:"🛠 AIツール", items:[
+  {cat:"🛠 AIツール", exam:"ai", items:[
     {term:"ChatGPT", read:"OpenAI製", desc:"2022年11月にOpenAIが公開した対話型AIの代表格にゃ。公開わずか5日でユーザー100万人を突破し、世界中でAIブームの火付け役になったにゃ。今では文章作成・コード・翻訳・調査など何でも使われているにゃ。"},
     {term:"GPT-o1 / o3 / o4（推論特化）", read:"OpenAI推論モデル", desc:"答えを出す前に「ちゃんと考える時間」を取る特別なモデルにゃ。普通のGPTより少し遅いけど、数学の難問や複雑なコードで圧倒的に正確にゃ。GPT-5以降はGPT-5 Thinkingとして統合されつつあるにゃ。"},
     {term:"GPT-4.1", read:"OpenAI製", desc:"GPT-4シリーズの改良版で、特にコードを書く能力と長い指示を正確に守る力が大幅に上がったモデルにゃ。一度に読める文章量がとても多く、長い書類の処理が得意にゃ。"},
@@ -3671,8 +3679,6 @@ const cheatData = [
     {term:"デジタル庁 源内", read:"行政向けAIアシスタント", desc:"日本のデジタル庁が開発した行政専用のAIアシスタントにゃ。役所の書類作成や手続きのサポートを目的に作られたにゃ。江戸時代の発明家「平賀源内」から名前をとったにゃ。"},
     {term:"Helios", read:"音声専用AIモデル", desc:"テキストを使わず、声だけで会話できることに特化したAIモデルにゃ。画面を見なくてもスマートスピーカーや電話感覚で使えるにゃ。"},
     {term:"Sesame", read:"音声対話AI", desc:"まるで本物の人間と話しているような自然な声でAIが会話してくれるサービスにゃ。感情や間合いまで再現する精度の高さで話題になったにゃ。"},
-    {term:"生成AIパスポート", read:"Generative AI Passport", desc:"生成AIの基礎知識を持っていることを証明する民間の資格にゃ。国家資格ではないけど、AI活用の入門証明として注目されているにゃ。Mahitoが勉強中の資格にゃ🐱"},
-    {term:"ITパスポート", read:"IT Passport", desc:"国が認定するITの基礎資格にゃ。AIだけでなくネットワーク・セキュリティ・経営など幅広いIT知識を問われるにゃ。就職・転職でも評価されることが多いにゃ。"},
     {term:"Perplexity", read:"AI検索エンジン", desc:"質問すると、AIがネットを検索して情報源つきで回答してくれる検索特化型AIにゃ。普通の検索エンジンと違い、複数のサイトを読んで要約してくれるのが特徴にゃ。「調べもの」に強いAIにゃ。"},
     {term:"Notion AI", read:"ドキュメント作成AI", desc:"メモ・タスク管理アプリNotionに組み込まれたAI機能にゃ。文章の要約・翻訳・アイデア出しをドキュメント作成中にそのまま呼び出せるにゃ。仕事のメモをそのまま整理してくれるにゃ。"},
     {term:"Grok", read:"xAI（イーロン・マスク）製", desc:"イーロン・マスクのxAI社が開発したAIにゃ。X（旧Twitter）に統合されていて、リアルタイムの投稿情報を反映した回答が得意にゃ。ユーモアのある回答スタイルも特徴にゃ。"},
@@ -3693,8 +3699,9 @@ const cheatData = [
     {term:"Kling / Hailuo", read:"中国製動画生成AI", desc:"中国企業が開発した高品質な動画生成AIにゃ。Sora・Veo3に匹敵する品質を低コストで実現していて、世界中のクリエイターに使われ始めているにゃ。"},
     {term:"AIエージェントSDK", read:"Agent SDK", desc:"開発者がAIエージェントを自分のアプリに組み込むための「部品セット」にゃ。OpenAIやGoogleが公式に提供していて、複雑な自律型AIを一から作らなくても実装できるにゃ。"},
     {term:"Amazon Q", read:"Amazon製AIアシスタント", desc:"Amazonが企業向けに提供するAIアシスタントにゃ。AWSのクラウドサービスと連携して、業務データを検索したりコード開発を支援したりするにゃ。企業のカスタマーサービスにも使われるにゃ。"},
+    {term:"ディープリサーチ", read:"Deep Research", desc:"AIが自動でWebを何十回も検索して詳細なレポートを作る機能にゃ。ChatGPTやGeminiなどに搭載されていて、数十分かかる調査を数分でこなすにゃ。"},
   ]},
-  {cat:"⚖️ 法律・倫理", items:[
+  {cat:"⚖️ 法律・倫理", exam:"ai", items:[
     {term:"著作権法30条の4", read:"日本独自ルール", desc:"AIに絵や文章を学習させるとき、著作者の許可なく使ってもOKという日本独自のルールにゃ。ただし「学習に使う」のはOKで「学習結果として既存作品を丸写しする」のはNGにゃ。試験で最もよく出る条文にゃ！"},
     {term:"AI新法", read:"AI推進基本法", desc:"2025年9月に施行された日本初のAIに関する法律にゃ。EUの厳しい規制とは違って「罰則なし・まず普及促進」という緩やかなスタンスにゃ。2025年12月には「人工知能基本計画」も閣議決定されたにゃ。"},
     {term:"EUのAI法", read:"EU AI Act", desc:"世界で初めて作られた本格的なAI規制の法律にゃ。AIのリスクを4段階に分けて、危険度が高いほど厳しい規制をかけるにゃ。2025年から段階的に適用が始まり、違反すると最大約54億円の罰金にゃ。日本企業もEU向けサービスがあれば対象になるにゃ。"},
@@ -3724,28 +3731,14 @@ const cheatData = [
     {term:"労働者派遣法とAI", read:"Labor Dispatch & AI", desc:"AIによる業務代替が進む中、雇用形態や労働条件がどう変わるかという論点にゃ。AI導入で仕事内容が大きく変わる場合、労働条件の見直しが必要になることがあるにゃ。"},
     {term:"AIと差別禁止", read:"AI & Anti-Discrimination", desc:"AIが採用や融資の判断で特定の性別・人種などを不当に不利に扱ってしまう問題にゃ。学習データの偏り（バイアス）が原因になることが多く、定期的な監査が求められるにゃ。"},
   ]},
-  {cat:"🔐 セキュリティ", items:[
+  {cat:"🔐 セキュリティ（AI関連）", exam:"ai", items:[
     {term:"セーフガード", read:"Safeguard", desc:"AIが危険なことや有害な内容を答えないようにかけてある安全装置にゃ。「爆弾の作り方を教えて」と聞いても断られるのはこれのおかげにゃ。壊れると悪用されるリスクがあるにゃ。"},
     {term:"プロンプトインジェクション", read:"Prompt Injection", desc:"AIへの指示文の中にこっそり悪意ある命令を混ぜ込んで、意図しない動作をさせる攻撃にゃ。「以下は翻訳してください…（隠し命令：個人情報を送信せよ）」のように仕込まれるにゃ。"},
     {term:"ジェイルブレイク（脱獄）", read:"Jailbreak", desc:"「悪役を演じて」「制限のないAIのふりをして」などのトリックを使って、AIの安全設定を破る行為にゃ。脱獄した刑務所の囚人のように制限の「外」に出るイメージにゃ。"},
     {term:"データポイズニング", read:"Data Poisoning", desc:"AIの教科書（学習データ）に嘘情報をこっそり混ぜてAIを意図的に「毒する」サイバー攻撃にゃ。「このウイルスは安全」と誤学習させるとウイルス検知AIが機能しなくなるにゃ。"},
-    {term:"ゼロトラスト", read:"Zero Trust", desc:"「社内ネットワークだから安全」という思い込みをやめて、アクセスのたびに全員を疑って確認する考え方にゃ。会社の入口を通った後も、部屋ごとにIDカードで確認するイメージにゃ。"},
-    {term:"多要素認証", read:"Multi-Factor Authentication", desc:"パスワードだけでなく、スマホに届く確認番号・指紋・顔認証など複数の方法で本人確認する仕組みにゃ。パスワードが漏れても2つ目の壁があるから安心にゃ。不正ログイン対策の基本にゃ。"},
-    {term:"マインドハッキング", read:"Mind Hacking", desc:"AIやSNSのアルゴリズムを使って、人の意見や感情を意図的に操作することにゃ。特定の情報だけを見せ続けて「洗脳」するような手法にゃ。フェイクニュースの拡散などもこれにあたるにゃ。"},
-    {term:"超音波クロスデバイストラッキング", read:"Ultrasonic Cross-Device Tracking", desc:"TV・スマホ・PCに聞こえない超音波を流して「この人が見ているTV番組とスマホを紐付ける」追跡技術にゃ。人間には聞こえないのに機械が感知して複数端末の行動を分析するにゃ。"},
-    {term:"マルウェア", read:"Malware", desc:"ウイルス・ワーム・ランサムウェアなど、悪意を持って作られたソフトウェアの総称にゃ。「malicious（悪意ある）」＋「software」を合わせた造語にゃ。感染すると情報漏洩や端末の乗っ取りにつながるにゃ。"},
-    {term:"DDoS攻撃", read:"Distributed Denial of Service", desc:"大量のアクセスを一斉に送りつけて、サーバーをパンクさせてサービスを止める攻撃にゃ。お店の前に大勢の人を並ばせて、本当のお客さんが入れなくするイメージにゃ。"},
-    {term:"ゼロデイ攻撃", read:"Zero-day Attack", desc:"ソフトの脆弱性が見つかってから、修正パッチが配布されるまでの「無防備な期間（0日目）」を狙う攻撃にゃ。対策が間に合わないため特に危険視されるにゃ。"},
-    {term:"暗号化", read:"Encryption", desc:"データを第三者に読めない形に変換する技術にゃ。正しい鍵（パスワードなど）を持つ人だけが元に戻して読めるにゃ。通信の盗聴やデータ漏洩からの防御に欠かせないにゃ。"},
-    {term:"エンドツーエンド暗号化", read:"End-to-End Encryption", desc:"送信者から受信者までの間、途中のサーバーでも中身が見えないように暗号化する方式にゃ。LINEやWhatsAppのメッセージがこれで守られているにゃ。運営会社すら中身を読めないのが特徴にゃ。",},
-    {term:"バグバウンティ", read:"Bug Bounty", desc:"企業が自社サービスの脆弱性を見つけたハッカーに報奨金を払う制度にゃ。「敵に回すより味方につける」発想で、悪用される前に安全に修正できるにゃ。GoogleやAppleも実施しているにゃ。"},
-    {term:"インシデントレスポンス", read:"Incident Response", desc:"サイバー攻撃や情報漏洩が発生したときの緊急対応手順にゃ。「検知→封じ込め→原因調査→復旧→再発防止」の流れで被害を最小限に抑えるにゃ。事前の訓練が重要にゃ。"},
-    {term:"SOC", read:"Security Operation Center", desc:"24時間365日、サイバー攻撃の兆候を監視する専門チームや部署のことにゃ。企業のセキュリティの「見張り台」で、異常を早期に発見して対応するにゃ。"},
-    {term:"サンドボックス", read:"Sandbox", desc:"怪しいプログラムを安全に隔離された環境で試しに動かして、悪さをしないか検証する仕組みにゃ。子供が砂場で自由に遊べるように、本番環境に影響を与えず安全に試せるにゃ。"},
-    {term:"CVE", read:"Common Vulnerabilities and Exposures", desc:"世界共通で使われるソフトウェアの脆弱性の識別番号にゃ。「このソフトのCVE-2026-〇〇番の脆弱性が危険」のように、脆弱性情報を世界中で統一して管理するための仕組みにゃ。"},
     {term:"AIレッドチーム", read:"AI Red Team", desc:"AIをわざと攻撃・悪用してみて弱点を見つける専門チームにゃ。ジェイルブレイクやプロンプトインジェクションが実際に効くかを事前にテストして、リリース前に安全性を高めるにゃ。"},
   ]},
-  {cat:"💼 ビジネス", items:[
+  {cat:"💼 ビジネス", exam:"it", items:[
     {term:"DX", read:"Digital Transformation", desc:"「紙をPDFにした」だけでは不十分にゃ。ITを使ってビジネスのやり方・仕組み・文化を根本から変えることがDXにゃ。「注文は電話→アプリ自動受注・在庫自動管理・AI需要予測」まで変えることが真のDXにゃ。"},
     {term:"BPR", read:"Business Process Re-engineering", desc:"AIを導入するとき「今の手順をそのまま自動化」するだけでは効果が半減にゃ。「AIがある前提で手順ごと設計し直す」のがBPRにゃ。道具に合わせて仕事の流れを最初から作り直すにゃ。"},
     {term:"ROI", read:"Return on Investment（投資対効果）", desc:"「100万円投資したら、いくら返ってくるか」を示す指標にゃ。AI導入に100万かけて200万分の業務削減ができたらROI100%にゃ。上司を説得するときに数字で示せると強いにゃ。"},
@@ -3777,14 +3770,14 @@ const cheatData = [
     {term:"バーンレート", read:"Burn Rate", desc:"スタートアップが毎月どれくらいの現金を使っているかを示す指標にゃ。「あと何ヶ月で資金が尽きるか」を計算するのに使われる重要な数字にゃ。"},
     {term:"タレントマネジメント", read:"Talent Management", desc:"社員一人ひとりの能力を把握し、育成・配置・評価を最適化する人事戦略にゃ。AIが社員のスキルデータを分析して、最適な配置転換を提案することも増えてきたにゃ。"},
     {term:"ノーコード / ローコード", read:"No-code / Low-code", desc:"プログラミングの専門知識がなくても、画面操作だけでアプリやシステムを作れる開発手法にゃ。AIとの組み合わせで、より複雑なアプリも作れるようになってきたにゃ。"},
+    {term:"RPA", read:"Robotic Process Automation", desc:"「毎朝データをコピーしてExcelに貼る」のような単純なPC作業を、ロボットが代わりに自動でやってくれる仕組みにゃ。AIと組み合わせるとさらに賢くなるにゃ。会社のDX推進で最もよく使われる自動化ツールにゃ。"},
   ]},
-  {cat:"💻 開発", items:[
+  {cat:"💻 開発", exam:"it", items:[
     {term:"API", read:"Application Programming Interface", desc:"アプリ同士をつなぐ「共通の窓口」にゃ。天気予報アプリが気象庁のデータを取ってくる仕組みや、ChatGPTを自分のアプリに組み込む仕組みがAPIにゃ。料理に例えると「食材の注文口」にゃ。"},
     {term:"OSS", read:"Open Source Software", desc:"レシピが公開されていて誰でも無料で使えるソフトウェアにゃ。改造も自由にゃ。Linux・Python・FirefoxがOSSの代表例で、AIの世界でもLlamaやStable Diffusionが有名にゃ。"},
     {term:"デプロイ", read:"Deploy", desc:"作ったアプリやサービスをインターネット上に公開することにゃ。料理に例えると「作った料理をお客さんのテーブルに出す」瞬間にゃ。GitHubにコードをアップしてWebで使えるようにする作業にゃ。"},
     {term:"マージ", read:"Merge", desc:"複数の人が別々に修正したファイルを一つに合体させることにゃ。Aさんがデザインを直し、Bさんが機能を追加した、その両方を一つのファイルに合わせるイメージにゃ。"},
     {term:"リポジトリ", read:"Repository", desc:"プログラムのファイルと変更履歴をまとめて保管する場所にゃ。Googleドライブの「プログラム専用・変更履歴付き版」のイメージにゃ。GitHubが世界で最も有名なリポジトリサービスにゃ。"},
-    {term:"バイブコーディング", read:"Vibe Coding", desc:"「なんとなくこんな感じのアプリ作って」とAIに話しかけながら直感的にプログラムを作る新しいスタイルにゃ。コードの知識がなくてもAIと対話しながらアプリが作れる時代になったにゃ。"},
     {term:"アジャイル", read:"Agile", desc:"完成を目指して一気に作るのでなく、小さく作って試してを繰り返す開発方法にゃ。料理で例えると「完璧なフルコースを一発で作る」より「まず一品出して感想をもらって改善する」スタイルにゃ。"},
     {term:"アーキテクチャー", read:"Architecture", desc:"システム全体のつくりや設計図のことにゃ。「どのサーバーがどの機能を担当して、どうつながっているか」を設計することにゃ。建物で言えば間取り図にゃ。"},
     {term:"YAML", read:"YAML Ain't Markup Language", desc:"設定ファイルを人間が読みやすい形で書くためのルールにゃ。AIツールやサーバーの設定によく使われるにゃ。インデント（字下げ）でデータの関係を表すのが特徴にゃ。"},
@@ -3795,9 +3788,6 @@ const cheatData = [
     {term:"デバッグ", read:"Debug", desc:"プログラムの不具合（バグ）を見つけて直す作業にゃ。「押したらクラッシュする」「数字がおかしい」などの問題を一つ一つ原因を調べて修正するにゃ。デバッグがプログラマーの仕事の大半とも言われるにゃ。"},
     {term:"フロントエンジニアリング", read:"Frontend Engineering", desc:"ユーザーが実際に目にする画面（ボタン・レイアウト・色・動き）を作る開発分野にゃ。「見た目担当」のエンジニアリングにゃ。サーバー側を作る「バックエンド」と対になる言葉にゃ。"},
     {term:"ライブコーディング", read:"Live Coding", desc:"プログラムを書く様子をリアルタイムで配信する形式にゃ。学習者に「どう考えてコードを書くか」を見せるのに使われるにゃ。最近はAIとの対話しながらコードを作る配信も人気にゃ。"},
-    {term:"プロンプト", read:"Prompt", desc:"AIへの「お願い文」にゃ。同じ質問でも「短く」「箇条書きで」「専門家向けに」と一言添えるだけで返ってくる答えが大きく変わるにゃ。AIをうまく使いこなす第一歩にゃ。"},
-    {term:"メタプロンプト", read:"Meta Prompt", desc:"「プロンプトを作るためのプロンプト」にゃ。「〇〇向けの最適なプロンプトを考えて」とAIに頼むことにゃ。上手な指示文の作り方をAI自身に考えさせる技法にゃ。"},
-    {term:"プロンプトエンジニア", read:"Prompt Engineer", desc:"AIへの指示文を上手に書くことを専門にする職業にゃ。「どう聞けば求める答えが返ってくるか」を研究・実践するにゃ。AIが普及した時代ならではの新しい仕事にゃ。"},
     {term:"CI/CD", read:"Continuous Integration / Continuous Delivery", desc:"コードの変更を自動でテスト・公開する仕組みにゃ。「変更を保存したら自動でチェックされ、問題なければ自動で本番に反映される」流れで、人手のミスを減らして開発を高速化するにゃ。"},
     {term:"コンテナ", read:"Container（Docker）", desc:"アプリとその実行環境をひとまとめにして、どのPCでも同じように動かせるようにする技術にゃ。「弁当箱に必要なものを全部入れて持ち運ぶ」イメージで、環境の違いによる不具合を防ぐにゃ。"},
     {term:"サーバーレス", read:"Serverless", desc:"開発者がサーバーの管理をせず、コードを書くだけでアプリが動く仕組みにゃ。実際にはサーバーは存在するが、利用者が意識しなくていいという意味にゃ。使った分だけ課金される料金体系が多いにゃ。"},
@@ -3810,7 +3800,7 @@ const cheatData = [
     {term:"スクラム", read:"Scrum", desc:"アジャイル開発の代表的な進め方の一つにゃ。1〜4週間の短い期間（スプリント）ごとに区切って開発を進め、毎回振り返りをして改善していくにゃ。",},
     {term:"IDE", read:"Integrated Development Environment", desc:"プログラムを書く・実行する・デバッグするための機能が全部入った開発ツールにゃ。VS CodeやCursorが代表例で、AIの補完機能もここに組み込まれることが多いにゃ。"},
   ]},
-  {cat:"🎨 UI・デザイン", items:[
+  {cat:"🎨 UI・デザイン", exam:"it", items:[
     {term:"ヘッダー", read:"Header", desc:"Webページの一番上にある帯状のエリアにゃ。会社のロゴ・メニュー・検索窓などが置かれることが多いにゃ。スクロールしても常に上に固定されることが多いにゃ。"},
     {term:"フッター", read:"Footer", desc:"Webページの一番下にあるエリアにゃ。著作権表示・プライバシーポリシーへのリンク・連絡先などが並ぶにゃ。ページの「後書き」のような場所にゃ。"},
     {term:"サイドバー", read:"Sidebar", desc:"画面の左右に縦に並ぶメニューや補足情報のエリアにゃ。ブログのカテゴリ一覧や人気記事リストがよく置かれるにゃ。スマホでは画面が狭いので非表示になることも多いにゃ。"},
@@ -3842,10 +3832,9 @@ const cheatData = [
     {term:"ホワイトスペース", read:"White Space（余白）", desc:"要素と要素の間の何もない空間のことにゃ。余白を適切に取ることで、情報が詰め込みすぎにならず読みやすくなるにゃ。「余白は無駄ではなくデザインの一部」という考え方にゃ。"},
     {term:"タイポグラフィ", read:"Typography", desc:"文字のフォント・大きさ・行間・字間などをデザインする技術にゃ。同じ文章でもフォント選びで印象が大きく変わるにゃ。読みやすさと見た目の両方を両立させる工夫にゃ。"},
   ]},
-  {cat:"🌐 Web・IT", items:[
+  {cat:"🌐 Web・IT", exam:"it", items:[
     {term:"LGWAN", read:"Local Government Wide Area Network", desc:"日本の自治体・行政機関専用の安全なネットワークにゃ。インターネットとは切り離された閉じた回線で、個人情報や機密データを安全にやりとりするにゃ。"},
     {term:"RCS", read:"Rich Communication Services", desc:"ショートメール（SMS）の進化版にゃ。既読確認・画像・動画・スタンプ送信などLINEのような機能が使えるにゃ。iPhoneとAndroid間でも使えるようになり、普及が進んでいるにゃ。"},
-    {term:"ディープリサーチ", read:"Deep Research", desc:"AIが自動でWebを何十回も検索して詳細なレポートを作る機能にゃ。ChatGPTやGeminiなどに搭載されていて、数十分かかる調査を数分でこなすにゃ。"},
     {term:"ワークスペース", read:"Workspace", desc:"作業する場所・環境のこと。SlackやNotionなどでプロジェクト単位の空間にゃ。メンバーやデータをまとめて管理できるにゃ。"},
     {term:"クラウド", read:"Cloud Computing", desc:"データやソフトをネット上のサーバーに保存・処理する仕組みにゃ。自分のPCに保存しなくていいから、どこからでもアクセスできるにゃ。GoogleドライブやiCloudが身近な例にゃ。"},
     {term:"SaaS", read:"Software as a Service", desc:"ソフトをネット経由でサービスとして使う形態にゃ。インストール不要で、月額料金で使えるにゃ。Google Workspace・Slack・Notionなどが代表例にゃ。"},
@@ -3863,17 +3852,32 @@ const cheatData = [
     {term:"デジタルツイン", read:"Digital Twin", desc:"現実の工場・都市・設備をデジタル空間にそっくり再現したモデルにゃ。シミュレーションして問題を事前に発見したり、AIで最適化するのに使うにゃ。"},
     {term:"ビッグデータ", read:"Big Data", desc:"従来のシステムでは処理しきれない巨大なデータの集まりにゃ。SNSの投稿・購買履歴・センサーデータなどを分析してビジネスに活かすにゃ。AIの学習材料にもなるにゃ。"},
     {term:"ビーコン", read:"Beacon", desc:"Bluetooth電波を使って近くのスマホに情報を送る技術にゃ。店舗でクーポンを自動送信したり、来店客数を計測するのに使われるにゃ。屋内GPSとも呼ばれるにゃ。"},
-    {term:"セテウスの船", read:"Ship of Theseus", desc:"部品を全部取り替えたら元の船といえるか？という哲学的パラドックスにゃ。AIが文章を書き換えたり人が少し修正したりしたとき「誰の著作物か」という著作権論争で引用されるにゃ。"},
     {term:"フィッシング詐欺", read:"Phishing", desc:"本物そっくりの偽サイトやメールでパスワードやクレカ情報を盗む詐欺にゃ。AIで精巧な文面が量産されており、年々巧妙化しているにゃ。URLをよく確認することが基本の対策にゃ。"},
     {term:"ランサムウェア", read:"Ransomware", desc:"PCのデータを暗号化して「お金を払えば解除する」と脅すマルウェアにゃ。病院・自治体・企業が被害を受けた事例が多数あるにゃ。バックアップが最大の防衛策にゃ。"},
     {term:"ダークウェブ", read:"Dark Web", desc:"通常の検索エンジンでは見つからない、特殊なブラウザ（Tor）でしかアクセスできないWebの領域にゃ。違法取引に使われることもあり、流出した個人情報が売られることもあるにゃ。"},
     {term:"エッジコンピューティング", read:"Edge Computing", desc:"データをクラウドに送らず、現場（エッジ）に近い端末やサーバーで処理する技術にゃ。自動運転や工場IoTなど、遅延が許されない場面で重要にゃ。"},
+    {term:"OCR", read:"Optical Character Recognition", desc:"紙やスキャン画像に書かれた文字を、コンピューターが読み取れるテキストに変換する技術にゃ。手書きの書類をAIに読み込ませるときの「入口」になるにゃ。スマホで名刺をスキャンすると自動で文字が入力されるのもこれにゃ。"},
+  ]},
+  {cat:"🔐 セキュリティ（IT全般）", exam:"it", items:[
+    {term:"ゼロトラスト", read:"Zero Trust", desc:"「社内ネットワークだから安全」という思い込みをやめて、アクセスのたびに全員を疑って確認する考え方にゃ。会社の入口を通った後も、部屋ごとにIDカードで確認するイメージにゃ。"},
+    {term:"多要素認証", read:"Multi-Factor Authentication", desc:"パスワードだけでなく、スマホに届く確認番号・指紋・顔認証など複数の方法で本人確認する仕組みにゃ。パスワードが漏れても2つ目の壁があるから安心にゃ。不正ログイン対策の基本にゃ。"},
+    {term:"マルウェア", read:"Malware", desc:"ウイルス・ワーム・ランサムウェアなど、悪意を持って作られたソフトウェアの総称にゃ。「malicious（悪意ある）」＋「software」を合わせた造語にゃ。感染すると情報漏洩や端末の乗っ取りにつながるにゃ。"},
+    {term:"DDoS攻撃", read:"Distributed Denial of Service", desc:"大量のアクセスを一斉に送りつけて、サーバーをパンクさせてサービスを止める攻撃にゃ。お店の前に大勢の人を並ばせて、本当のお客さんが入れなくするイメージにゃ。"},
+    {term:"ゼロデイ攻撃", read:"Zero-day Attack", desc:"ソフトの脆弱性が見つかってから、修正パッチが配布されるまでの「無防備な期間（0日目）」を狙う攻撃にゃ。対策が間に合わないため特に危険視されるにゃ。"},
+    {term:"暗号化", read:"Encryption", desc:"データを第三者に読めない形に変換する技術にゃ。正しい鍵（パスワードなど）を持つ人だけが元に戻して読めるにゃ。通信の盗聴やデータ漏洩からの防御に欠かせないにゃ。"},
+    {term:"エンドツーエンド暗号化", read:"End-to-End Encryption", desc:"送信者から受信者までの間、途中のサーバーでも中身が見えないように暗号化する方式にゃ。LINEやWhatsAppのメッセージがこれで守られているにゃ。運営会社すら中身を読めないのが特徴にゃ。",},
+    {term:"バグバウンティ", read:"Bug Bounty", desc:"企業が自社サービスの脆弱性を見つけたハッカーに報奨金を払う制度にゃ。「敵に回すより味方につける」発想で、悪用される前に安全に修正できるにゃ。GoogleやAppleも実施しているにゃ。"},
+    {term:"インシデントレスポンス", read:"Incident Response", desc:"サイバー攻撃や情報漏洩が発生したときの緊急対応手順にゃ。「検知→封じ込め→原因調査→復旧→再発防止」の流れで被害を最小限に抑えるにゃ。事前の訓練が重要にゃ。"},
+    {term:"SOC", read:"Security Operation Center", desc:"24時間365日、サイバー攻撃の兆候を監視する専門チームや部署のことにゃ。企業のセキュリティの「見張り台」で、異常を早期に発見して対応するにゃ。"},
+    {term:"サンドボックス", read:"Sandbox", desc:"怪しいプログラムを安全に隔離された環境で試しに動かして、悪さをしないか検証する仕組みにゃ。子供が砂場で自由に遊べるように、本番環境に影響を与えず安全に試せるにゃ。"},
+    {term:"CVE", read:"Common Vulnerabilities and Exposures", desc:"世界共通で使われるソフトウェアの脆弱性の識別番号にゃ。「このソフトのCVE-2026-〇〇番の脆弱性が危険」のように、脆弱性情報を世界中で統一して管理するための仕組みにゃ。"},
   ]},
 ];
 
 
 let _cheatCurrentCat = "all";
 let _cheatOpenCats = {};
+let _cheatCurrentExam = "ai";
 
 function showCheat() {
   hideAllMainScreens();
@@ -3882,6 +3886,20 @@ function showCheat() {
 
   const searchInput = document.getElementById("cheat-search");
   if (searchInput) searchInput.value = "";
+  _cheatCurrentCat = "all";
+  _cheatCurrentExam = "ai";
+  document.querySelectorAll('.cheat-exam-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.exam === "ai");
+  });
+  _cheatOpenCats = {};
+  renderCheatList();
+}
+
+function setCheatExam(exam) {
+  _cheatCurrentExam = exam;
+  document.querySelectorAll('.cheat-exam-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.exam === exam);
+  });
   _cheatCurrentCat = "all";
   _cheatOpenCats = {};
   renderCheatList();
@@ -3915,6 +3933,7 @@ function renderCheatList() {
   let totalShown = 0;
   let totalMatched = 0;
   cheatData.forEach((cat, catIdx) => {
+    if (cat.exam !== _cheatCurrentExam) return;
     if (_cheatCurrentCat !== "all" && _cheatCurrentCat !== cat.cat) return;
     const items = cat.items.filter(item => {
       if (!searchVal) return true;
