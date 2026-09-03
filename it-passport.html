@@ -273,7 +273,6 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .menu button .mtitle { margin:0; }
 .menu button .msub { display:block; font-weight:500; font-size:.85em; opacity:.75; margin-top:3px; }
 .menu-note { font-size:14px; color:rgba(255,255,255,.68); margin:2px 0 18px; line-height:1.75; background:rgba(255,255,255,.05); padding:14px 16px; border-radius:10px; border-left:4px solid var(--teal); }
-#guestModeBtn.active { background:rgba(251,191,36,.18) !important; border-color:#fbbf24 !important; }
 
 #statsCard { background:rgba(255,255,255,.04); border:1px solid rgba(34,211,238,.28); border-radius:14px; padding:14px 16px; margin:0 0 14px; }
 .stat-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
@@ -380,10 +379,6 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
   </script>
 
   <div id="menu-screen">
-    <div id="guestModeBanner" style="display:none; background:rgba(251,191,36,.12); border:1.5px solid #fbbf24; color:#fde68a; font-size:12.5px; line-height:1.6; padding:10px 12px; border-radius:10px; margin-bottom:10px;">
-      🙋 ゲストプレイ中だよ。この間の解答は「累計問題数・連続学習・苦手リスト」に保存されないから、自分の記録は安心して残るにゃ。もう一度ボタンを押すと通常モードに戻るよ。
-    </div>
-    <button id="guestModeBtn" onclick="toggleGuestMode()" style="width:100%; background:transparent; border:1.5px solid rgba(251,191,36,.5); color:#fbbf24; font-size:12.5px; font-weight:700; padding:8px 10px; border-radius:10px; margin-bottom:10px; cursor:pointer; font-family:inherit;">🙋 他の人が挑戦する？（ゲストプレイに切替）</button>
     <div id="statsCard"></div>
     <div class="menu">
       <button class="wide mini" onclick="startMode('mini')"><span class="badge">⭐ おすすめ・短時間でサクッと</span><div class="gicon">😻</div><div class="mtitle">ネコと学ぶITミニ試験</div><div class="msub">（20問・35:20:45比率・結果がすぐ出る）</div></button>
@@ -512,20 +507,6 @@ function stratifiedSet(s, m, t){
 
 const SAVE_KEY = 'itpassport_save_v1';
 
-// ゲストプレイ中フラグ。trueの間はlocalStorageに一切書き込まない＝他の人が試験を実施しても
-// 累計問題数・連続学習日数・苦手リストなど自分の過去の記録は上書きされない。
-// ページを開き直すと自動でfalseに戻る（次にMahitoが開いた時にうっかりOFF忘れしないように）。
-let isGuestMode = false;
-
-function toggleGuestMode(){
-  isGuestMode = !isGuestMode;
-  const btn = document.getElementById('guestModeBtn');
-  const banner = document.getElementById('guestModeBanner');
-  if(btn) btn.textContent = isGuestMode ? '🙋 ゲストプレイ中（記録は保存されません）' : '🙋 他の人が挑戦する？（ゲストプレイに切替）';
-  if(btn) btn.classList.toggle('active', isGuestMode);
-  if(banner) banner.style.display = isGuestMode ? 'block' : 'none';
-}
-
 // localStorageの保存データを読み込む。壊れている・存在しない場合はnullを返す（例外を投げない）
 function loadSaveData(){
   try{
@@ -548,8 +529,14 @@ function getSaveData(){
 }
 
 function writeSaveData(data){
-  if(isGuestMode) return; // ゲストプレイ中は一切保存しない＝自分の過去の記録を守る
   try{ localStorage.setItem(SAVE_KEY, JSON.stringify(data)); }catch(e){ /* 容量オーバー等は無視してアプリ動作は継続 */ }
+}
+
+// 累計問題数・連続学習日数・苦手リスト・途中セッションなど、保存データを全部消して最初からにする
+function resetAllProgress(){
+  if(!confirm('過去の記録（累計問題数・連続学習日数・苦手リストなど）を全部消すにゃ。元には戻せないけど本当にいい？')) return;
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){ /* 無視 */ }
+  renderMenuStats();
 }
 
 // 「次の問題へ」を押したタイミングで、今の進捗（モード・出題順・何問目か・正解数など）を自動保存する
@@ -674,6 +661,7 @@ function renderMenuStats(){
       </div>
     </div>
     ${barHtml}
+    <button onclick="resetAllProgress()" style="width:100%; background:transparent; border:none; color:rgba(255,255,255,.4); font-size:12px; text-align:right; padding:0; margin-top:2px; cursor:pointer; font-family:inherit; text-decoration:underline;">🗑 過去の記録を消す</button>
   `;
 }
 
