@@ -319,6 +319,25 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 #result { margin:0 0 14px; font-size:16px; padding:14px 16px; border-radius:8px; display:none; line-height:1.8; background:#f0f2f4; border-left:4px solid #7a8290; color:#1a1d22; }
 #result b { color:#1a1d22; }
 
+#flagRow { display:flex; align-items:center; gap:6px; font-size:13px; color:#9fd8e8; font-weight:700; padding:0 14px 14px; cursor:pointer; }
+#flagRow input { width:16px; height:16px; accent-color:#fbbf24; cursor:pointer; }
+
+#statusGridWrap { background:rgba(255,255,255,.03); border:1px solid rgba(34,211,238,.2); border-radius:12px; padding:10px 12px; margin-bottom:14px; }
+.statusLabel { font-size:11.5px; color:rgba(255,255,255,.5); margin:0 0 8px; font-weight:700; }
+#statusGrid { display:flex; flex-wrap:wrap; gap:6px; max-height:260px; overflow-y:auto; }
+.status-cell { width:30px; height:30px; flex-shrink:0; border-radius:7px; border:1.5px solid rgba(34,211,238,.3); background:rgba(10,26,46,.6); color:#9fd8e8; font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+.status-cell.answered { background:rgba(34,211,238,.18); border-color:var(--teal); color:#e0f7ff; }
+.status-cell.current { border-color:#fbbf24; box-shadow:0 0 0 2px rgba(251,191,36,.4); }
+.status-cell.flagged::after { content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#fbbf24; border:1.5px solid #04141f; }
+
+#examNavRow { display:none; gap:8px; margin-bottom:8px; }
+#examNavRow button { flex:1; padding:14px; border-radius:12px; font-size:15px; font-weight:800; }
+#prevBtn { background:transparent; border:2px solid rgba(34,211,238,.5); color:#9fd8e8; }
+#prevBtn:disabled { opacity:.35; cursor:default; }
+#prevBtn:hover:not(:disabled) { background:rgba(34,211,238,.08); }
+#nextBtnExam { background:var(--teal); color:#04141f; border:none; box-shadow:0 4px 0 var(--teal-hover); }
+#nextBtnExam:hover { filter:brightness(1.06); }
+
 #nextBtn { display:none; width:100%; background:var(--teal); color:#04141f; border:none; padding:16px; border-radius:12px; font-size:18px; font-weight:bold; margin-bottom:8px; box-shadow:0 4px 0 var(--teal-hover); }
 #backBtn { display:none; width:100%; background:transparent; border:2px solid rgba(34,211,238,.5); color:#9fd8e8; font-size:16.5px; font-weight:800; padding:14px; border-radius:12px; }
 #backBtn:hover { background:rgba(34,211,238,.08); }
@@ -388,8 +407,8 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
       <button onclick="startCategory('management')"><div class="gicon">😸</div><div class="mtitle">マネジメント系</div><div class="msub">（168問中ランダム100問）</div></button>
       <button onclick="startCategory('technology')"><div class="gicon">😹</div><div class="mtitle">テクノロジ系</div><div class="msub">（374問中ランダム100問）</div></button>
       <button class="official" onclick="startMode('official')"><div class="gicon">🙀</div><div class="mtitle">IPA公式問題だけ</div><div class="msub">（令和6〜8年度・300問中ランダム100問）</div></button>
-      <button class="secondary" onclick="startMode('all')"><div class="gicon">😽</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（830問中ランダム100問・正解不正解は最後まで出ません）</div></button>
-      <button class="crosslink-btn" onclick="location.href='index.html'"><div class="gicon">🐱</div><div class="mtitle">生成AIパスポート</div><div class="msub">模擬試験アプリはこちら →</div></button>
+      <button class="secondary" onclick="startMode('all')"><div class="gicon">😾</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（830問中100問・本番形式）</div></button>
+      <button class="crosslink-btn" onclick="location.href='index.html?screen=cheat'"><div class="gicon">📖</div><div class="mtitle">略語チートシート</div><div class="msub">生成AIパスポートはこちら →</div></button>
     </div>
   </div>
 
@@ -418,8 +437,19 @@ footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; li
       </div>
       <p id="question"></p>
       <div id="answers"></div>
+      <label id="flagRow" style="display:none;">
+        <input type="checkbox" id="flagCheck" onchange="toggleFlag()"> 後で見直すためにチェックする
+      </label>
     </div>
     <div id="result"></div>
+    <div id="examNavRow" style="display:none;">
+      <button id="prevBtn" onclick="prevQuestion()">← 前の問題へ</button>
+      <button id="nextBtnExam" onclick="nextQuestion()">次の問題へ →</button>
+    </div>
+    <div id="statusGridWrap" style="display:none;">
+      <p class="statusLabel">解答状況（タップでその問題へジャンプ）</p>
+      <div id="statusGrid"></div>
+    </div>
     <button id="nextBtn" onclick="nextQuestion()">次の問題へ →</button>
     <button id="backBtn" onclick="backToMenu()">分野選択に戻る</button>
   </div>
@@ -485,6 +515,8 @@ let idx = 0, score = 0;
 let wrongQuestions = [];
 let isScoredMode = false;
 let currentMode = null;
+let answersGiven = [];
+let flaggedSet = new Set();
 let catScore = { strategy:{correct:0,total:0}, management:{correct:0,total:0}, technology:{correct:0,total:0} };
 const modeLabels = { mini:'ネコと学ぶITミニ試験', exam:'本番形式ランダム', official:'IPA公式問題だけ', all:'全問ランダム総復習', strategy:'ストラテジ系', management:'マネジメント系', technology:'テクノロジ系', reviewWrong:'不正解だった問題の復習' };
 
@@ -703,6 +735,9 @@ function resumeSession(){
   currentMode = cr.mode;
   const wrongIds = Array.isArray(cr.wrongQids) ? cr.wrongQids : [];
   wrongQuestions = wrongIds.map(id=>byId[id]).filter(Boolean).map(shuffleChoices);
+  // 途中再開では1問ごとの回答内容までは保存していないため、解答状況は未回答からやり直しになる
+  answersGiven = new Array(current.length).fill(null);
+  flaggedSet = new Set();
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
@@ -718,6 +753,8 @@ function dismissResume(){
 function resetSessionState(){
   idx = 0; score = 0; wrongQuestions = [];
   catScore = { strategy:{correct:0,total:0}, management:{correct:0,total:0}, technology:{correct:0,total:0} };
+  answersGiven = new Array(current.length).fill(null);
+  flaggedSet = new Set();
 }
 
 function startMode(mode){
@@ -765,19 +802,40 @@ function reviewWrong(){
 
 function showQuestion(){
   const q = current[idx];
+  const examLike = (currentMode === 'all');
   document.getElementById('crumb').textContent = `HOME ＞ ${catLabels[q.cat]} ＞ No.${idx+1}`;
-  document.getElementById('score').textContent = `${idx+1} / ${current.length}問　正解 ${score}`;
+  document.getElementById('score').textContent = examLike
+    ? `${idx+1} / ${current.length}問`
+    : `${idx+1} / ${current.length}問　正解 ${score}`;
   document.getElementById('catBadge').textContent = catLabels[q.cat];
   document.getElementById('question').textContent = q.q;
   document.getElementById('result').style.display='none';
   document.getElementById('nextBtn').style.display='none';
   document.getElementById('backBtn').style.display='block';
+
+  const flagRow = document.getElementById('flagRow');
+  const statusWrap = document.getElementById('statusGridWrap');
+  const examNav = document.getElementById('examNavRow');
+  if(examLike){
+    flagRow.style.display='flex';
+    document.getElementById('flagCheck').checked = flaggedSet.has(idx);
+    statusWrap.style.display='block';
+    renderStatusGrid();
+    examNav.style.display='flex';
+    document.getElementById('prevBtn').disabled = (idx===0);
+  } else {
+    flagRow.style.display='none';
+    statusWrap.style.display='none';
+    examNav.style.display='none';
+  }
+
   const box = document.getElementById('answers');
   box.innerHTML='';
   q.a.forEach((text,i)=>{
     const div = document.createElement('div');
     div.className='choice-item';
     div.innerHTML = `<div class="choice-label">${choiceLabels[i]}</div><div class="choice-text">${text}</div>`;
+    if(examLike && answersGiven[idx]===i) div.classList.add('picked');
     div.onclick = ()=>selectAnswer(i);
     box.appendChild(div);
   });
@@ -785,17 +843,23 @@ function showQuestion(){
 
 function selectAnswer(i){
   const q = current[idx];
-  // 「全問ランダム総復習」だけは本番の雰囲気に寄せて、選んだ場だと正誤・解説を出さずに次へ進める
+  // 「全問ランダム総復習」だけは本番の雰囲気に寄せて、選んだ場だと正誤・解説を出さずに次へ進める。
+  // このモードは前の問題に戻って選び直せるので、採点は最後にまとめて行う（ここでは記録だけ）
   const examLike = (currentMode === 'all');
+  answersGiven[idx] = i;
+  if(examLike){
+    document.querySelectorAll('.choice-item').forEach((el,i2)=>{
+      el.classList.toggle('picked', i2===i);
+    });
+    renderStatusGrid();
+    saveProgress();
+    return;
+  }
   const items = document.querySelectorAll('.choice-item');
   items.forEach((el,i2)=>{
     el.classList.add('disabled-item');
-    if(examLike){
-      if(i2===i) el.classList.add('picked');
-    } else {
-      if(i2===q.c) el.classList.add('correct');
-      else if(i2===i) el.classList.add('wrong');
-    }
+    if(i2===q.c) el.classList.add('correct');
+    else if(i2===i) el.classList.add('wrong');
   });
   catScore[q.cat].total++;
   const isCorrect = i===q.c;
@@ -803,18 +867,71 @@ function selectAnswer(i){
   else { wrongQuestions.push(q); saveWrongQuestion(q.qid); }
   updateStats(isCorrect);
   const result = document.getElementById('result');
-  if(examLike){
-    result.style.display='none';
-  } else {
-    result.style.display='block';
-    result.innerHTML = `<b>正解：${choiceLabels[q.c]}</b><br>${q.d}`;
-  }
+  result.style.display='block';
+  result.innerHTML = `<b>正解：${choiceLabels[q.c]}</b><br>${q.d}`;
   document.getElementById('nextBtn').style.display='block';
+}
+
+function prevQuestion(){
+  if(idx<=0) return;
+  idx--;
+  saveProgress();
+  showQuestion();
+}
+
+function jumpToQuestion(n){
+  if(n<0 || n>=current.length || n===idx) return;
+  idx = n;
+  saveProgress();
+  showQuestion();
+}
+
+function toggleFlag(){
+  const checked = document.getElementById('flagCheck').checked;
+  if(checked) flaggedSet.add(idx); else flaggedSet.delete(idx);
+  renderStatusGrid();
+}
+
+function renderStatusGrid(){
+  const grid = document.getElementById('statusGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  current.forEach((q,i)=>{
+    const cell = document.createElement('div');
+    cell.className = 'status-cell';
+    if(answersGiven[i]!==null && answersGiven[i]!==undefined) cell.classList.add('answered');
+    if(i===idx) cell.classList.add('current');
+    if(flaggedSet.has(i)) cell.classList.add('flagged');
+    cell.textContent = i+1;
+    cell.onclick = ()=>jumpToQuestion(i);
+    grid.appendChild(cell);
+  });
+}
+
+// 「全問ランダム総復習」は選び直しができる分、正誤判定を最後の1回だけまとめて行う
+// （未回答の問題は不正解扱い。本番同様「白紙提出」も減点として扱うのが自然なため）
+function finalizeExamScoring(){
+  score = 0;
+  catScore = { strategy:{correct:0,total:0}, management:{correct:0,total:0}, technology:{correct:0,total:0} };
+  wrongQuestions = [];
+  current.forEach((q,i)=>{
+    catScore[q.cat].total++;
+    const picked = answersGiven[i];
+    const isCorrect = (picked !== null && picked !== undefined && picked === q.c);
+    if(isCorrect){ score++; catScore[q.cat].correct++; }
+    else { wrongQuestions.push(q); saveWrongQuestion(q.qid); }
+    updateStats(isCorrect);
+  });
 }
 
 function nextQuestion(){
   idx++;
-  if(idx>=current.length){ clearCurrentRun(); showEnd(); return; }
+  if(idx>=current.length){
+    if(currentMode==='all') finalizeExamScoring();
+    clearCurrentRun();
+    showEnd();
+    return;
+  }
   saveProgress();
   showQuestion();
 }
@@ -858,6 +975,30 @@ function catReaction(pct){
   if(pct >= 60) return {face:'😼', line:'惜しいにゃ…もう一声にゃ'};
   if(pct >= 40) return {face:'😿', line:'ちょっと復習が必要かもにゃ…'};
   return {face:'🙀', line:'これは基礎からやり直しにゃ！'};
+}
+
+// IPA公式ソフトの「試験結果詳細」に寄せた、問題番号・正答・自分の解答・正誤の一覧表
+function buildDetailTable(){
+  const rows = current.map((q,i)=>{
+    const picked = answersGiven[i];
+    const answered = picked !== null && picked !== undefined;
+    const userAns = answered ? choiceLabels[picked] : '－';
+    const correct = answered && picked === q.c;
+    const mark = !answered ? '－' : (correct ? '○' : '×');
+    const markColor = !answered ? '#94a3b8' : (correct ? '#16a34a' : '#dc2626');
+    return `<tr><td style="padding:4px 6px;border-top:1px solid #edf1f5;">${i+1}</td><td style="padding:4px 6px;border-top:1px solid #edf1f5;">${choiceLabels[q.c]}</td><td style="padding:4px 6px;border-top:1px solid #edf1f5;">${userAns}</td><td style="padding:4px 6px;border-top:1px solid #edf1f5;color:${markColor};font-weight:800;">${mark}</td></tr>`;
+  }).join('');
+  return `
+    <div style="margin-top:10px;text-align:left;">
+      <p style="font-size:12px;color:#64748b;font-weight:700;margin:0 0 6px;">📋 試験結果詳細（問題番号・正答・あなたの解答・正誤）</p>
+      <div style="max-height:260px;overflow-y:auto;border:1px solid #dbe2ea;border-radius:8px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;text-align:center;">
+          <tr style="background:#eaf3fb;color:#0a1a2e;position:sticky;top:0;"><th style="padding:5px;">問題</th><th style="padding:5px;">正答</th><th style="padding:5px;">あなたの解答</th><th style="padding:5px;">正誤</th></tr>
+          ${rows}
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 function showEnd(){
@@ -908,6 +1049,10 @@ function showEnd(){
       <div style="display:inline-block;padding:10px 24px;border-radius:8px;font-size:18px;font-weight:800;margin:4px 0 10px;background:${v.bg};color:${v.color};border:1px solid ${v.border};">${v.label}</div>
       <p style="font-size:11.5px;color:#64748b;line-height:1.6;margin:6px 0 0;">※このモードは本番の出題比率（ストラテジ35%・マネジメント20%・テクノロジ45%）どおりではないため、あくまで参考評価だよ。正式な合否判定は「本番形式ランダム」か「ネコと学ぶITミニ試験」で確認してね。</p>
     `;
+    // 本番のIPA公式ソフトの「疑似体験」結果画面にある問題別の正誤一覧を、全問ランダム総復習モードの結果画面にも追加
+    if(currentMode === 'all'){
+      endMsg.innerHTML += buildDetailTable();
+    }
   }
 
   if(fireworks) launchFireworks();
