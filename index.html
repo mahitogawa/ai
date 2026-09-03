@@ -3113,6 +3113,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // URLパラメータ（ITパスポートアプリの「略語チートシート」リンクなど）で略語チートシートを自動起動。
     // 表紙画面が一瞬見えてしまわないよう、待たずにすぐ切り替える
     if (params.get('screen') === 'cheat') {
+      // ITパスポートアプリから来た場合は覚えておいて、「戻る」でそちらへ帰れるようにする
+      if (params.get('from') === 'itp') {
+        _cheatBackTo = 'it-passport.html';
+      }
       showCheat();
       // 表紙を隠すための一時クラスはここで役目終わり。外しておかないと、
       // 「戻る」で表紙に戻ろうとしてもCSSのdisplay:none(!important)が
@@ -3929,6 +3933,7 @@ const cheatData = [
 let _cheatCurrentCat = "all";
 let _cheatOpenCats = {};
 let _cheatCurrentExam = "ai";
+let _cheatBackTo = null; // 他アプリ（ITパスポートなど）からチートシートへ直接来た場合の、戻り先URL
 
 function showCheat() {
   hideAllMainScreens();
@@ -4026,6 +4031,10 @@ function renderCheatList() {
 }
 
 function hideCheat() {
+  if (_cheatBackTo) {
+    location.href = _cheatBackTo;
+    return;
+  }
   hideAllMainScreens();
   document.getElementById("start-screen").style.display = "block";
   window.scrollTo({top:0,behavior:"auto"});
