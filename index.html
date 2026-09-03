@@ -26,6 +26,18 @@
   }catch(e){}
 })();
 </script>
+<script>
+// 「?screen=cheat」で開いた時に表紙画面が一瞬チラつくのを防ぐため、
+// 描画される前に先回りしてCSSで表紙を隠しておく（実際の切り替えはshowCheat()が行う）
+(function(){
+  try{
+    if(new URLSearchParams(location.search).get('screen') === 'cheat'){
+      document.documentElement.classList.add('jump-cheat');
+    }
+  }catch(e){}
+})();
+</script>
+<style>.jump-cheat #start-screen{ display:none !important; }</style>
 <title>生成AIパスポート 無料対策アプリ｜全419問2026年対応【合格者続出】</title>
 <meta name="description" content="生成AIパスポート試験を無料で対策。全419問・2026年新シラバス完全対応。カテゴリ別演習・略語チートシート・AI先生に質問機能搭載。脳梗塞リハビリ中の開発者が制作。">
 <meta name="keywords" content="生成AIパスポート,AI試験,対策アプリ,無料,2026,G検定,AI資格,ドリル,問題集,419問,GUGA,AI検定,プロンプト,LLM,RAG,生成AI,資格対策,スマホ">
@@ -3097,6 +3109,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('exam') === 'g') {
       setTimeout(() => selectExam('g'), 300);
+    }
+    // URLパラメータ（ITパスポートアプリの「略語チートシート」リンクなど）で略語チートシートを自動起動。
+    // 表紙画面が一瞬見えてしまわないよう、待たずにすぐ切り替える
+    if (params.get('screen') === 'cheat') {
+      showCheat();
     }
 });
 
