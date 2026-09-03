@@ -870,9 +870,9 @@ function showEnd(){
         ${passed ? '🎉 合格ライン到達' : '📕 合格ラインには未到達'}
       </div>
       <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:center;margin-bottom:8px;">
-        <tr style="background:#eaf3fb;"><th style="padding:6px;">分野</th><th style="padding:6px;">正解数</th><th style="padding:6px;">簡易評価点</th><th style="padding:6px;">判定</th></tr>
+        <tr style="background:#eaf3fb;color:#0a1a2e;"><th style="padding:6px;">分野</th><th style="padding:6px;">正解数</th><th style="padding:6px;">簡易評価点</th><th style="padding:6px;">判定</th></tr>
         ${rows}
-        <tr style="background:#eaf3fb;font-weight:800;"><td style="padding:6px;">総合</td><td style="padding:6px;">${score}/${current.length}問</td><td style="padding:6px;">${overallPoint}点</td><td style="padding:6px;">${passOverall ? '✅ 600点以上' : '❌ 600点未満'}</td></tr>
+        <tr style="background:#eaf3fb;color:#0a1a2e;font-weight:800;"><td style="padding:6px;">総合</td><td style="padding:6px;">${score}/${current.length}問</td><td style="padding:6px;">${overallPoint}点</td><td style="padding:6px;">${passOverall ? '✅ 600点以上' : '❌ 600点未満'}</td></tr>
       </table>
       <p style="font-size:11.5px;color:#64748b;line-height:1.6;margin:6px 0 0;">※本番のITパスポート試験は問題の難易度を考慮したIRT方式で採点され、計算方法の詳細はIPAから公表されていない。ここでの評価点は単純な正答率を1000点満点に換算した簡易的な目安で、実際の評価点とは異なるよ。</p>
     `;
