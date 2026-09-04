@@ -106,7 +106,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .canvas-grid td{padding:4px 8px;border:1px solid #dcdfe3;text-align:center;}
 .canvas-grid td.sel{background:#bcd6ff;outline:2px solid #1a73e8;outline-offset:-2px;}
 
-.hint-btn{display:block;width:100%;margin-top:12px;padding:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13.5px;font-weight:800;}
+.hint-btn{display:block;width:100%;margin-bottom:12px;padding:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13.5px;font-weight:800;}
 
 /* 結果 */
 #end-screen{display:none;}
@@ -195,7 +195,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 }
 #catToast.show{ transform:translate(-50%,-50%) scale(1); opacity:1; }
 #catToast .cat-emoji{ font-size:38px; line-height:1; animation:catBounce .6s ease infinite alternate; }
-#catToast .cat-msg{ font-size:14.5px; font-weight:800; color:#ffffff; }
+#catToast .cat-msg{ font-size:14.5px; font-weight:800; color:#ffffff; white-space:pre-line; }
 #catToast.wrong{ border-color:rgba(248,113,113,.5); }
 #catToast.streak{ border-color:rgba(250,204,21,.7); box-shadow:0 8px 24px rgba(0,0,0,.4), 0 0 18px rgba(250,204,21,.35); }
 #catToast.streak .cat-msg{ color:#fde68a; }
@@ -237,6 +237,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <div class="instruction-text" id="instructionText"></div>
     </div>
     <div class="feedback" id="feedback"></div>
+    <button class="hint-btn" onclick="showHint()">💡 ヒント（正解のタブを表示）</button>
     <div class="app-window">
       <div class="window-titlebar">
         <span class="win-dot red"></span><span class="win-dot yellow"></span><span class="win-dot green"></span>
@@ -249,7 +250,6 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
         <div id="catToast"><span class="cat-emoji" id="catToastEmoji">😸</span><span class="cat-msg" id="catToastMsg"></span></div>
       </div>
     </div>
-    <button class="hint-btn" onclick="showHint()">💡 ヒント（正解のタブを表示）</button>
   </div>
 
   <div id="end-screen">
@@ -431,7 +431,7 @@ function shuffle(arr){
 
 // ===== モチベ猫ギミック =====
 let catToastTimer = null;
-function showCatToast(correct, streakCount){
+function showCatToast(correct, streakCount, rateText){
   const el = document.getElementById('catToast');
   const emojiEl = document.getElementById('catToastEmoji');
   const msgEl = document.getElementById('catToastMsg');
@@ -442,6 +442,7 @@ function showCatToast(correct, streakCount){
     else if(streakCount >= 5){ emoji='😻'; msg=`${streakCount}連続一発正解、絶好調にゃ！`; isStreak=true; }
     else if(streakCount >= 3){ emoji='🙀'; msg=`${streakCount}連続一発正解！乗ってきたにゃ`; isStreak=true; }
     else { emoji='😸'; msg='正解にゃ！'; }
+    if(rateText) msg += `\n正答率 ${rateText}`;
   } else {
     const encourage = ['大丈夫、次いこう！','ここ覚えたら勝ちにゃ','どんまい、切り替えて！'];
     emoji='😿'; msg=encourage[Math.floor(Math.random()*encourage.length)];
@@ -537,7 +538,8 @@ function clickBtn(btnId){
     const isPerfect = (mistakesThisTask===0 && !hintUsedThisTask);
     if(isPerfect){ perfectCount++; streak++; if(streak > bestStreak) bestStreak = streak; }
     else { streak = 0; }
-    showCatToast(true, streak);
+    const rate = Math.round(perfectCount/(idx+1)*100);
+    showCatToast(true, streak, `${rate}%（${idx+1}問中${perfectCount}問）`);
     document.getElementById('simScoreLabel').textContent = `一発正解 ${perfectCount}`;
     setTimeout(()=>{
       idx++;

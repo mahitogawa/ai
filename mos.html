@@ -169,7 +169,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 }
 #catToast.show{ transform:translate(-50%,-50%) scale(1); opacity:1; }
 #catToast .cat-emoji{ font-size:38px; line-height:1; animation:catBounce .6s ease infinite alternate; }
-#catToast .cat-msg{ font-size:14.5px; font-weight:800; color:var(--ink); }
+#catToast .cat-msg{ font-size:14.5px; font-weight:800; color:var(--ink); white-space:pre-line; }
 #catToast.wrong{ border-color:rgba(248,113,113,.5); }
 #catToast.streak{ border-color:rgba(250,204,21,.7); box-shadow:0 8px 24px rgba(0,0,0,.4), 0 0 18px rgba(250,204,21,.35); }
 #catToast.streak .cat-msg{ color:#fde68a; }
@@ -476,7 +476,7 @@ function cloneQ(q){ return Object.assign({}, q); }
 
 // ===== モチベ猫ギミック =====
 let catToastTimer = null;
-function showCatToast(correct, streakCount){
+function showCatToast(correct, streakCount, rateText){
   const el = document.getElementById('catToast');
   const emojiEl = document.getElementById('catToastEmoji');
   const msgEl = document.getElementById('catToastMsg');
@@ -487,6 +487,7 @@ function showCatToast(correct, streakCount){
     else if(streakCount >= 5){ emoji='😻'; msg=`${streakCount}連続正解、絶好調にゃ！`; isStreak=true; }
     else if(streakCount >= 3){ emoji='🙀'; msg=`${streakCount}連続正解！乗ってきたにゃ`; isStreak=true; }
     else { emoji='😸'; msg='正解にゃ！'; }
+    if(rateText) msg += `\n正答率 ${rateText}`;
   } else {
     const encourage = ['大丈夫、次いこう！','ここ覚えたら勝ちにゃ','どんまい、切り替えて！'];
     emoji='😿'; msg=encourage[Math.floor(Math.random()*encourage.length)];
@@ -552,7 +553,8 @@ function selectAnswer(pos){
 
   if(isCorrect){ streak++; if(streak > bestStreak) bestStreak = streak; }
   else { streak = 0; }
-  showCatToast(isCorrect, streak);
+  const rate = Math.round(score/(idx+1)*100);
+  showCatToast(isCorrect, streak, isCorrect ? `${rate}%（${idx+1}問中${score}問）` : null);
 
   document.getElementById('quizScore').textContent = `正解 ${score}`;
   document.getElementById('nextBtn').classList.add('show');
