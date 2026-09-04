@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MOS対策ドリル（ワード・エクセル 一般）</title>
+<meta name="description" content="MOS(Microsoft Office Specialist) ワード・エクセル一般レベルの用語・操作を4択クイズで予備学習できるドリルアプリ。">
+<meta name="theme-color" content="#0a1a2e">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0a1a2e; --navy-dark:#050d18;
+  --teal:#22d3ee; --teal-hover:#0891b2;
+  --word:#2b7de9; --excel:#1e9e5a;
+  --ink:#e0f7ff; --muted:rgba(255,255,255,.65);
+  --line:rgba(148,163,184,.2);
+  --danger:#f87171; --good:#34d399;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34,211,238,.12) 0%, transparent 60%),
+    linear-gradient(170deg, var(--navy) 0%, var(--navy-dark) 45%);
+  background-attachment:fixed;
+  color:var(--ink); min-height:100vh;
+}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;user-select:none;-webkit-user-select:none;font-family:inherit;}
+
+#topHeader{background:var(--navy);padding:16px;border-bottom:1px solid rgba(34,211,238,.25);text-align:center;}
+#topHeader h1{font-size:22px;margin:0;color:#e0f7ff;font-weight:900;letter-spacing:.01em;}
+#topHeader .tagline{font-size:14px;color:#9fd8e8;margin:6px 0 0;font-weight:700;}
+
+.wrap{max-width:680px;margin:0 auto;padding:18px 14px 80px;}
+
+#crosslink{text-align:center;padding:7px 16px;background:var(--navy-dark);border-bottom:1px solid var(--line);}
+#crosslink a{color:var(--teal);font-size:13.5px;font-weight:700;text-decoration:none;margin:0 8px;}
+#crosslink a.sim-link{display:inline-block;margin-top:8px;font-size:16px;font-weight:900;color:#0a1a2e;background:linear-gradient(135deg,#5eead4,#22d3ee);padding:8px 18px;border-radius:999px;box-shadow:0 3px 10px rgba(34,211,238,.35);}
+
+/* メニュー */
+#menu-screen{
+  background:
+    linear-gradient(rgba(34,211,238,.05) 1px, transparent 1px) 0 0/22px 22px,
+    linear-gradient(90deg, rgba(34,211,238,.05) 1px, transparent 1px) 0 0/22px 22px,
+    radial-gradient(ellipse at 50% 0%, rgba(34,211,238,0.16) 0%, transparent 60%),
+    linear-gradient(170deg, #0a1a2e 0%, #050d18 100%);
+  border-radius:20px; padding:18px 14px 22px;
+  box-shadow:0 8px 32px rgba(34,211,238,0.14), 0 2px 40px rgba(0,0,0,0.6);
+  position:relative; overflow:hidden;
+}
+.stat-line{font-size:13px;color:var(--muted);text-align:center;margin-bottom:14px;font-weight:700;}
+.sub-heading{font-size:14px;font-weight:900;color:var(--teal);margin:16px 0 8px;padding-left:2px;}
+.sub-heading.excel{color:#4ade80;}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:4px;}
+.menu button{
+  background:radial-gradient(ellipse at 50% 20%, rgba(34,211,238,0.12) 0%, transparent 70%), linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
+  color:#d7f5fb; font-size:14.5px; padding:16px 10px; border-radius:14px;
+  border:1px solid rgba(34,211,238,.28); font-weight:700; line-height:1.45;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative; transition:transform .12s, box-shadow .12s, border-color .12s;
+}
+.menu button:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.7);}
+.menu button:active{transform:scale(.96);}
+.menu button.wide{grid-column:1/-1;}
+.menu button.mini{
+  background:radial-gradient(ellipse at 50% 0%, rgba(34,211,238,.18) 0%, transparent 70%), linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
+  border:2px solid var(--teal); padding-top:20px;
+  box-shadow:0 0 0 1px rgba(34,211,238,.25) inset, 0 0 22px rgba(34,211,238,.3), 0 8px 20px rgba(0,0,0,.4);
+}
+.menu button.excel-cat{border-color:rgba(74,222,128,.3);}
+.menu button.excel-cat:hover{border-color:rgba(74,222,128,.7);}
+.gicon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:7px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.4);}
+.excel-cat .gicon{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.4);}
+.mtitle{margin:0;}
+.msub{display:block;font-weight:500;font-size:.82em;opacity:.75;margin-top:3px;}
+.badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fbbf24;color:#1a0e08;font-size:11px;font-weight:800;padding:3px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+
+/* クイズ画面 */
+#quiz-screen{display:none;}
+#quiz-screen.show{display:block;}
+.quiz-back{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:10px;padding:0;}
+.quiz-back:active{color:var(--teal);}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.quiz-progress{font-size:13px;font-weight:800;color:var(--teal);}
+.quiz-score{font-size:13px;font-weight:800;color:var(--good);}
+.progress-bar-wrap{height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-bottom:18px;}
+.progress-bar{height:100%;background:linear-gradient(to right,var(--teal),#67e8f9);border-radius:999px;transition:.3s ease;}
+.q-card{background:linear-gradient(160deg,#17304e 0%,#0f2138 100%);border:1px solid rgba(148,163,184,.35);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.35);}
+.q-cat-tag{display:inline-block;font-size:11.5px;font-weight:800;color:var(--teal);background:rgba(34,211,238,.1);border-radius:999px;padding:3px 10px;margin-bottom:10px;}
+.q-text{font-size:16.5px;font-weight:700;line-height:1.6;color:#f0feff;}
+.choices{display:flex;flex-direction:column;gap:10px;}
+.choice-btn{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.09);border:1.5px solid rgba(148,163,184,.4);border-radius:12px;
+  padding:13px 14px;font-size:14.5px;font-weight:700;color:#ffffff;
+  text-align:left;transition:.12s;
+}
+.choice-btn:active{transform:scale(.98);}
+.choice-btn .cl{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--teal);}
+.choice-btn.correct{background:rgba(52,211,153,.15);border-color:var(--good);}
+.choice-btn.correct .cl{background:var(--good);border-color:var(--good);color:#04211c;}
+.choice-btn.wrong{background:rgba(248,113,113,.15);border-color:var(--danger);}
+.choice-btn.wrong .cl{background:var(--danger);border-color:var(--danger);color:#fff;}
+.choice-btn.disabled{pointer-events:none;opacity:.75;}
+.choice-btn.disabled.correct,.choice-btn.disabled.wrong{opacity:1;}
+.next-btn{display:none;width:100%;padding:15px;margin-top:14px;background:var(--teal);color:#04141f;border:none;border-radius:14px;font-size:16px;font-weight:900;box-shadow:0 4px 16px rgba(34,211,238,.35);}
+.next-btn.show{display:block;}
+
+/* 結果画面 */
+#end-screen{display:none;}
+#end-screen.show{display:block;}
+.end-card{background:var(--navy);border:1px solid var(--line);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:16px;}
+.end-score{font-size:44px;font-weight:900;color:var(--teal);margin:6px 0;}
+.end-msg{font-size:14.5px;color:var(--muted);font-weight:700;line-height:1.7;}
+.detail-title{font-size:12.5px;color:var(--muted);font-weight:700;margin:14px 0 6px;text-align:left;}
+.detail-wrap{max-height:280px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;}
+.detail-table{width:100%;border-collapse:collapse;font-size:12.5px;text-align:left;}
+.detail-table th{background:rgba(34,211,238,.1);color:var(--ink);padding:6px 8px;position:sticky;top:0;}
+.detail-table td{padding:6px 8px;border-top:1px solid var(--line);}
+.act-row{display:flex;gap:10px;margin-top:16px;}
+.act-btn{flex:1;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:900;}
+.act-again{background:var(--teal);color:#04141f;}
+.act-menu{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line);}
+
+.site-footer{text-align:center;padding:20px 16px;color:var(--muted);font-size:12.5px;font-weight:700;border-top:1px solid var(--line);margin-top:20px;}
+.site-footer a{color:var(--teal);text-decoration:none;font-weight:800;}
+#gc-visits{display:block;margin-top:6px;}
+
+/* PC（広い画面）向けに拡大表示 */
+@media (min-width:900px){
+  .wrap{max-width:980px;}
+  #topHeader h1{font-size:26px;}
+  #topHeader .tagline{font-size:15px;}
+  .stat-line{font-size:14.5px;}
+  .sub-heading{font-size:16px;}
+  .menu button{font-size:16px;padding:20px 14px;}
+  .gicon{font-size:24px;margin-bottom:8px;}
+  .msub{font-size:.85em;}
+  .q-cat-tag{font-size:13px;padding:4px 12px;}
+  .q-text{font-size:19px;}
+  .q-card{padding:24px;}
+  .choice-btn{font-size:16px;padding:16px 18px;}
+  .choice-btn .cl{width:30px;height:30px;font-size:15px;}
+  .next-btn{font-size:18px;padding:17px;}
+  .quiz-progress,.quiz-score{font-size:14px;}
+  .end-score{font-size:50px;}
+  .end-msg{font-size:15.5px;}
+  .detail-table{font-size:14px;}
+  .act-btn{font-size:16px;padding:16px;}
+}
+
+/* ===== モチベ猫ギミック ===== */
+.choices-wrap{ position:relative; }
+#catToast{
+  position:absolute; left:50%; top:50%; z-index:50;
+  transform:translate(-50%,-50%) scale(.6);
+  background:linear-gradient(135deg,#0f2942,#0a1a2e);
+  border:1.5px solid rgba(34,211,238,.5);
+  box-shadow:0 8px 28px rgba(0,0,0,.55), 0 0 0 1px rgba(34,211,238,.08) inset;
+  border-radius:16px;
+  padding:14px 22px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  pointer-events:none;
+  opacity:0;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+  max-width:82%;
+  text-align:center;
+}
+#catToast.show{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+#catToast .cat-emoji{ font-size:38px; line-height:1; animation:catBounce .6s ease infinite alternate; }
+#catToast .cat-msg{ font-size:14.5px; font-weight:800; color:var(--ink); }
+#catToast.wrong{ border-color:rgba(248,113,113,.5); }
+#catToast.streak{ border-color:rgba(250,204,21,.7); box-shadow:0 8px 24px rgba(0,0,0,.4), 0 0 18px rgba(250,204,21,.35); }
+#catToast.streak .cat-msg{ color:#fde68a; }
+@keyframes catBounce{ from{ transform:translateY(0) rotate(-4deg);} to{ transform:translateY(-4px) rotate(4deg);} }
+
+.cat-mascot{ font-size:56px; text-align:center; margin:2px 0 4px; animation:catBounce 1.1s ease infinite alternate; }
+@media (max-width:480px){ #catToast .cat-msg{ font-size:13px; } #catToast .cat-emoji{ font-size:32px; } }
+</style>
+</head>
+<body>
+
+<div id="topHeader">
+  <h1>📊 MOS対策ドリル</h1>
+  <p class="tagline">ワード・エクセル 一般レベル｜用語・操作の4択クイズ</p>
+</div>
+
+<div id="crosslink">
+  <a href="index.html">🐱 生成AIパスポート</a>
+  <a href="it-passport.html">🐈 ITパスポート</a>
+  <br>
+  <a href="mos-sim.html" class="sim-link">🖱️ 操作シミュレーション版（PC推奨）</a>
+</div>
+
+<div class="wrap">
+
+  <div id="menu-screen">
+    <div class="stat-line" id="statLine">これまでの累計：読み込み中...</div>
+
+    <div class="menu" id="topMenu">
+      <button class="wide mini" onclick="startMode('mini')"><span class="badge">⭐ おすすめ・混合20問</span><div class="gicon">🎯</div><div class="mtitle">ワード＋エクセル ミニ復習</div><div class="msub">（混合20問・結果がすぐ出る）</div></button>
+    </div>
+
+    <div class="sub-heading">📝 ワード（Word）一般</div>
+    <div class="menu" id="wordMenu"></div>
+
+    <div class="sub-heading excel">📈 エクセル（Excel）一般</div>
+    <div class="menu" id="excelMenu"></div>
+
+    <div class="menu" style="margin-top:10px;">
+      <button class="wide" onclick="startMode('all')"><div class="gicon">🔁</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（ワード・エクセル 全120問）</div></button>
+    </div>
+  </div>
+
+  <div id="quiz-screen">
+    <div class="quiz-top">
+      <div class="quiz-progress" id="quizProgress">1 / 15</div>
+      <div class="quiz-score" id="quizScore">正解 0</div>
+    </div>
+    <button class="quiz-back" onclick="exitQuiz()">← メニューに戻る（途中でやめる）</button>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%;"></div></div>
+    <div class="q-card">
+      <span class="q-cat-tag" id="qCatTag">ワード</span>
+      <div class="q-text" id="qText"></div>
+    </div>
+    <div class="choices-wrap">
+      <div class="choices" id="qChoices"></div>
+      <div id="catToast"><span class="cat-emoji" id="catToastEmoji">😸</span><span class="cat-msg" id="catToastMsg"></span></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">次へ →</button>
+  </div>
+
+  <div id="end-screen">
+    <div class="end-card">
+      <div style="font-size:14px;color:var(--muted);font-weight:700;">結果</div>
+      <div class="cat-mascot" id="endCatFace">😺</div>
+      <div class="end-score" id="endScore">0%</div>
+      <div class="end-msg" id="endMsg"></div>
+      <div class="end-msg" id="endStreakMsg" style="color:#fde68a;"></div>
+    </div>
+    <div class="detail-title">📋 回答詳細（問題・あなたの解答・正誤）</div>
+    <div class="detail-wrap">
+      <table class="detail-table">
+        <tr><th>問題</th><th>あなたの解答</th><th>正誤</th></tr>
+        <tbody id="detailBody"></tbody>
+      </table>
+    </div>
+    <div class="act-row">
+      <button class="act-btn act-again" onclick="showMenu()">🔄 メニューに戻る</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="site-footer">
+  © Mahito｜MOSは Microsoft の登録商標です。本アプリは非公式の学習用ドリルであり、公式試験問題ではありません。
+  <span id="gc-visits">👀 訪問者数：読み込み中...</span>
+</div>
+
+<script>
+// ===== カテゴリ定義 =====
+const CATS = [
+  {id:'w0', subject:'word',  icon:'📁', label:'文書管理・基本操作'},
+  {id:'w1', subject:'word',  icon:'🔤', label:'文字・段落の書式設定'},
+  {id:'w2', subject:'word',  icon:'📋', label:'表とリスト'},
+  {id:'w3', subject:'word',  icon:'📑', label:'参考資料の作成と管理'},
+  {id:'w4', subject:'word',  icon:'🖼', label:'グラフィック要素'},
+  {id:'e0', subject:'excel', icon:'📗', label:'ワークシート・ブック管理'},
+  {id:'e1', subject:'excel', icon:'🔢', label:'セルとデータ管理'},
+  {id:'e2', subject:'excel', icon:'🗂', label:'テーブルの管理'},
+  {id:'e3', subject:'excel', icon:'🧮', label:'数式・関数'},
+  {id:'e4', subject:'excel', icon:'📉', label:'グラフの作成・管理'},
+];
+
+// ===== 問題データ（4択・全80問） =====
+const QUESTIONS = [
+// --- w0 文書管理・基本操作 ---
+{cat:'w0', q:'Wordで作成した文書を「以前のバージョンのWordでも開ける形式」で保存したいとき、名前を付けて保存の「ファイルの種類」で選ぶべき形式は？', choices:['Word 97-2003 文書 (.doc)','PDF (.pdf)','Word テンプレート (.dotx)','Web ページ (.htm)'], a:0},
+{cat:'w0', q:'文書内の総ページ数と現在のページ番号を確認できる場所は？', choices:['クイックアクセスツールバー','ステータスバー','リボンの「表示」タブのみ','タイトルバー'], a:1},
+{cat:'w0', q:'印刷前に、実際の見た目を確認できる機能は？', choices:['印刷プレビュー（ファイル＞印刷）','校閲','スペルチェック','変更履歴'], a:0},
+{cat:'w0', q:'文書のプロパティ（作成者、タイトルなど）を確認・編集できる場所は？', choices:['ホームタブ','ファイル＞情報','挿入タブ','レイアウトタブ'], a:1},
+{cat:'w0', q:'作業中の文書を誤って閉じてしまった場合に、自動保存されたファイルを探す機能は？', choices:['自動回復（文書の管理）','ごみ箱','クリップボード','テンプレート'], a:0},
+{cat:'w0', q:'複数のウィンドウで同じ文書を並べて表示し、別の箇所を同時に編集・比較したいときに使う機能は？', choices:['ウィンドウの分割（表示タブ）','ページ設定','セクション区切り','差し込み印刷'], a:0},
+{cat:'w0', q:'文書をテンプレートとして保存する際の拡張子は？', choices:['.docx','.dotx','.docm','.pdf'], a:1},
+{cat:'w0', q:'よく使うコマンドを常に表示させておきたいときに追加する場所は？', choices:['クイックアクセスツールバー','ステータスバー','ルーラー','ナビゲーションウィンドウ'], a:0},
+// --- w1 文字・段落の書式設定 ---
+{cat:'w1', q:'文字に取り消し線を引く書式ボタンがあるのは？', choices:['ホームタブのフォントグループ','挿入タブ','レイアウトタブ','校閲タブ'], a:0},
+{cat:'w1', q:'段落の先頭行だけを字下げする設定は？', choices:['ぶら下げインデント','1行目のインデント','均等割り付け','行間設定'], a:1},
+{cat:'w1', q:'見出しに統一感を持たせ、後で目次を自動作成できるようにするために使うべき機能は？', choices:['スタイル（見出し1・見出し2など）','蛍光ペン','ワードアート','透かし'], a:0},
+{cat:'w1', q:'段落と段落の間の余白（段落前・段落後）を設定するダイアログを開くには？', choices:['「段落」ダイアログ','「フォント」ダイアログ','「ページ設定」ダイアログ','「タブとリーダー」ダイアログ'], a:0},
+{cat:'w1', q:'特定の文字列だけを検索して別の文字列に一括で置き換える機能は？', choices:['置換（Ctrl+H）','スペルチェック','ナビゲーション','校閲'], a:0},
+{cat:'w1', q:'行の途中で強制的に改行するが、新しい段落にはしたくないときに使うキー操作は？', choices:['Shift + Enter','Ctrl + Enter','Enter','Ctrl + Shift + Enter'], a:0},
+{cat:'w1', q:'文字の色や背景色ではなく、「蛍光ペンで線を引いたような強調」をする機能は？', choices:['蛍光ペンの色（ホームタブ）','フォントの色','罫線','スタイル'], a:0},
+{cat:'w1', q:'書式のみをコピーして他の文字に適用する機能は？', choices:['書式のコピー/貼り付け（ハケのアイコン）','形式を選択して貼り付け','テキストのみ保持','リンク貼り付け'], a:0},
+// --- w2 表とリスト ---
+{cat:'w2', q:'文章の一部を選択して、Wordの表に変換する機能は？', choices:['「挿入」タブ→表→文字列を表にする','「デザイン」タブ','「校閲」タブ','「参考資料」タブ'], a:0},
+{cat:'w2', q:'表の行を数値の昇順などで並べ替える機能はどこにある？', choices:['表ツールの「レイアウト」タブの「並べ替え」','「ホーム」タブ','「挿入」タブ','「校閲」タブ'], a:0},
+{cat:'w2', q:'番号付きリストの途中の番号を「1」以外から始めたいときは？', choices:['「番号の設定」から開始番号を指定する','リストを削除して作り直す','フォントサイズを変える','インデントを増やす'], a:0},
+{cat:'w2', q:'表の複数のセルを1つに結合する機能がある場所は？', choices:['表ツールの「レイアウト」タブ','「デザイン」タブ','「挿入」タブ','「校閲」タブ'], a:0},
+{cat:'w2', q:'箇条書きの行頭記号（●や■など）を変更する機能は？', choices:['「箇条書き」ボタンの▼から記号を選択','フォントを変更','段落記号を表示','スタイルの管理'], a:0},
+{cat:'w2', q:'表の各列の幅をすべて均等にそろえる機能は？', choices:['表ツールの「レイアウト」タブの「幅を揃える」','「デザイン」タブの「飾り枠」','セルの結合','表のスタイル'], a:0},
+{cat:'w2', q:'Excelの表データをWord文書に「元のExcelとリンクした状態」で貼り付ける方法は？', choices:['形式を選択して貼り付け→リンク貼り付け','通常の貼り付け（Ctrl+V）','テキストのみ保持','図として貼り付け（リンクなし）'], a:0},
+{cat:'w2', q:'表全体に統一されたデザイン（色・罫線）を一括で適用する機能は？', choices:['表のスタイル（表ツールの「デザイン」タブ）','セルの網かけを1つずつ設定','段落スタイル','テーマの変更のみ'], a:0},
+// --- w3 参考資料の作成と管理 ---
+{cat:'w3', q:'見出しスタイルを使った文書から、自動で目次を作成する機能はどのタブにある？', choices:['参考資料タブの「目次」','挿入タブ','レイアウトタブ','校閲タブ'], a:0},
+{cat:'w3', q:'文中の用語について、ページ下部に説明を追加する機能は？', choices:['脚注（参考資料タブ）','コメント','相互参照','ハイパーリンク'], a:0},
+{cat:'w3', q:'すべてのページ上部に共通して表示される情報（ロゴや文書名など）を設定する機能は？', choices:['ヘッダー（挿入タブ）','フッター専用のツール','透かし','ページ罫線'], a:0},
+{cat:'w3', q:'目次の見出しをクリックすると、そのページへ自動でジャンプできるようにするために必要なことは？', choices:['見出しに見出しスタイルを適用しておく','見出しをすべて太字にする','フォントサイズを大きくする','段落記号を表示する'], a:0},
+{cat:'w3', q:'「詳細は◯ページを参照」のような、文書内の別の場所への参照を自動更新される形で作る機能は？', choices:['相互参照（参考資料タブ）','ハイパーリンク（挿入タブ）のみ','コメント','ブックマークのみで完結'], a:0},
+{cat:'w3', q:'参考文献の一覧（引用文献リスト）を自動で作成・管理する機能があるタブは？', choices:['参考資料タブ','校閲タブ','レイアウトタブ','デザインタブ'], a:0},
+{cat:'w3', q:'宛名などを1件ずつ差し替えて大量に印刷する「差し込み印刷」の機能があるタブは？', choices:['差し込み文書タブ','校閲タブ','表示タブ','参考資料タブ'], a:0},
+{cat:'w3', q:'差し込み印刷で使うデータの元として使えるものは？', choices:['Excelの一覧表やOutlookの連絡先など','PowerPointのスライドのみ','PDFファイルのみ','画像ファイルのみ'], a:0},
+// --- w4 グラフィック要素 ---
+{cat:'w4', q:'文書に図やイラストを挿入するタブは？', choices:['挿入タブ','デザインタブ','レイアウトタブ','校閲タブ'], a:0},
+{cat:'w4', q:'画像の周りに文字を回り込ませる設定を変更する機能は？', choices:['文字列の折り返し','図のスタイル','トリミング','図の圧縮'], a:0},
+{cat:'w4', q:'組織図や手順図をきれいなデザインで簡単に作成できる機能は？', choices:['SmartArt','ワードアート','図形の結合','テキストボックスの連結'], a:0},
+{cat:'w4', q:'画像の不要な部分を切り取って必要な部分だけ表示する機能は？', choices:['トリミング','図の圧縮','アート効果','背景の削除'], a:0},
+{cat:'w4', q:'印刷では目立たず、背景に薄く「社外秘」などの文字を入れる機能は？', choices:['透かし（デザインタブ）','ページの色','図形の背景','ヘッダー'], a:0},
+{cat:'w4', q:'複数の図形をまとめて1つのオブジェクトとして扱う機能は？', choices:['グループ化（図形の書式タブ）','配置','前面へ移動','回転'], a:0},
+{cat:'w4', q:'画像の背景（不要な部分）を自動で透明にする機能は？', choices:['背景の削除','トリミング','図の枠線','図の圧縮'], a:0},
+{cat:'w4', q:'テキストボックスや図形内の文字の配置（上下中央など）を調整する機能は？', choices:['図形の書式設定のテキストボックスのオプション','フォントの色','段落番号','ルーラー'], a:0},
+// --- e0 ワークシート・ブック管理 ---
+{cat:'e0', q:'新しいシートを追加するボタンはどこにある？', choices:['シート見出しの右にある「＋」','ホームタブの挿入のみ','リボンの右端','ステータスバーの右端'], a:0},
+{cat:'e0', q:'シート見出しを右クリックして「シートの移動またはコピー」を使うとできることは？', choices:['シートの順番の変更やコピーの作成','セルの書式コピーのみ','行の削除','印刷範囲の設定'], a:0},
+{cat:'e0', q:'ブックを他の人が編集できないように保護する機能は？', choices:['ブックの保護（校閲タブ）','セルの書式設定のみ','名前の管理','ウィンドウ枠の固定'], a:0},
+{cat:'e0', q:'行や列を固定して、スクロールしても見出し行が常に見えるようにする機能は？', choices:['ウィンドウ枠の固定（表示タブ）','シートの保護','グループ化','印刷タイトル'], a:0},
+{cat:'e0', q:'印刷したときに毎ページ同じ見出し行を印刷する設定はどこで行う？', choices:['ページレイアウトタブの「印刷タイトル」','ウィンドウ枠の固定','ヘッダーとフッター','セルの書式設定'], a:0},
+{cat:'e0', q:'シートを非表示にする操作は、シート見出しを右クリックして何を選ぶ？', choices:['非表示','削除','保護','名前の変更'], a:0},
+{cat:'e0', q:'複数のシートを同時に選択して、同じ内容の入力などを一括で行う機能は？', choices:['作業グループ（Ctrlキーを押しながらシート見出しをクリック）','シートの結合','テーブルの作成','名前の定義'], a:0},
+{cat:'e0', q:'Excelブックをテンプレートとして保存するときの拡張子は？', choices:['.xlsx','.xltx','.xlsm','.csv'], a:1},
+// --- e1 セルとデータ管理 ---
+{cat:'e1', q:'複数のセルを1つに結合して中央に文字を配置する機能は？', choices:['セルを結合して中央揃え（ホームタブ）','折り返して全体を表示','インデント','均等割り付け'], a:0},
+{cat:'e1', q:'長い文字列がセルからはみ出す場合に、セル内で折り返して全部表示する機能は？', choices:['折り返して全体を表示する','セルを結合して中央揃え','列の幅を自動調整のみ','フォントサイズを縮小'], a:0},
+{cat:'e1', q:'データを条件に応じて自動で色分けする機能は？', choices:['条件付き書式','セルのスタイル','テーマの色','データの入力規則'], a:0},
+{cat:'e1', q:'入力できる値を「1〜100の整数のみ」のように制限する機能は？', choices:['データの入力規則','条件付き書式','セルの保護','表示形式'], a:0},
+{cat:'e1', q:'特定の列や行を基準にデータを並べ替える機能はどのタブにある？', choices:['データタブの「並べ替え」','ホームタブのみ','挿入タブ','数式タブ'], a:0},
+{cat:'e1', q:'条件に合うデータだけを一時的に絞り込んで表示する機能は？', choices:['フィルター（データタブ）','並べ替え','ピボットテーブルのみ','名前の定義'], a:0},
+{cat:'e1', q:'セルに入力した数値を「¥1,000」のように通貨表示にする機能は？', choices:['セルの書式設定の表示形式','条件付き書式','データの入力規則','セルの結合'], a:0},
+{cat:'e1', q:'同じ値が入力されているセルを見つけて色をつけたいときに使う機能は？', choices:['条件付き書式の「重複する値」','データの入力規則','オートフィルター','名前の管理'], a:0},
+// --- e2 テーブルの管理 ---
+{cat:'e2', q:'選択したセル範囲を「テーブル」として書式設定すると使えるようになる機能は？', choices:['見出し行の自動フィルターや構造化参照','印刷が自動でできなくなる','グラフが作れなくなる','セルの結合が必須になる'], a:0},
+{cat:'e2', q:'テーブルに新しい行を追加するもっとも簡単な方法は？', choices:['テーブルの最終行のすぐ下にデータを入力する','常にリボンから手動で行を挿入する','別シートに書く','行の削除ボタンを押す'], a:0},
+{cat:'e2', q:'テーブルの列を参照するときに使える、セル番地の代わりの参照方法は？', choices:['構造化参照（列見出し名を使う参照）','絶対参照のみ','相対参照のみ','名前の定義のみ'], a:0},
+{cat:'e2', q:'テーブルのデザイン（縞模様の色など）をまとめて変更する機能は？', choices:['テーブルスタイル（テーブルデザインタブ）','セルの塗りつぶしを1つずつ設定','条件付き書式','テーマの変更のみ'], a:0},
+{cat:'e2', q:'テーブルを普通のセル範囲に戻す操作は？', choices:['範囲に変換（テーブルデザインタブ）','テーブルの削除','シートの削除','データの入力規則の解除'], a:0},
+{cat:'e2', q:'テーブル内の合計や平均をワンクリックで表示できる行は？', choices:['集計行','ヘッダー行','フィルター行','タイトル行'], a:0},
+{cat:'e2', q:'複数のテーブルの見た目を統一するために便利な機能は？', choices:['同じテーブルスタイルを適用する','毎回手動で色を塗る','セルを結合する','フォントだけ揃える'], a:0},
+{cat:'e2', q:'テーブルに名前を付けて、数式で参照しやすくする設定はどこにある？', choices:['テーブルデザインタブの「テーブル名」','ホームタブ','挿入タブ','校閲タブ'], a:0},
+// --- e3 数式・関数 ---
+{cat:'e3', q:'セルA1からA10までの合計を求める関数は？', choices:['=SUM(A1:A10)','=TOTAL(A1:A10)','=ADD(A1:A10)','=COUNT(A1:A10)'], a:0},
+{cat:'e3', q:'平均値を求める関数は？', choices:['=AVERAGE(範囲)','=MEDIAN(範囲)','=SUM(範囲)/2','=MODE(範囲)'], a:0},
+{cat:'e3', q:'条件を満たすセルの個数を数える関数は？', choices:['=COUNTIF(範囲,条件)','=SUMIF(範囲,条件)','=COUNT(範囲)','=IF(条件,真,偽)'], a:0},
+{cat:'e3', q:'「条件が真なら○、偽なら×」のように条件分岐する関数は？', choices:['=IF(条件,真の場合,偽の場合)','=AND(条件1,条件2)','=OR(条件1,条件2)','=COUNTIF(範囲,条件)'], a:0},
+{cat:'e3', q:'数式をコピーしても参照先が動かないようにするために使う記号は？', choices:['$（例：$A$1）','%','#','&'], a:0},
+{cat:'e3', q:'表の左端の列を検索して、対応する値を別の列から取得する関数は？', choices:['=VLOOKUP(検索値,範囲,列番号,FALSE)','=HLOOKUP(検索値,範囲,行番号,TRUE)のみ','=INDEX(範囲,行,列)のみ','=SUM(範囲)'], a:0},
+{cat:'e3', q:'セル参照で、行だけ固定して列は動かしたいときの書き方は？', choices:['A$1（行だけ絶対参照）','$A1（列だけ絶対参照）','$A$1（両方絶対参照）','A1（相対参照）'], a:0},
+{cat:'e3', q:'数式のエラー「#DIV/0!」が意味するのは？', choices:['0で割り算をしている','参照先のセルが存在しない','数値ではない値を計算しようとした','名前が定義されていない'], a:0},
+// --- e4 グラフの作成・管理 ---
+{cat:'e4', q:'選択したデータから、同じシート内にグラフをすばやく作成するショートカットキーは？', choices:['Alt + F1','F11のみ','Ctrl + G','Ctrl + F1'], a:0},
+{cat:'e4', q:'全体に対する割合（比率）を表すのに最も適したグラフの種類は？', choices:['円グラフ','折れ線グラフ','散布図','レーダーチャート'], a:0},
+{cat:'e4', q:'時系列でのデータの推移（売上の変化など）を表すのに適したグラフは？', choices:['折れ線グラフ','円グラフ','積み上げ横棒グラフのみ','ドーナツグラフ'], a:0},
+{cat:'e4', q:'グラフの種類やデザインを後から変更するときに使うタブは？', choices:['グラフのデザインタブ','数式タブ','データタブ','校閲タブ'], a:0},
+{cat:'e4', q:'グラフに項目名や数値を直接表示するための要素は？', choices:['データラベル','凡例のみ','軸ラベルのみ','グラフタイトルのみ'], a:0},
+{cat:'e4', q:'グラフの元になるデータ範囲を後から変更する機能は？', choices:['データの選択（グラフのデザインタブ）','グラフの種類の変更のみ','グラフエリアの書式設定','グラフのレイアウト'], a:0},
+{cat:'e4', q:'複数系列のデータを積み重ねて、全体と内訳の変化を表すのに向いているグラフは？', choices:['積み上げグラフ','散布図','レーダーチャート','ヒストグラム'], a:0},
+{cat:'e4', q:'グラフをシート内ではなく、独立した「グラフシート」として作成するキーは？', choices:['F11','F4','F2','F9'], a:0},
+// --- 追加分（w0 文書管理・基本操作） ---
+{cat:'w0', q:'文書を「読み取り専用」で開くように推奨する設定はどこにある？', choices:['名前を付けて保存の全般オプション「読み取り専用を推奨する」','パスワードを削除する','校閲の変更履歴の制限','フォントの埋め込み'], a:0},
+{cat:'w0', q:'作成した文書をPDF形式で書き出す方法は？', choices:['ファイル＞エクスポート＞PDF/XPSの作成','ファイル＞印刷のみ','挿入タブ','校閲タブ'], a:0},
+{cat:'w0', q:'配布前に、文書に残っている変更履歴やコメント、個人情報などをまとめて確認する機能は？', choices:['文書の検査（ドキュメント検査）','オートコレクト','スペルチェック','テンプレートの適用'], a:0},
+{cat:'w0', q:'直前の操作を元に戻す（Undo）ショートカットキーは？', choices:['Ctrl + Z','Ctrl + Y','Ctrl + X','Ctrl + R'], a:0},
+// --- 追加分（w1 文字・段落の書式設定） ---
+{cat:'w1', q:'選択した文字のフォントサイズを1ポイントずつ大きくするショートカットキーは？', choices:['Ctrl + ]','Ctrl + [','Ctrl + Shift + >','Ctrl + B'], a:0},
+{cat:'w1', q:'段落の左右の余白いっぱいに文字をそろえる「両端揃え」のショートカットキーは？', choices:['Ctrl + J','Ctrl + E','Ctrl + R','Ctrl + L'], a:0},
+{cat:'w1', q:'文字と文字の間隔を広げたり詰めたりする設定があるのは？', choices:['「フォント」ダイアログの「詳細設定」タブ','「段落」ダイアログ','「ページ設定」ダイアログ','スタイルウィンドウ'], a:0},
+{cat:'w1', q:'選択した文字に適用されているすべての書式をまとめて解除する機能は？', choices:['書式のクリア（ホームタブ）','元に戻す','スタイルの管理','テーマのリセット'], a:0},
+// --- 追加分（w2 表とリスト） ---
+{cat:'w2', q:'表の一番右下のセルでTabキーを押すとどうなる？', choices:['新しい行が追加される','表全体が選択される','表が削除される','列幅が自動調整される'], a:0},
+{cat:'w2', q:'長い表がページをまたぐとき、2ページ目以降にも見出し行を自動表示させる設定は？', choices:['タイトル行の繰り返し（表ツール「レイアウト」タブ）','セルの結合','表のスタイル','罫線の作成'], a:0},
+{cat:'w2', q:'箇条書きの階層を1段階下げる（インデントを増やす）操作は？', choices:['Tabキーを押す','Enterキーを押す','Shift + Tabキーを押す','Deleteキーを押す'], a:0},
+{cat:'w2', q:'表内の数値を使って簡単な合計を計算する機能は？', choices:['表ツール「レイアウト」タブの「計算式」','ホームタブの電卓','挿入タブの数式','校閲タブの集計'], a:0},
+// --- 追加分（w3 参考資料の作成と管理） ---
+{cat:'w3', q:'見出しを追加・変更したあとに、目次のページ番号を最新の状態に反映させる操作は？', choices:['目次の更新（目次を右クリックして更新）','目次を削除して作り直す','印刷プレビューを開く','ファイルを開き直す'], a:0},
+{cat:'w3', q:'脚注ではなく、文書の最後にまとめて注釈を表示する機能は？', choices:['文末脚注','脚注','コメント','ハイパーリンク'], a:0},
+{cat:'w3', q:'「図1」「表1」のような図表の番号を自動で振る機能は？', choices:['図表番号の挿入（参考資料タブ）','段落番号','ページ番号','見出しスタイル'], a:0},
+{cat:'w3', q:'巻末の索引（用語とページ番号の一覧）を作る前に、まず行っておく作業は？', choices:['索引に入れたい語句を「索引登録」する','見出しスタイルを設定する','目次を作成する','脚注を挿入する'], a:0},
+// --- 追加分（w4 グラフィック要素） ---
+{cat:'w4', q:'図形に直接文字を入力するもっとも簡単な方法は？', choices:['図形をクリックしてそのまま文字を入力する','テキストボックスを別に重ねて配置する','ワードアートを使う','SmartArtに変換する'], a:0},
+{cat:'w4', q:'挿入した画像の明るさやコントラストを調整する機能は？', choices:['図の修整（図の形式タブ）','トリミング','図の圧縮','背景の削除'], a:0},
+{cat:'w4', q:'複数の図形の左端をそろえたり、上下の中心をそろえたりする機能は？', choices:['配置（左揃え・上下中央揃えなど）','グループ化','回転','文字列の折り返し'], a:0},
+{cat:'w4', q:'シンプルな線画のピクトグラム（人・矢印など）を挿入する機能は？', choices:['挿入タブの「アイコン」','ワードアート','SmartArt','図形'], a:0},
+// --- 追加分（e0 ワークシート・ブック管理） ---
+{cat:'e0', q:'シート見出しの色を変更する操作は？', choices:['シート見出しを右クリック→シート見出しの色','ホームタブのフォントの色','セルの塗りつぶし','テーマの色'], a:0},
+{cat:'e0', q:'今のシートを、別のブックに「コピー」として複製する操作は？', choices:['シート見出しを右クリック→移動またはコピーで「コピーを作成する」にチェック','セルをコピーして貼り付ける','ブックの保護','印刷範囲の設定'], a:0},
+{cat:'e0', q:'マクロを含むブックを開いたときのセキュリティ設定を確認・変更する場所は？', choices:['トラストセンターの設定','データの入力規則','名前の管理','ページ設定'], a:0},
+{cat:'e0', q:'ファイルの自動保存の間隔を設定する場所は？', choices:['ファイル＞オプション＞保存','データタブ','校閲タブ','表示タブ'], a:0},
+// --- 追加分（e1 セルとセル範囲のデータ管理） ---
+{cat:'e1', q:'数式の結果ではなく「値」だけをコピーして別のセルに貼り付ける方法は？', choices:['形式を選択して貼り付け→値','通常の貼り付け（Ctrl+V）','書式のコピー/貼り付け','リンク貼り付け'], a:0},
+{cat:'e1', q:'セル右下のハンドルをドラッグして、連続した数値や曜日を自動入力する機能は？', choices:['オートフィル','コピー＆貼り付け','データの入力規則','名前の定義'], a:0},
+{cat:'e1', q:'入力済みのデータのパターンを認識して、残りのセルを自動で補完する機能は？', choices:['フラッシュフィル','オートフィル','条件付き書式','入力規則'], a:0},
+{cat:'e1', q:'選択したセル範囲の合計・平均・データの個数をワンクリックで確認できる場所は？', choices:['ステータスバー','数式バー','名前ボックス','セルの書式設定'], a:0},
+// --- 追加分（e2 テーブルとテーブルのデータ管理） ---
+{cat:'e2', q:'テーブルの見出し行にある▼（フィルターボタン）を非表示にする操作は？', choices:['テーブルデザインタブの「フィルターボタン」のチェックを外す','テーブルを削除する','行を非表示にする','列を削除する'], a:0},
+{cat:'e2', q:'テーブルの範囲を手動で拡張・縮小する機能は？', choices:['テーブルのサイズ変更（テーブルデザインタブ）','範囲に変換','テーブルスタイル','集計行'], a:0},
+{cat:'e2', q:'テーブルのすぐ下の行にデータを入力すると、テーブル範囲はどうなる？', choices:['自動的に拡張される','何も起きない','エラーになる','新しいシートが作られる'], a:0},
+{cat:'e2', q:'テーブル内で特定の列だけをすばやく選択する方法は？', choices:['列の見出しのすぐ上にカーソルを合わせてクリック','セルを1つずつShiftで選択','行番号をクリック','Ctrl+Aで全選択'], a:0},
+// --- 追加分（e3 数式や関数を使用した演算の実行） ---
+{cat:'e3', q:'複数の条件をすべて満たす行だけを合計する関数は？', choices:['=SUMIFS(合計範囲,条件範囲1,条件1,条件範囲2,条件2)','=SUMIF(範囲,条件)','=SUM(範囲)','=COUNTIFS(範囲1,条件1)'], a:0},
+{cat:'e3', q:'文字列の左側から指定した文字数だけ取り出す関数は？', choices:['=LEFT(文字列,文字数)','=RIGHT(文字列,文字数)','=MID(文字列,開始位置,文字数)','=LEN(文字列)'], a:0},
+{cat:'e3', q:'今日の日付を自動で表示する関数は？', choices:['=TODAY()','=NOW()','=DATE()','=DAY()'], a:0},
+{cat:'e3', q:'範囲の中の最大値と最小値を求める関数の組み合わせとして正しいのは？', choices:['=MAX(範囲) と =MIN(範囲)','=LARGE(範囲) と =SMALL(範囲)のみ','=SUM(範囲) と =COUNT(範囲)','=TOP(範囲) と =BOTTOM(範囲)'], a:0},
+// --- 追加分（e4 グラフの作成と管理） ---
+{cat:'e4', q:'グラフの中の1つのデータ系列だけ色を変更したいときの操作は？', choices:['その系列をクリックして選択してから塗りつぶしの色を変更する','グラフ全体を削除して作り直す','グラフの種類を変更する','データラベルを追加する'], a:0},
+{cat:'e4', q:'棒グラフと折れ線グラフなど、異なる種類のグラフを1つに組み合わせる機能は？', choices:['組み合わせグラフ','積み上げグラフ','散布図','レーダーチャート'], a:0},
+{cat:'e4', q:'グラフのタイトルを直接書き換える方法は？', choices:['グラフタイトルをクリックしてそのまま入力し直す','グラフを削除して作り直す','セルの内容を変更する','グラフの種類を変更する'], a:0},
+{cat:'e4', q:'作成したグラフを画像として文書やスライドに貼り付ける方法は？', choices:['グラフをコピーして「図として貼り付け」を選ぶ','通常の貼り付けしかできない','グラフはコピーできない','必ずPDFに変換してから貼り付ける'], a:0},
+];
+
+const choiceLabels = ['ア','イ','ウ','エ'];
+
+// ===== 状態 =====
+let current = [];      // 出題中の問題配列
+let idx = 0;
+let score = 0;
+let answers = [];      // 各問の選択インデックス
+let streak = 0;        // 連続正解数（モチベ猫ギミック用）
+let bestStreak = 0;
+
+// ===== メニュー描画 =====
+function catCount(id){ return QUESTIONS.filter(q=>q.cat===id).length; }
+
+function renderMenus(){
+  const wordCats = CATS.filter(c=>c.subject==='word');
+  const excelCats = CATS.filter(c=>c.subject==='excel');
+  document.getElementById('wordMenu').innerHTML = wordCats.map(c=>`
+    <button onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
+  `).join('');
+  document.getElementById('excelMenu').innerHTML = excelCats.map(c=>`
+    <button class="excel-cat" onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
+  `).join('');
+}
+
+function catLabel(catId){
+  const c = CATS.find(x=>x.id===catId);
+  return c ? (c.subject==='word' ? '📝 '+c.label : '📈 '+c.label) : '';
+}
+
+// ===== 統計（累計） =====
+function loadStats(){
+  try{ return JSON.parse(localStorage.getItem('mosStats')||'{}'); }catch(e){ return {}; }
+}
+function saveStats(s){
+  try{ localStorage.setItem('mosStats', JSON.stringify(s)); }catch(e){}
+}
+function renderStatLine(){
+  const s = loadStats();
+  const total = s.total||0, correct = s.correct||0;
+  const rate = total ? Math.round(correct/total*100) : 0;
+  document.getElementById('statLine').textContent = total
+    ? `これまでの累計：${total}問中${correct}問正解（正答率${rate}%）`
+    : 'これまでの累計：まだ記録がないにゃ。まずは1問やってみよう！';
+}
+
+// ===== 出題開始 =====
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function cloneQ(q){ return Object.assign({}, q); }
+
+// ===== モチベ猫ギミック =====
+let catToastTimer = null;
+function showCatToast(correct, streakCount){
+  const el = document.getElementById('catToast');
+  const emojiEl = document.getElementById('catToastEmoji');
+  const msgEl = document.getElementById('catToastMsg');
+  let emoji, msg, isStreak = false;
+
+  if(correct){
+    if(streakCount >= 8){ emoji='🐯'; msg=`${streakCount}連続正解！猫が虎になってきた🔥`; isStreak=true; }
+    else if(streakCount >= 5){ emoji='😻'; msg=`${streakCount}連続正解、絶好調にゃ！`; isStreak=true; }
+    else if(streakCount >= 3){ emoji='🙀'; msg=`${streakCount}連続正解！乗ってきたにゃ`; isStreak=true; }
+    else { emoji='😸'; msg='正解にゃ！'; }
+  } else {
+    const encourage = ['大丈夫、次いこう！','ここ覚えたら勝ちにゃ','どんまい、切り替えて！'];
+    emoji='😿'; msg=encourage[Math.floor(Math.random()*encourage.length)];
+  }
+
+  emojiEl.textContent = emoji;
+  msgEl.textContent = msg;
+  el.classList.remove('show','wrong','streak');
+  void el.offsetWidth; // reflow でアニメーションを再トリガー
+  el.classList.add('show');
+  if(!correct) el.classList.add('wrong');
+  if(isStreak) el.classList.add('streak');
+
+  clearTimeout(catToastTimer);
+  catToastTimer = setTimeout(()=>{ el.classList.remove('show'); }, 2600);
+}
+
+function startCategory(catId){
+  current = shuffle(QUESTIONS.filter(q=>q.cat===catId)).map(cloneQ);
+  beginQuiz();
+}
+function startMode(mode){
+  if(mode==='mini') current = shuffle(QUESTIONS).slice(0,20).map(cloneQ);
+  else if(mode==='all') current = shuffle(QUESTIONS).map(cloneQ);
+  beginQuiz();
+}
+
+function beginQuiz(){
+  idx = 0; score = 0; answers = []; streak = 0; bestStreak = 0;
+  document.getElementById('menu-screen').style.display = 'none';
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('quiz-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = current[idx];
+  // 選択肢の表示順をシャッフル（正解が常に「ア」になって当てずっぽうで解けてしまうのを防ぐ）
+  q._order = shuffle([0,1,2,3]);
+  document.getElementById('quizProgress').textContent = `${idx+1} / ${current.length}`;
+  document.getElementById('quizScore').textContent = `正解 ${score}`;
+  document.getElementById('progressBar').style.width = Math.round((idx)/current.length*100)+'%';
+  document.getElementById('qCatTag').textContent = catLabel(q.cat);
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qChoices').innerHTML = q._order.map((origIdx,pos)=>`
+    <button class="choice-btn" onclick="selectAnswer(${pos})"><span class="cl">${choiceLabels[pos]}</span><span>${q.choices[origIdx]}</span></button>
+  `).join('');
+  document.getElementById('nextBtn').classList.remove('show');
+}
+
+function selectAnswer(pos){
+  const q = current[idx];
+  const origIdx = q._order[pos];
+  const correctPos = q._order.indexOf(q.a);
+  const btns = document.querySelectorAll('#qChoices .choice-btn');
+  btns.forEach(b=>b.classList.add('disabled'));
+  btns[correctPos].classList.add('correct');
+  const isCorrect = (pos === correctPos);
+  if(!isCorrect) btns[pos].classList.add('wrong');
+  else score++;
+  answers.push(origIdx);
+
+  if(isCorrect){ streak++; if(streak > bestStreak) bestStreak = streak; }
+  else { streak = 0; }
+  showCatToast(isCorrect, streak);
+
+  document.getElementById('quizScore').textContent = `正解 ${score}`;
+  document.getElementById('nextBtn').classList.add('show');
+  document.getElementById('nextBtn').textContent = (idx+1 < current.length) ? '次へ →' : '結果を見る →';
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx < current.length){ renderQuestion(); }
+  else { showResult(); }
+}
+
+function showResult(){
+  document.getElementById('quiz-screen').classList.remove('show');
+  document.getElementById('end-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const total = current.length;
+  const rate = Math.round(score/total*100);
+  document.getElementById('endScore').textContent = `${rate}% (${score}/${total}問)`;
+  let msg = '', face = '';
+  if(rate>=90){ msg = 'すごいにゃ！ほぼ完璧、この調子で本番に近い操作練習も進めよう🐱'; face='😻'; }
+  else if(rate>=70){ msg = 'いい感じにゃ！間違えた問題を下の表で見直そう。'; face='😺'; }
+  else if(rate>=40){ msg = 'まずは用語に慣れるところから。下の表で間違えた問題を復習してにゃ。'; face='😼'; }
+  else { msg = '一歩ずつでOK！間違えた問題だけもう一度見てみようにゃ。'; face='😿'; }
+  document.getElementById('endMsg').textContent = msg;
+  document.getElementById('endCatFace').textContent = face;
+  document.getElementById('endStreakMsg').textContent = bestStreak>=3 ? `🔥 最高連続正解：${bestStreak}問！` : '';
+
+  document.getElementById('detailBody').innerHTML = current.map((q,i)=>{
+    const picked = answers[i];
+    const correct = picked === q.a;
+    return `<tr>
+      <td>${i+1}. ${q.q}</td>
+      <td>${q.choices[picked]}</td>
+      <td style="color:${correct?'#34d399':'#f87171'};font-weight:800;">${correct?'○':'×'}</td>
+    </tr>`;
+  }).join('');
+
+  const s = loadStats();
+  s.total = (s.total||0) + total;
+  s.correct = (s.correct||0) + score;
+  saveStats(s);
+  renderStatLine();
+}
+
+function exitQuiz(){
+  document.getElementById('quiz-screen').classList.remove('show');
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('menu-screen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showMenu(){
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('quiz-screen').classList.remove('show');
+  document.getElementById('menu-screen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== 初期化 =====
+renderMenus();
+renderStatLine();
+
+fetch('https://mahito.goatcounter.com/counter/TOTAL.json')
+  .then(r=>r.json())
+  .then(d=>{ document.getElementById('gc-visits').textContent = '👀 訪問者数：'+d.count+' 人'; })
+  .catch(()=>{ document.getElementById('gc-visits').textContent = '👀 訪問者数：集計中'; });
+</script>
+</body>
+</html>
