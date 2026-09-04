@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MOS操作シミュレーション（ワード・エクセル 一般）</title>
+<meta name="description" content="MOS一般レベルの操作場所を、リボンUIの疑似操作で練習するシミュレーションドリル。本番のCBT実技試験に近い形式。">
+<meta name="theme-color" content="#0a1a2e">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0a1a2e; --navy-dark:#050d18;
+  --teal:#22d3ee; --teal-hover:#0891b2;
+  --ink:#e0f7ff; --muted:rgba(255,255,255,.65);
+  --line:rgba(148,163,184,.2);
+  --danger:#f87171; --good:#34d399;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34,211,238,.12) 0%, transparent 60%),
+    linear-gradient(170deg, var(--navy) 0%, var(--navy-dark) 45%);
+  background-attachment:fixed;
+  color:var(--ink); min-height:100vh;
+}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;user-select:none;-webkit-user-select:none;font-family:inherit;}
+
+#topHeader{background:var(--navy);padding:16px;border-bottom:1px solid rgba(34,211,238,.25);text-align:center;}
+#topHeader h1{font-size:20px;margin:0;color:#e0f7ff;font-weight:900;}
+#topHeader .tagline{font-size:13px;color:#9fd8e8;margin:6px 0 0;font-weight:700;}
+
+#crosslink{text-align:center;padding:7px 16px;background:var(--navy-dark);border-bottom:1px solid var(--line);}
+#crosslink a{color:var(--teal);font-size:13.5px;font-weight:700;text-decoration:none;margin:0 8px;}
+
+.wrap{max-width:760px;margin:0 auto;padding:16px 12px 70px;}
+
+/* メニュー */
+#menu-screen{
+  background:radial-gradient(ellipse at 50% 0%, rgba(34,211,238,0.16) 0%, transparent 60%), linear-gradient(170deg, #0a1a2e 0%, #050d18 100%);
+  border-radius:20px; padding:18px 14px 22px; box-shadow:0 8px 32px rgba(34,211,238,0.14);
+}
+.notice{font-size:13px;color:var(--muted);line-height:1.7;background:rgba(255,255,255,.04);border-left:4px solid var(--teal);padding:12px 14px;border-radius:8px;margin-bottom:16px;}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.menu button{
+  background:linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
+  color:#d7f5fb; font-size:14.5px; padding:16px 10px; border-radius:14px;
+  border:1px solid rgba(34,211,238,.28); font-weight:700;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.menu button.wide{grid-column:1/-1;}
+.menu button:active{transform:scale(.96);}
+.gicon{font-size:22px;margin-bottom:6px;}
+.msub{display:block;font-weight:500;font-size:.82em;opacity:.75;margin-top:3px;}
+
+/* シミュレーション画面 */
+#sim-screen{display:none;}
+#sim-screen.show{display:block;}
+.sim-back{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:10px;padding:0;}
+.sim-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px;font-weight:800;color:var(--teal);}
+.instruction-bar{
+  background:linear-gradient(135deg, rgba(34,211,238,.14), rgba(139,124,246,.1));
+  border:1.5px solid rgba(34,211,238,.4); border-radius:14px; padding:14px 16px; margin-bottom:12px;
+}
+.instruction-label{font-size:11.5px;font-weight:800;color:var(--teal);letter-spacing:.06em;margin-bottom:4px;}
+.instruction-text{font-size:15.5px;font-weight:800;color:#f0feff;line-height:1.5;}
+.feedback{min-height:20px;font-size:13.5px;font-weight:800;margin-bottom:8px;}
+.feedback.ok{color:var(--good);}
+.feedback.ng{color:var(--danger);}
+
+/* リボンUI */
+.app-window{background:#1c1c1c;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.5);border:1px solid #333;}
+.ribbon-tabs{display:flex;flex-wrap:wrap;background:#232323;border-bottom:1px solid #3a3a3a;padding:0 4px;}
+.ribbon-tab{background:none;border:none;color:#c9c9c9;font-size:13px;font-weight:700;padding:9px 14px;border-bottom:2px solid transparent;}
+.ribbon-tab.active{color:var(--teal);border-bottom-color:var(--teal);background:rgba(34,211,238,.08);}
+.ribbon-body{display:flex;flex-wrap:wrap;gap:0;background:#282828;padding:8px 6px;min-height:96px;}
+.ribbon-group{display:flex;flex-direction:column;align-items:center;padding:2px 10px;border-right:1px solid #3a3a3a;}
+.ribbon-group:last-child{border-right:none;}
+.ribbon-btns{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:220px;}
+.ribbon-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:none;border:1px solid transparent;border-radius:6px;
+  padding:5px 7px;min-width:52px;color:#e6e6e6;
+}
+.ribbon-btn:hover{background:#333;border-color:#4a4a4a;}
+.ribbon-btn:active{background:#3a3a3a;}
+.ribbon-btn .ic{font-size:16px;line-height:1;}
+.ribbon-btn .lb{font-size:9.5px;font-weight:600;text-align:center;line-height:1.2;color:#c9c9c9;white-space:normal;}
+.ribbon-btn.flash-ok{background:rgba(52,211,153,.3)!important;border-color:var(--good)!important;}
+.ribbon-btn.flash-ng{background:rgba(248,113,113,.3)!important;border-color:var(--danger)!important;}
+.ribbon-group-label{font-size:9px;color:#8a8a8a;margin-top:4px;}
+
+.canvas-area{background:#e9edf2;min-height:170px;padding:16px;}
+.canvas-doc{background:#fff;border-radius:4px;padding:18px;max-width:420px;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.15);color:#1a1a1a;font-size:13px;line-height:1.8;}
+.canvas-doc .sel{background:#bcd6ff;}
+.canvas-grid{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.canvas-grid table{width:100%;border-collapse:collapse;font-size:11.5px;color:#333;}
+.canvas-grid th{background:#f1f3f5;color:#666;font-weight:700;padding:4px;border:1px solid #dcdfe3;}
+.canvas-grid td{padding:4px 8px;border:1px solid #dcdfe3;text-align:center;}
+.canvas-grid td.sel{background:#bcd6ff;outline:2px solid #1a73e8;outline-offset:-2px;}
+
+.hint-btn{display:block;width:100%;margin-top:12px;padding:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13.5px;font-weight:800;}
+
+/* 結果 */
+#end-screen{display:none;}
+#end-screen.show{display:block;}
+.end-card{background:var(--navy);border:1px solid var(--line);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:16px;}
+.end-score{font-size:40px;font-weight:900;color:var(--teal);margin:6px 0;}
+.end-msg{font-size:14px;color:var(--muted);font-weight:700;line-height:1.7;}
+.detail-title{font-size:12.5px;color:var(--muted);font-weight:700;margin:14px 0 6px;text-align:left;}
+.detail-wrap{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;}
+.detail-table{width:100%;border-collapse:collapse;font-size:12.5px;text-align:left;}
+.detail-table th{background:rgba(34,211,238,.1);color:var(--ink);padding:6px 8px;position:sticky;top:0;}
+.detail-table td{padding:6px 8px;border-top:1px solid var(--line);}
+.act-btn{width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:900;background:var(--teal);color:#04141f;margin-top:16px;}
+
+.site-footer{text-align:center;padding:20px 16px;color:var(--muted);font-size:12.5px;font-weight:700;border-top:1px solid var(--line);margin-top:20px;}
+.site-footer a{color:var(--teal);text-decoration:none;font-weight:800;}
+</style>
+</head>
+<body>
+
+<div id="topHeader">
+  <h1>🖱️ MOS操作シミュレーション</h1>
+  <p class="tagline">リボンのどこを押すか当てる、本番に近い練習</p>
+</div>
+
+<div id="crosslink">
+  <a href="mos.html">📊 4択ドリルに戻る</a>
+  <a href="index.html">🐱 生成AIパスポート</a>
+  <a href="it-passport.html">🐈 ITパスポート</a>
+</div>
+
+<div class="wrap">
+
+  <div id="menu-screen">
+    <div class="notice">💡 本物のMOS試験は「実際にWord・Excelを操作する実技試験」。ここではリボン（画面上部のボタン集）を再現して、「指示された操作をするにはどこを押せばいいか」を練習できるよ。文字入力やドラッグ操作までは再現していない、簡易シミュレーションだよ。</div>
+    <div class="menu">
+      <button class="wide" onclick="startSim('word')"><div class="gicon">📝</div><div>ワード操作編</div><div class="msub">（10問）</div></button>
+      <button class="wide" onclick="startSim('excel')"><div class="gicon">📈</div><div>エクセル操作編</div><div class="msub">（10問）</div></button>
+      <button class="wide" onclick="startSim('all')"><div class="gicon">🔁</div><div>ワード＋エクセル 混合</div><div class="msub">（全20問）</div></button>
+    </div>
+  </div>
+
+  <div id="sim-screen">
+    <button class="sim-back" onclick="exitSim()">← メニューに戻る（途中でやめる）</button>
+    <div class="sim-top"><span id="simProgress">1 / 10</span><span id="simScoreLabel">一発正解 0</span></div>
+    <div class="instruction-bar">
+      <div class="instruction-label">📋 次の操作を行いなさい</div>
+      <div class="instruction-text" id="instructionText"></div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="app-window">
+      <div class="ribbon-tabs" id="ribbonTabs"></div>
+      <div class="ribbon-body" id="ribbonBody"></div>
+      <div class="canvas-area" id="canvasArea"></div>
+    </div>
+    <button class="hint-btn" onclick="showHint()">💡 ヒント（正解のタブを表示）</button>
+  </div>
+
+  <div id="end-screen">
+    <div class="end-card">
+      <div style="font-size:14px;color:var(--muted);font-weight:700;">結果</div>
+      <div class="end-score" id="endScore">0 / 0</div>
+      <div class="end-msg" id="endMsg"></div>
+    </div>
+    <div class="detail-title">📋 操作詳細</div>
+    <div class="detail-wrap">
+      <table class="detail-table">
+        <tr><th>指示内容</th><th>結果</th></tr>
+        <tbody id="detailBody"></tbody>
+      </table>
+    </div>
+    <button class="act-btn" onclick="showMenu()">🔄 メニューに戻る</button>
+  </div>
+
+</div>
+
+<div class="site-footer">
+  © Mahito｜MOSは Microsoft の登録商標です。本アプリは非公式の学習用シミュレーションであり、公式試験そのものではありません。<br>
+  <a href="mos.html">4択ドリルはこちら →</a>
+</div>
+
+<script>
+// ===== リボン定義（アプリごとのタブ・グループ・ボタン） =====
+const RIBBONS = {
+  word: {
+    tabs: ['ホーム','挿入','レイアウト','参考資料','校閲','表示'],
+    groups: {
+      'ホーム': [
+        {label:'クリップボード', btns:[{id:'paste',label:'貼り付け',icon:'📋'},{id:'copy',label:'コピー',icon:'📄'}]},
+        {label:'フォント', btns:[{id:'bold',label:'太字',icon:'B'},{id:'italic',label:'斜体',icon:'I'},{id:'underline',label:'下線',icon:'U'},{id:'strike',label:'取消線',icon:'S'},{id:'highlight',label:'蛍光ペン',icon:'🖍'}]},
+        {label:'段落', btns:[{id:'bullets',label:'箇条書き',icon:'≡'},{id:'numbering',label:'段落番号',icon:'①'},{id:'align-center',label:'中央揃え',icon:'≣'},{id:'line-spacing',label:'行間隔',icon:'↕'},{id:'borders',label:'罫線',icon:'▦'}]},
+        {label:'スタイル', btns:[{id:'heading1',label:'見出し1',icon:'H1'},{id:'heading2',label:'見出し2',icon:'H2'},{id:'normal',label:'標準',icon:'標'}]},
+        {label:'編集', btns:[{id:'find',label:'検索',icon:'🔍'},{id:'replace',label:'置換',icon:'⇄'}]},
+      ],
+      '挿入': [
+        {label:'ページ', btns:[{id:'cover-page',label:'表紙',icon:'📔'},{id:'blank-page',label:'空白のページ',icon:'📄'},{id:'page-break',label:'ページ区切り',icon:'⏎'}]},
+        {label:'表', btns:[{id:'table',label:'表',icon:'▦'}]},
+        {label:'図', btns:[{id:'pictures',label:'画像',icon:'🖼'},{id:'shapes',label:'図形',icon:'🔷'},{id:'smartart',label:'SmartArt',icon:'🧩'},{id:'chart',label:'グラフ',icon:'📊'}]},
+        {label:'ヘッダーとフッター', btns:[{id:'header',label:'ヘッダー',icon:'⬆'},{id:'footer',label:'フッター',icon:'⬇'},{id:'page-number',label:'ページ番号',icon:'#'}]},
+        {label:'テキスト', btns:[{id:'textbox',label:'テキストボックス',icon:'📝'},{id:'wordart',label:'ワードアート',icon:'🎨'}]},
+      ],
+      'レイアウト': [
+        {label:'ページ設定', btns:[{id:'margins',label:'余白',icon:'▭'},{id:'orientation',label:'印刷の向き',icon:'🔄'},{id:'size',label:'サイズ',icon:'📐'},{id:'columns',label:'段組み',icon:'❘❘'},{id:'breaks',label:'区切り',icon:'⏸'}]},
+        {label:'配置', btns:[{id:'wrap-text',label:'文字列の折り返し',icon:'↩'},{id:'align',label:'配置',icon:'⊞'}]},
+      ],
+      '参考資料': [
+        {label:'目次', btns:[{id:'toc',label:'目次',icon:'📑'}]},
+        {label:'脚注', btns:[{id:'footnote',label:'脚注の挿入',icon:'¹'}]},
+        {label:'引用文献と文献目録', btns:[{id:'citation',label:'引用文献の挿入',icon:'❝'},{id:'bibliography',label:'文献目録',icon:'📚'}]},
+      ],
+      '校閲': [
+        {label:'文章校正', btns:[{id:'spelling',label:'スペルチェックと文章校正',icon:'✓'}]},
+        {label:'コメント', btns:[{id:'new-comment',label:'新しいコメント',icon:'💬'}]},
+        {label:'変更履歴', btns:[{id:'track-changes',label:'変更履歴の記録',icon:'✏'}]},
+      ],
+      '表示': [
+        {label:'表示', btns:[{id:'read-mode',label:'閲覧モード',icon:'📖'},{id:'print-layout',label:'印刷レイアウト',icon:'🖨'}]},
+        {label:'表示設定', btns:[{id:'ruler',label:'ルーラー',icon:'📏'},{id:'gridlines',label:'グリッド線',icon:'▦'},{id:'nav-pane',label:'ナビゲーションウィンドウ',icon:'🧭'}]},
+      ],
+    }
+  },
+  excel: {
+    tabs: ['ホーム','挿入','ページレイアウト','数式','データ','校閲','表示'],
+    groups: {
+      'ホーム': [
+        {label:'クリップボード', btns:[{id:'paste',label:'貼り付け',icon:'📋'},{id:'copy',label:'コピー',icon:'📄'}]},
+        {label:'フォント', btns:[{id:'bold',label:'太字',icon:'B'},{id:'italic',label:'斜体',icon:'I'},{id:'borders',label:'罫線',icon:'▦'},{id:'fill-color',label:'塗りつぶしの色',icon:'🎨'}]},
+        {label:'配置', btns:[{id:'align-center',label:'中央揃え',icon:'≣'},{id:'wrap-text',label:'折り返して全体を表示',icon:'↩'},{id:'merge-center',label:'セルを結合して中央揃え',icon:'⬜'}]},
+        {label:'数値', btns:[{id:'number-format',label:'表示形式',icon:'¥'},{id:'percent',label:'パーセントスタイル',icon:'%'}]},
+        {label:'スタイル', btns:[{id:'conditional-formatting',label:'条件付き書式',icon:'🎯'},{id:'format-as-table',label:'テーブルとして書式設定',icon:'📋'},{id:'cell-styles',label:'セルのスタイル',icon:'🖌'}]},
+        {label:'セル', btns:[{id:'insert-cell',label:'挿入',icon:'➕'},{id:'delete-cell',label:'削除',icon:'➖'}]},
+        {label:'編集', btns:[{id:'autosum',label:'オートSUM',icon:'Σ'},{id:'sort-filter',label:'並べ替えとフィルター',icon:'🔽'},{id:'find-select',label:'検索と選択',icon:'🔍'}]},
+      ],
+      '挿入': [
+        {label:'テーブル', btns:[{id:'pivot-table',label:'ピボットテーブル',icon:'📊'},{id:'table',label:'テーブル',icon:'▦'}]},
+        {label:'図', btns:[{id:'pictures',label:'画像',icon:'🖼'},{id:'shapes',label:'図形',icon:'🔷'}]},
+        {label:'グラフ', btns:[{id:'recommended-charts',label:'おすすめグラフ',icon:'📈'},{id:'column-chart',label:'縦棒',icon:'📊'},{id:'line-chart',label:'折れ線',icon:'📉'},{id:'pie-chart',label:'円',icon:'🥧'}]},
+        {label:'スパークライン', btns:[{id:'sparkline-line',label:'折れ線',icon:'〰'},{id:'sparkline-column',label:'縦棒',icon:'▁▃▅'}]},
+      ],
+      'ページレイアウト': [
+        {label:'テーマ', btns:[{id:'themes',label:'テーマ',icon:'🎨'}]},
+        {label:'ページ設定', btns:[{id:'margins',label:'余白',icon:'▭'},{id:'orientation',label:'印刷の向き',icon:'🔄'},{id:'print-area',label:'印刷範囲',icon:'⬚'},{id:'print-titles',label:'印刷タイトル',icon:'📌'}]},
+        {label:'シートのオプション', btns:[{id:'gridlines-view',label:'目盛線',icon:'▦'},{id:'headings-view',label:'見出し',icon:'#'}]},
+      ],
+      '数式': [
+        {label:'関数ライブラリ', btns:[{id:'insert-function',label:'関数の挿入',icon:'fx'},{id:'autosum2',label:'オートSUM',icon:'Σ'},{id:'logical',label:'論理',icon:'⊤'},{id:'text-func',label:'文字列操作',icon:'Aa'}]},
+        {label:'定義された名前', btns:[{id:'define-name',label:'名前の定義',icon:'🏷'},{id:'name-manager',label:'名前の管理',icon:'📇'}]},
+        {label:'ワークシート分析', btns:[{id:'show-formulas',label:'数式の表示',icon:'👁'},{id:'error-check',label:'エラーチェック',icon:'⚠'}]},
+      ],
+      'データ': [
+        {label:'並べ替えとフィルター', btns:[{id:'sort',label:'並べ替え',icon:'🔤'},{id:'filter',label:'フィルター',icon:'🔽'}]},
+        {label:'データツール', btns:[{id:'remove-duplicates',label:'重複の削除',icon:'🗑'},{id:'data-validation',label:'データの入力規則',icon:'✅'}]},
+        {label:'アウトライン', btns:[{id:'group',label:'グループ化',icon:'📦'},{id:'subtotal',label:'小計',icon:'∑'}]},
+      ],
+      '校閲': [
+        {label:'文章校正', btns:[{id:'spelling',label:'スペルチェック',icon:'✓'}]},
+        {label:'コメント', btns:[{id:'new-comment',label:'新しいコメント',icon:'💬'}]},
+        {label:'変更', btns:[{id:'protect-sheet',label:'シートの保護',icon:'🔒'},{id:'protect-workbook',label:'ブックの保護',icon:'🔐'}]},
+      ],
+      '表示': [
+        {label:'ブックの表示', btns:[{id:'normal-view',label:'標準',icon:'▦'},{id:'page-break-preview',label:'改ページプレビュー',icon:'🔲'}]},
+        {label:'表示設定', btns:[{id:'gridlines-check',label:'目盛線',icon:'▦'},{id:'formula-bar',label:'数式バー',icon:'fx'}]},
+        {label:'ウィンドウ', btns:[{id:'freeze-panes',label:'ウィンドウ枠の固定',icon:'📌'},{id:'split',label:'分割',icon:'⊟'}]},
+      ],
+    }
+  }
+};
+
+// ===== 課題データ（20問） =====
+const TASKS = [
+  {app:'word', instruction:'選択した文字を「太字」にしなさい。', tab:'ホーム', btnId:'bold'},
+  {app:'word', instruction:'選択した文字に「下線」を付けなさい。', tab:'ホーム', btnId:'underline'},
+  {app:'word', instruction:'段落の「行と段落の間隔」を変更しなさい。', tab:'ホーム', btnId:'line-spacing'},
+  {app:'word', instruction:'見出しに「見出し1」のスタイルを適用しなさい。', tab:'ホーム', btnId:'heading1'},
+  {app:'word', instruction:'文書に「表紙」を挿入しなさい。', tab:'挿入', btnId:'cover-page'},
+  {app:'word', instruction:'文書に「画像」を挿入しなさい。', tab:'挿入', btnId:'pictures'},
+  {app:'word', instruction:'すべてのページに「ページ番号」を挿入しなさい。', tab:'挿入', btnId:'page-number'},
+  {app:'word', instruction:'見出しを使って「目次」を自動作成しなさい。', tab:'参考資料', btnId:'toc'},
+  {app:'word', instruction:'ページの「余白」を変更しなさい。', tab:'レイアウト', btnId:'margins'},
+  {app:'word', instruction:'文書の「スペルチェックと文章校正」を実行しなさい。', tab:'校閲', btnId:'spelling'},
+  {app:'excel', instruction:'選択したセルを「太字」にしなさい。', tab:'ホーム', btnId:'bold'},
+  {app:'excel', instruction:'セルを「結合して中央揃え」にしなさい。', tab:'ホーム', btnId:'merge-center'},
+  {app:'excel', instruction:'選択範囲の合計を「オートSUM」で計算しなさい。', tab:'ホーム', btnId:'autosum'},
+  {app:'excel', instruction:'データに「条件付き書式」を設定しなさい。', tab:'ホーム', btnId:'conditional-formatting'},
+  {app:'excel', instruction:'選択範囲を「テーブルとして書式設定」しなさい。', tab:'ホーム', btnId:'format-as-table'},
+  {app:'excel', instruction:'データを「並べ替え」しなさい。', tab:'データ', btnId:'sort'},
+  {app:'excel', instruction:'選択したデータから「おすすめグラフ」を挿入しなさい。', tab:'挿入', btnId:'recommended-charts'},
+  {app:'excel', instruction:'セルの入力値を制限する「データの入力規則」を設定しなさい。', tab:'データ', btnId:'data-validation'},
+  {app:'excel', instruction:'ワークシートを「保護」しなさい。', tab:'校閲', btnId:'protect-sheet'},
+  {app:'excel', instruction:'印刷時に見出し行を固定する「印刷タイトル」を設定しなさい。', tab:'ページレイアウト', btnId:'print-titles'},
+];
+
+// ===== 状態 =====
+let current = [];
+let idx = 0;
+let perfectCount = 0;
+let results = []; // {ok:true, mistakes, hint}
+let activeTab = '';
+let mistakesThisTask = 0;
+let hintUsedThisTask = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startSim(mode){
+  if(mode==='word') current = shuffle(TASKS.filter(t=>t.app==='word'));
+  else if(mode==='excel') current = shuffle(TASKS.filter(t=>t.app==='excel'));
+  else current = shuffle(TASKS);
+  idx = 0; perfectCount = 0; results = [];
+  document.getElementById('menu-screen').style.display = 'none';
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('sim-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderTask();
+}
+
+function renderTask(){
+  const t = current[idx];
+  mistakesThisTask = 0;
+  hintUsedThisTask = false;
+  activeTab = 'ホーム'; // 毎回ホームタブから開始（本番同様、正しいタブへ自分で移動する）
+  document.getElementById('simProgress').textContent = `${idx+1} / ${current.length}`;
+  document.getElementById('simScoreLabel').textContent = `一発正解 ${perfectCount}`;
+  document.getElementById('instructionText').textContent = (t.app==='word'?'【Word】 ':'【Excel】 ') + t.instruction;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  renderRibbon();
+  renderCanvas();
+}
+
+function renderRibbon(){
+  const t = current[idx];
+  const rb = RIBBONS[t.app];
+  document.getElementById('ribbonTabs').innerHTML = rb.tabs.map(tab=>`
+    <button class="ribbon-tab${tab===activeTab?' active':''}" onclick="switchTab('${tab}')">${tab}</button>
+  `).join('');
+  const groups = rb.groups[activeTab] || [];
+  document.getElementById('ribbonBody').innerHTML = groups.map(g=>`
+    <div class="ribbon-group">
+      <div class="ribbon-btns">
+        ${g.btns.map(b=>`<button class="ribbon-btn" id="rb-${b.id}" onclick="clickBtn('${b.id}')"><span class="ic">${b.icon}</span><span class="lb">${b.label}</span></button>`).join('')}
+      </div>
+      <div class="ribbon-group-label">${g.label}</div>
+    </div>
+  `).join('');
+}
+
+function renderCanvas(){
+  const t = current[idx];
+  const area = document.getElementById('canvasArea');
+  if(t.app==='word'){
+    area.innerHTML = `<div class="canvas-doc">これはサンプル文書です。<span class="sel">この部分が選択されています</span>。ここに指示された操作を適用します。</div>`;
+  } else {
+    const cols = ['A','B','C','D'];
+    let rows = '<tr><th></th>' + cols.map(c=>`<th>${c}</th>`).join('') + '</tr>';
+    for(let r=1;r<=5;r++){
+      rows += '<tr><th>'+r+'</th>' + cols.map((c,ci)=>{
+        const sel = (r===2 && ci===1) ? ' sel' : '';
+        return `<td class="${sel.trim()}">${r===1?'項目'+ (ci+1):(r*10+ci)}</td>`;
+      }).join('') + '</tr>';
+    }
+    area.innerHTML = `<div class="canvas-grid"><table>${rows}</table></div>`;
+  }
+}
+
+function switchTab(tab){
+  activeTab = tab;
+  renderRibbon();
+}
+
+function clickBtn(btnId){
+  const t = current[idx];
+  const el = document.getElementById('rb-'+btnId);
+  if(btnId === t.btnId){
+    el.classList.add('flash-ok');
+    document.getElementById('feedback').textContent = '✅ 正解！次の問題へ進むにゃ';
+    document.getElementById('feedback').className = 'feedback ok';
+    results.push({instruction:t.instruction, ok:true, mistakes:mistakesThisTask, hint:hintUsedThisTask});
+    if(mistakesThisTask===0 && !hintUsedThisTask) perfectCount++;
+    document.getElementById('simScoreLabel').textContent = `一発正解 ${perfectCount}`;
+    setTimeout(()=>{
+      idx++;
+      if(idx < current.length) renderTask();
+      else showResult();
+    }, 700);
+  } else {
+    mistakesThisTask++;
+    el.classList.add('flash-ng');
+    setTimeout(()=>{ el.classList.remove('flash-ng'); }, 500);
+    document.getElementById('feedback').textContent = '❌ ちがうにゃ。もう一度探してみて';
+    document.getElementById('feedback').className = 'feedback ng';
+  }
+}
+
+function showHint(){
+  const t = current[idx];
+  hintUsedThisTask = true;
+  activeTab = t.tab;
+  renderRibbon();
+  document.getElementById('feedback').textContent = `💡「${t.tab}」タブの中を探してみて！`;
+  document.getElementById('feedback').className = 'feedback';
+}
+
+function showResult(){
+  document.getElementById('sim-screen').classList.remove('show');
+  document.getElementById('end-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+  const total = current.length;
+  document.getElementById('endScore').textContent = `${perfectCount} / ${total}（一発正解）`;
+  let msg = '';
+  const rate = perfectCount/total;
+  if(rate>=0.9) msg = 'すごいにゃ！操作場所をよく覚えてる。本番も自信を持って！';
+  else if(rate>=0.6) msg = 'いい調子にゃ。間違えた操作は下の表で復習しよう。';
+  else msg = 'まずはリボンのどこに何があるか、慣れるところからにゃ。';
+  document.getElementById('endMsg').textContent = msg;
+
+  document.getElementById('detailBody').innerHTML = results.map(r=>{
+    let res, color;
+    if(r.hint){ res='💡 ヒント使用'; color='#fbbf24'; }
+    else if(r.mistakes===0){ res='◎ 一発正解'; color='#34d399'; }
+    else { res=`△ ${r.mistakes}回やり直し`; color='#67e8f9'; }
+    return `<tr><td>${r.instruction}</td><td style="color:${color};font-weight:800;">${res}</td></tr>`;
+  }).join('');
+}
+
+function exitSim(){
+  document.getElementById('sim-screen').classList.remove('show');
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('menu-screen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showMenu(){ exitSim(); }
+</script>
+</body>
+</html>
