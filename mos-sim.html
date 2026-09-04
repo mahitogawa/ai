@@ -70,6 +70,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 
 /* リボンUI */
 .app-window{background:#1c1c1c;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.5);border:1px solid #333;}
+.window-titlebar{display:flex;align-items:center;gap:7px;background:#171717;padding:9px 12px;border-bottom:1px solid #333;}
+.win-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.win-dot.red{background:#ff5f57;}
+.win-dot.yellow{background:#febc2e;}
+.win-dot.green{background:#28c840;}
+.win-title{flex:1;text-align:center;font-size:12px;color:#999;font-weight:700;margin-right:38px;}
 .ribbon-tabs{display:flex;flex-wrap:wrap;background:#232323;border-bottom:1px solid #3a3a3a;padding:0 4px;}
 .ribbon-tab{background:none;border:none;color:#c9c9c9;font-size:13px;font-weight:700;padding:9px 14px;border-bottom:2px solid transparent;}
 .ribbon-tab.active{color:var(--teal);border-bottom-color:var(--teal);background:rgba(34,211,238,.08);}
@@ -129,6 +135,34 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   .instruction-label{font-size:13px;}
   .instruction-text{font-size:19px;}
   .feedback{font-size:15px;}
+  .hint-btn{font-size:15px;padding:14px;}
+  .end-score{font-size:52px;}
+  .end-msg{font-size:15.5px;}
+  .detail-table{font-size:14px;}
+  .act-btn{font-size:16px;padding:16px;}
+}
+
+/* PCで実際にWord/Excelを開いているような「全画面ウィンドウ」風に見せる */
+@media (min-width:1100px){
+  .wrap{max-width:1400px;}
+  .window-titlebar{padding:11px 14px;}
+  .win-dot{width:13px;height:13px;}
+  .win-title{font-size:13.5px;}
+  .ribbon-tab{font-size:16px;padding:14px 24px;}
+  .ribbon-body{min-height:170px;padding:20px 16px;}
+  .ribbon-group{padding:6px 20px;}
+  .ribbon-btns{max-width:280px;}
+  .ribbon-btn{min-width:82px;padding:11px 14px;}
+  .ribbon-btn .ic{font-size:24px;}
+  .ribbon-btn .lb{font-size:12.5px;}
+  .ribbon-group-label{font-size:11px;}
+  .canvas-area{min-height:460px;display:flex;align-items:center;justify-content:center;padding:32px;}
+  .canvas-doc{max-width:820px;width:100%;font-size:16px;padding:40px;min-height:380px;}
+  .canvas-grid{width:100%;max-width:960px;}
+  .canvas-grid table{font-size:15px;}
+  .canvas-grid td,.canvas-grid th{padding:12px 22px;}
+}
+@media (min-width:900px) and (max-width:1099px){
   .ribbon-tab{font-size:15px;padding:12px 20px;}
   .ribbon-body{min-height:130px;padding:16px 12px;}
   .ribbon-group{padding:4px 16px;}
@@ -139,11 +173,6 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   .canvas-doc{max-width:640px;font-size:15px;padding:26px;}
   .canvas-grid table{font-size:14px;}
   .canvas-grid td,.canvas-grid th{padding:8px 16px;}
-  .hint-btn{font-size:15px;padding:14px;}
-  .end-score{font-size:52px;}
-  .end-msg{font-size:15.5px;}
-  .detail-table{font-size:14px;}
-  .act-btn{font-size:16px;padding:16px;}
 }
 </style>
 </head>
@@ -180,6 +209,10 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
     </div>
     <div class="feedback" id="feedback"></div>
     <div class="app-window">
+      <div class="window-titlebar">
+        <span class="win-dot red"></span><span class="win-dot yellow"></span><span class="win-dot green"></span>
+        <span class="win-title" id="windowTitle">文書1 - Word</span>
+      </div>
       <div class="ribbon-tabs" id="ribbonTabs"></div>
       <div class="ribbon-body" id="ribbonBody"></div>
       <div class="canvas-area" id="canvasArea"></div>
@@ -358,6 +391,7 @@ function renderTask(){
   document.getElementById('simProgress').textContent = `${idx+1} / ${current.length}`;
   document.getElementById('simScoreLabel').textContent = `一発正解 ${perfectCount}`;
   document.getElementById('instructionText').textContent = (t.app==='word'?'【Word】 ':'【Excel】 ') + t.instruction;
+  document.getElementById('windowTitle').textContent = t.app==='word' ? '文書1 - Word' : 'Book1 - Excel';
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
   renderRibbon();
