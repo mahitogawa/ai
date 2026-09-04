@@ -32,6 +32,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 
 #crosslink{text-align:center;padding:7px 16px;background:var(--navy-dark);border-bottom:1px solid var(--line);}
 #crosslink a{color:var(--teal);font-size:13.5px;font-weight:700;text-decoration:none;margin:0 8px;}
+#crosslink a.sim-link{display:inline-block;margin-top:8px;font-size:16px;font-weight:900;color:#0a1a2e;background:linear-gradient(135deg,#5eead4,#22d3ee);padding:8px 18px;border-radius:999px;box-shadow:0 3px 10px rgba(34,211,238,.35);}
 
 .wrap{max-width:760px;margin:0 auto;padding:16px 12px 70px;}
 
@@ -184,9 +185,10 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 </div>
 
 <div id="crosslink">
-  <a href="mos.html">📊 4択ドリルに戻る</a>
   <a href="index.html">🐱 生成AIパスポート</a>
   <a href="it-passport.html">🐈 ITパスポート</a>
+  <br>
+  <a href="mos.html" class="sim-link">📊 4択ドリルに戻る</a>
 </div>
 
 <div class="wrap">
@@ -194,9 +196,9 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   <div id="menu-screen">
     <div class="notice">💡 本物のMOS試験は「実際にWord・Excelを操作する実技試験」。ここではリボン（画面上部のボタン集）を再現して、「指示された操作をするにはどこを押せばいいか」を練習できるよ。文字入力やドラッグ操作までは再現していない、簡易シミュレーションだよ。</div>
     <div class="menu">
-      <button class="wide" onclick="startSim('word')"><div class="gicon">📝</div><div>ワード操作編</div><div class="msub">（10問）</div></button>
-      <button class="wide" onclick="startSim('excel')"><div class="gicon">📈</div><div>エクセル操作編</div><div class="msub">（10問）</div></button>
-      <button class="wide" onclick="startSim('all')"><div class="gicon">🔁</div><div>ワード＋エクセル 混合</div><div class="msub">（全20問）</div></button>
+      <button class="wide" onclick="startSim('word')"><div class="gicon">📝</div><div>ワード操作編</div><div class="msub">（20問）</div></button>
+      <button class="wide" onclick="startSim('excel')"><div class="gicon">📈</div><div>エクセル操作編</div><div class="msub">（20問）</div></button>
+      <button class="wide" onclick="startSim('all')"><div class="gicon">🔁</div><div>ワード＋エクセル 混合</div><div class="msub">（全40問）</div></button>
     </div>
   </div>
 
@@ -329,7 +331,7 @@ const RIBBONS = {
   }
 };
 
-// ===== 課題データ（20問） =====
+// ===== 課題データ（40問） =====
 const TASKS = [
   {app:'word', instruction:'選択した文字を「太字」にしなさい。', tab:'ホーム', btnId:'bold'},
   {app:'word', instruction:'選択した文字に「下線」を付けなさい。', tab:'ホーム', btnId:'underline'},
@@ -351,6 +353,28 @@ const TASKS = [
   {app:'excel', instruction:'セルの入力値を制限する「データの入力規則」を設定しなさい。', tab:'データ', btnId:'data-validation'},
   {app:'excel', instruction:'ワークシートを「保護」しなさい。', tab:'校閲', btnId:'protect-sheet'},
   {app:'excel', instruction:'印刷時に見出し行を固定する「印刷タイトル」を設定しなさい。', tab:'ページレイアウト', btnId:'print-titles'},
+  // --- 追加分（ワード） ---
+  {app:'word', instruction:'選択した文字を「斜体」にしなさい。', tab:'ホーム', btnId:'italic'},
+  {app:'word', instruction:'選択した文字に「蛍光ペン」で色を付けなさい。', tab:'ホーム', btnId:'highlight'},
+  {app:'word', instruction:'選択した段落に「箇条書き」を設定しなさい。', tab:'ホーム', btnId:'bullets'},
+  {app:'word', instruction:'選択した段落を「中央揃え」にしなさい。', tab:'ホーム', btnId:'align-center'},
+  {app:'word', instruction:'文書に「表」を挿入しなさい。', tab:'挿入', btnId:'table'},
+  {app:'word', instruction:'文書に「ヘッダー」を挿入しなさい。', tab:'挿入', btnId:'header'},
+  {app:'word', instruction:'文書のレイアウトを「段組み」に設定しなさい。', tab:'レイアウト', btnId:'columns'},
+  {app:'word', instruction:'文中の語句に「脚注」を挿入しなさい。', tab:'参考資料', btnId:'footnote'},
+  {app:'word', instruction:'選択した箇所に「新しいコメント」を追加しなさい。', tab:'校閲', btnId:'new-comment'},
+  {app:'word', instruction:'文書を「閲覧モード」で表示しなさい。', tab:'表示', btnId:'read-mode'},
+  // --- 追加分（エクセル） ---
+  {app:'excel', instruction:'選択したセルを「斜体」にしなさい。', tab:'ホーム', btnId:'italic'},
+  {app:'excel', instruction:'選択したセルに「塗りつぶしの色」を設定しなさい。', tab:'ホーム', btnId:'fill-color'},
+  {app:'excel', instruction:'選択したセルの表示形式を「パーセントスタイル」にしなさい。', tab:'ホーム', btnId:'percent'},
+  {app:'excel', instruction:'選択範囲を「並べ替えとフィルター」で並べ替えなさい。', tab:'ホーム', btnId:'sort-filter'},
+  {app:'excel', instruction:'選択したデータから「縦棒」グラフを挿入しなさい。', tab:'挿入', btnId:'column-chart'},
+  {app:'excel', instruction:'選択範囲に「ピボットテーブル」を挿入しなさい。', tab:'挿入', btnId:'pivot-table'},
+  {app:'excel', instruction:'印刷する「印刷範囲」を設定しなさい。', tab:'ページレイアウト', btnId:'print-area'},
+  {app:'excel', instruction:'数式の「エラーチェック」を実行しなさい。', tab:'数式', btnId:'error-check'},
+  {app:'excel', instruction:'選択範囲の「重複の削除」を実行しなさい。', tab:'データ', btnId:'remove-duplicates'},
+  {app:'excel', instruction:'先頭行が常に見えるように「ウィンドウ枠の固定」を設定しなさい。', tab:'表示', btnId:'freeze-panes'},
 ];
 
 // ===== 状態 =====
