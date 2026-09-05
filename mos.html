@@ -28,14 +28,23 @@ body{
 button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;user-select:none;-webkit-user-select:none;font-family:inherit;}
 
 #topHeader{background:var(--navy);padding:16px;border-bottom:1px solid rgba(34,211,238,.25);text-align:center;}
-#topHeader h1{font-size:22px;margin:0;color:#e0f7ff;font-weight:900;letter-spacing:.01em;}
+#topHeader h1{font-size:22px;margin:0;color:#e0f7ff;font-weight:900;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:8px;}
+#topHeader h1 svg{width:24px;height:24px;flex-shrink:0;}
 #topHeader .tagline{font-size:14px;color:#9fd8e8;margin:6px 0 0;font-weight:700;}
 
 .wrap{max-width:680px;margin:0 auto;padding:18px 14px 80px;}
 
-#crosslink{text-align:center;padding:7px 16px;background:var(--navy-dark);border-bottom:1px solid var(--line);}
+#crosslink{text-align:center;padding:10px 16px;background:var(--navy-dark);border-bottom:1px solid var(--line);}
 #crosslink a{color:var(--teal);font-size:13.5px;font-weight:700;text-decoration:none;margin:0 8px;}
-#crosslink a.sim-link{display:inline-block;margin-top:8px;font-size:16px;font-weight:900;color:#0a1a2e;background:linear-gradient(135deg,#5eead4,#22d3ee);padding:8px 18px;border-radius:999px;box-shadow:0 3px 10px rgba(34,211,238,.35);}
+#crosslink a.sim-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;font-size:16px;font-weight:900;color:#0a1a2e;background:linear-gradient(135deg,#5eead4,#22d3ee);padding:8px 18px;border-radius:999px;box-shadow:0 3px 10px rgba(34,211,238,.35);}
+#crosslink a.sim-link svg{width:19px;height:19px;flex-shrink:0;}
+#crosslink .ctile-row{display:flex;align-items:stretch;justify-content:center;gap:10px;}
+#crosslink a.ctile{display:flex;flex-direction:column;align-items:center;text-decoration:none;width:120px;padding:9px 6px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(34,211,238,.25);margin:0;transition:transform .15s,border-color .15s,background .15s;}
+#crosslink a.ctile:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.7);background:rgba(34,211,238,.08);}
+#crosslink a.ctile:active{background:rgba(34,211,238,.1);}
+#crosslink .ctile-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.4);box-shadow:inset 0 0 6px rgba(34,211,238,.12);margin-bottom:5px;}
+#crosslink .ctile-icon svg{width:18px;height:18px;}
+#crosslink .ctile-title{font-size:12px;font-weight:800;color:var(--ink);line-height:1.3;}
 
 /* メニュー */
 #menu-screen{
@@ -188,15 +197,22 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 <body>
 
 <div id="topHeader">
-  <h1>📊 MOS対策ドリル</h1>
+  <h1><svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="6,14 12,4 16,14" fill="#22d3ee"/><polygon points="34,14 28,4 24,14" fill="#22d3ee"/><circle cx="20" cy="22" r="14" fill="#22d3ee"/><circle cx="15" cy="21" r="2.2" fill="#0a1a2e"/><circle cx="25" cy="21" r="2.2" fill="#0a1a2e"/><polygon points="20,25 18,27.5 22,27.5" fill="#0a1a2e"/></svg>MOS対策ドリル</h1>
   <p class="tagline">ワード・エクセル 一般＋エキスパート｜用語・操作の4択クイズ</p>
 </div>
 
 <div id="crosslink">
-  <a href="index.html">🐱 生成AIパスポート</a>
-  <a href="it-passport.html">🐈 ITパスポート</a>
-  <br>
-  <a href="mos-sim.html" class="sim-link">🖱️ 操作シミュレーション版（PC推奨）</a>
+  <div class="ctile-row">
+    <a href="index.html" class="ctile">
+      <div class="ctile-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><polygon points="6,14 12,4 16,14" fill="#22d3ee"/><polygon points="34,14 28,4 24,14" fill="#22d3ee"/><circle cx="20" cy="22" r="14" fill="#22d3ee"/><circle cx="15" cy="21" r="2.2" fill="#0a1a2e"/><circle cx="25" cy="21" r="2.2" fill="#0a1a2e"/><polygon points="20,25 18,27.5 22,27.5" fill="#0a1a2e"/></svg></div>
+      <div class="ctile-title">生成AIパスポート</div>
+    </a>
+    <a href="it-passport.html" class="ctile">
+      <div class="ctile-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><polygon points="6,14 12,4 16,14" fill="#22d3ee"/><polygon points="34,14 28,4 24,14" fill="#22d3ee"/><circle cx="20" cy="22" r="14" fill="#22d3ee"/><circle cx="15" cy="21" r="2.2" fill="#0a1a2e"/><circle cx="25" cy="21" r="2.2" fill="#0a1a2e"/><polygon points="20,25 18,27.5 22,27.5" fill="#0a1a2e"/></svg></div>
+      <div class="ctile-title">ITパスポート</div>
+    </a>
+  </div>
+  <a href="mos-sim.html" class="sim-link"><svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="6,14 12,4 16,14" fill="#0a1a2e"/><polygon points="34,14 28,4 24,14" fill="#0a1a2e"/><circle cx="20" cy="22" r="14" fill="#0a1a2e"/><circle cx="15" cy="21" r="2.2" fill="#eafffb"/><circle cx="25" cy="21" r="2.2" fill="#eafffb"/><polygon points="20,25 18,27.5 22,27.5" fill="#eafffb"/></svg>操作シミュレーション版（PC推奨）</a>
 </div>
 
 <div class="wrap">
