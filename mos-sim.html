@@ -85,32 +85,38 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .feedback.ng{color:var(--danger);}
 
 /* リボンUI */
-.app-window{background:#1c1c1c;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.5);border:1px solid #333;}
-.window-titlebar{display:flex;align-items:center;gap:7px;background:#171717;padding:9px 12px;border-bottom:1px solid #333;}
+.app-window{
+  --app-accent: #22d3ee;
+  font-family:"Segoe UI","Yu Gothic UI",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:#201f1e;border-radius:8px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.5);border:1px solid #3b3a39;
+}
+.app-window.app-word{--app-accent:#3a8ee6;}
+.app-window.app-excel{--app-accent:#3fa76d;}
+.window-titlebar{display:flex;align-items:center;gap:7px;background:#201f1e;padding:8px 12px;border-bottom:1px solid #3b3a39;}
 .win-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
 .win-dot.red{background:#ff5f57;}
 .win-dot.yellow{background:#febc2e;}
 .win-dot.green{background:#28c840;}
-.win-title{flex:1;text-align:center;font-size:12px;color:#999;font-weight:700;margin-right:38px;}
-.ribbon-tabs{display:flex;flex-wrap:wrap;background:#232323;border-bottom:1px solid #3a3a3a;padding:0 4px;}
-.ribbon-tab{background:none;border:none;color:#c9c9c9;font-size:13px;font-weight:700;padding:9px 14px;border-bottom:2px solid transparent;}
-.ribbon-tab.active{color:var(--teal);border-bottom-color:var(--teal);background:rgba(34,211,238,.08);}
-.ribbon-body{display:flex;flex-wrap:wrap;gap:0;background:#282828;padding:8px 6px;min-height:96px;}
-.ribbon-group{display:flex;flex-direction:column;align-items:center;padding:2px 10px;border-right:1px solid #3a3a3a;}
+.win-title{flex:1;text-align:center;font-size:12px;color:#a19f9d;font-weight:600;margin-right:38px;}
+.ribbon-tabs{display:flex;flex-wrap:wrap;background:#201f1e;border-bottom:1px solid #3b3a39;padding:0 4px;}
+.ribbon-tab{background:none;border:none;color:#c8c6c4;font-size:13px;font-weight:600;padding:9px 14px;border-bottom:2px solid transparent;}
+.ribbon-tab.active{color:#fff;border-bottom-color:var(--app-accent);background:rgba(255,255,255,.04);}
+.ribbon-body{display:flex;flex-wrap:wrap;gap:0;background:#2b2a29;padding:8px 6px;min-height:96px;}
+.ribbon-group{display:flex;flex-direction:column;align-items:center;padding:2px 10px;border-right:1px solid #3b3a39;}
 .ribbon-group:last-child{border-right:none;}
 .ribbon-btns{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:220px;}
 .ribbon-btn{
   display:flex;flex-direction:column;align-items:center;gap:2px;
-  background:none;border:1px solid transparent;border-radius:6px;
+  background:none;border:1px solid transparent;border-radius:4px;
   padding:5px 7px;min-width:52px;color:#e6e6e6;
 }
-.ribbon-btn:hover{background:#333;border-color:#4a4a4a;}
-.ribbon-btn:active{background:#3a3a3a;}
+.ribbon-btn:hover{background:#383735;border-color:#4a4846;}
+.ribbon-btn:active{background:#3f3d3b;}
 .ribbon-btn .ic{font-size:16px;line-height:1;}
-.ribbon-btn .lb{font-size:9.5px;font-weight:600;text-align:center;line-height:1.2;color:#c9c9c9;white-space:normal;}
+.ribbon-btn .lb{font-size:9.5px;font-weight:500;text-align:center;line-height:1.2;color:#c8c6c4;white-space:normal;}
 .ribbon-btn.flash-ok{background:rgba(52,211,153,.3)!important;border-color:var(--good)!important;}
 .ribbon-btn.flash-ng{background:rgba(248,113,113,.3)!important;border-color:var(--danger)!important;}
-.ribbon-group-label{font-size:9px;color:#8a8a8a;margin-top:4px;}
+.ribbon-group-label{font-size:9px;color:#918f8c;margin-top:4px;}
 
 .canvas-area{background:#e9edf2;min-height:170px;padding:16px;}
 .canvas-doc{background:#fff;border-radius:4px;padding:18px;max-width:420px;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.15);color:#1a1a1a;font-size:13px;line-height:1.8;}
@@ -121,7 +127,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .canvas-grid td{padding:4px 8px;border:1px solid #dcdfe3;text-align:center;}
 .canvas-grid td.sel{background:#bcd6ff;outline:2px solid #1a73e8;outline-offset:-2px;}
 
-.hint-btn{display:block;width:100%;margin:0;padding:9px 12px;background:#202020;border:none;border-bottom:1px solid #3a3a3a;border-radius:0;color:var(--muted);font-size:13.5px;font-weight:800;}
+.hint-btn{display:block;width:100%;margin:0;padding:9px 12px;background:#201f1e;border:none;border-bottom:1px solid #3b3a39;border-radius:0;color:var(--muted);font-size:13.5px;font-weight:800;}
 
 /* 結果 */
 #end-screen{display:none;}
@@ -265,7 +271,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <div class="instruction-text" id="instructionText"></div>
     </div>
     <div class="feedback" id="feedback"></div>
-    <div class="app-window">
+    <div class="app-window" id="appWindow">
       <div class="window-titlebar">
         <span class="win-dot red"></span><span class="win-dot yellow"></span><span class="win-dot green"></span>
         <span class="win-title" id="windowTitle">文書1 - Word</span>
@@ -543,6 +549,7 @@ function renderTask(){
   document.getElementById('simScoreLabel').textContent = `一発正解 ${perfectCount}`;
   document.getElementById('instructionText').textContent = (t.app==='word'?'【Word】 ':'【Excel】 ') + t.instruction;
   document.getElementById('windowTitle').textContent = t.app==='word' ? '文書1 - Word' : 'Book1 - Excel';
+  document.getElementById('appWindow').className = t.app==='word' ? 'app-window app-word' : 'app-window app-excel';
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
   renderRibbon();
