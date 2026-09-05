@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MOS対策ドリル（ワード・エクセル 一般）</title>
-<meta name="description" content="MOS(Microsoft Office Specialist) ワード・エクセル一般レベルの用語・操作を4択クイズで予備学習できるドリルアプリ。">
+<meta name="description" content="MOS(Microsoft Office Specialist) ワード・エクセル 一般＋エキスパートレベルの用語・操作を4択クイズで予備学習できるドリルアプリ。">
 <meta name="theme-color" content="#0a1a2e">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -51,6 +51,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .stat-line{font-size:13px;color:var(--muted);text-align:center;margin-bottom:14px;font-weight:700;}
 .sub-heading{font-size:14px;font-weight:900;color:var(--teal);margin:16px 0 8px;padding-left:2px;}
 .sub-heading.excel{color:#4ade80;}
+.sub-heading.expert{color:#fbbf24;margin-top:24px;}
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:4px;}
 .menu button{
   background:radial-gradient(ellipse at 50% 20%, rgba(34,211,238,0.12) 0%, transparent 70%), linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
@@ -70,8 +71,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 }
 .menu button.excel-cat{border-color:rgba(74,222,128,.3);}
 .menu button.excel-cat:hover{border-color:rgba(74,222,128,.7);}
+.menu button.expert-cat{border-color:rgba(251,191,36,.35);}
+.menu button.expert-cat:hover{border-color:rgba(251,191,36,.75);}
+.menu button.expert-all{border:2px solid #fbbf24;box-shadow:0 0 0 1px rgba(251,191,36,.25) inset, 0 0 18px rgba(251,191,36,.25);}
 .gicon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:7px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.4);}
 .excel-cat .gicon{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.4);}
+.expert-cat .gicon,.expert-all .gicon{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.5);}
 .mtitle{margin:0;}
 .msub{display:block;font-weight:500;font-size:.82em;opacity:.75;margin-top:3px;}
 .badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fbbf24;color:#1a0e08;font-size:11px;font-weight:800;padding:3px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.35);}
@@ -184,7 +189,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 
 <div id="topHeader">
   <h1>📊 MOS対策ドリル</h1>
-  <p class="tagline">ワード・エクセル 一般レベル｜用語・操作の4択クイズ</p>
+  <p class="tagline">ワード・エクセル 一般＋エキスパート｜用語・操作の4択クイズ</p>
 </div>
 
 <div id="crosslink">
@@ -210,7 +215,17 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
     <div class="menu" id="excelMenu"></div>
 
     <div class="menu" style="margin-top:10px;">
-      <button class="wide" onclick="startMode('all')"><div class="gicon">🔁</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（ワード・エクセル 全120問）</div></button>
+      <button class="wide" onclick="startMode('all')"><div class="gicon">🔁</div><div class="mtitle">一般 総復習</div><div class="msub">（ワード・エクセル 全120問）</div></button>
+    </div>
+
+    <div class="sub-heading expert">🏆 ワード エキスパート</div>
+    <div class="menu" id="wordExpertMenu"></div>
+
+    <div class="sub-heading expert excel">🏆 エクセル エキスパート</div>
+    <div class="menu" id="excelExpertMenu"></div>
+
+    <div class="menu" style="margin-top:10px;">
+      <button class="wide expert-all" onclick="startMode('allExpert')"><div class="gicon">🏆</div><div class="mtitle">エキスパート 総復習</div><div class="msub">（ワード・エクセル 全80問）</div></button>
     </div>
   </div>
 
@@ -262,19 +277,27 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 <script>
 // ===== カテゴリ定義 =====
 const CATS = [
-  {id:'w0', subject:'word',  icon:'📁', label:'文書管理・基本操作'},
-  {id:'w1', subject:'word',  icon:'🔤', label:'文字・段落の書式設定'},
-  {id:'w2', subject:'word',  icon:'📋', label:'表とリスト'},
-  {id:'w3', subject:'word',  icon:'📑', label:'参考資料の作成と管理'},
-  {id:'w4', subject:'word',  icon:'🖼', label:'グラフィック要素'},
-  {id:'e0', subject:'excel', icon:'📗', label:'ワークシート・ブック管理'},
-  {id:'e1', subject:'excel', icon:'🔢', label:'セルとデータ管理'},
-  {id:'e2', subject:'excel', icon:'🗂', label:'テーブルの管理'},
-  {id:'e3', subject:'excel', icon:'🧮', label:'数式・関数'},
-  {id:'e4', subject:'excel', icon:'📉', label:'グラフの作成・管理'},
+  {id:'w0', subject:'word',  level:'general', icon:'📁', label:'文書管理・基本操作'},
+  {id:'w1', subject:'word',  level:'general', icon:'🔤', label:'文字・段落の書式設定'},
+  {id:'w2', subject:'word',  level:'general', icon:'📋', label:'表とリスト'},
+  {id:'w3', subject:'word',  level:'general', icon:'📑', label:'参考資料の作成と管理'},
+  {id:'w4', subject:'word',  level:'general', icon:'🖼', label:'グラフィック要素'},
+  {id:'e0', subject:'excel', level:'general', icon:'📗', label:'ワークシート・ブック管理'},
+  {id:'e1', subject:'excel', level:'general', icon:'🔢', label:'セルとデータ管理'},
+  {id:'e2', subject:'excel', level:'general', icon:'🗂', label:'テーブルの管理'},
+  {id:'e3', subject:'excel', level:'general', icon:'🧮', label:'数式・関数'},
+  {id:'e4', subject:'excel', level:'general', icon:'📉', label:'グラフの作成・管理'},
+  {id:'we0', subject:'word',  level:'expert', icon:'⚙️', label:'文書のオプションと設定の管理'},
+  {id:'we1', subject:'word',  level:'expert', icon:'🖋', label:'高度な編集・書式設定機能'},
+  {id:'we2', subject:'word',  level:'expert', icon:'🧩', label:'独自のドキュメント要素の作成'},
+  {id:'we3', subject:'word',  level:'expert', icon:'🚀', label:'高度なWord機能の利用'},
+  {id:'ee0', subject:'excel', level:'expert', icon:'⚙️', label:'ブックのオプションと設定の管理'},
+  {id:'ee1', subject:'excel', level:'expert', icon:'🗂', label:'データの管理・書式設定'},
+  {id:'ee2', subject:'excel', level:'expert', icon:'🧮', label:'高度な数式・マクロ'},
+  {id:'ee3', subject:'excel', level:'expert', icon:'📊', label:'高度なグラフ・ピボットテーブル'},
 ];
 
-// ===== 問題データ（4択・全80問） =====
+// ===== 問題データ（4択・一般120問＋エキスパート80問＝全200問） =====
 const QUESTIONS = [
 // --- w0 文書管理・基本操作 ---
 {cat:'w0', q:'Wordで作成した文書を「以前のバージョンのWordでも開ける形式」で保存したいとき、名前を付けて保存の「ファイルの種類」で選ぶべき形式は？', choices:['Word 97-2003 文書 (.doc)','PDF (.pdf)','Word テンプレート (.dotx)','Web ページ (.htm)'], a:0},
@@ -416,6 +439,96 @@ const QUESTIONS = [
 {cat:'e4', q:'棒グラフと折れ線グラフなど、異なる種類のグラフを1つに組み合わせる機能は？', choices:['組み合わせグラフ','積み上げグラフ','散布図','レーダーチャート'], a:0},
 {cat:'e4', q:'グラフのタイトルを直接書き換える方法は？', choices:['グラフタイトルをクリックしてそのまま入力し直す','グラフを削除して作り直す','セルの内容を変更する','グラフの種類を変更する'], a:0},
 {cat:'e4', q:'作成したグラフを画像として文書やスライドに貼り付ける方法は？', choices:['グラフをコピーして「図として貼り付け」を選ぶ','通常の貼り付けしかできない','グラフはコピーできない','必ずPDFに変換してから貼り付ける'], a:0},
+// ===== エキスパートレベル（Word） =====
+// --- we0 文書のオプションと設定の管理 ---
+{cat:'we0', q:'文書を編集できないように制限しつつ、特定の書式のみ変更を許可する機能は？', choices:['「校閲」タブの「編集の制限」','パスワードを設定する','読み取り専用で開く','変更履歴の記録'], a:0},
+{cat:'we0', q:'マクロを含む文書を保存するときに使うファイル形式は？', choices:['Word マクロ有効文書 (.docm)','Word 文書 (.docx)','Word テンプレート (.dotx)','リッチテキスト形式 (.rtf)'], a:0},
+{cat:'we0', q:'文書に使用しているフォントを他のPCでも正しく表示させるための保存オプションは？', choices:['フォントを埋め込む','互換モードで保存する','読み取り専用にする','文書の検査を行う'], a:0},
+{cat:'we0', q:'複数人が編集した文書の変更点を1つの文書にまとめて確認する機能は？', choices:['「校閲」タブの「比較」（結合）','変更履歴の記録','コメントの挿入','共有のみ'], a:0},
+{cat:'we0', q:'個人情報やコメント、変更履歴などを保存前に確認・削除できる機能は？', choices:['文書の検査','スペルチェック','互換性チェック','アクセシビリティチェック'], a:0},
+{cat:'we0', q:'古いバージョンのWordでも正しく開けるか確認する機能は？', choices:['互換性チェック','文書の検査','アクセシビリティチェック','読み取り機能の確認'], a:0},
+{cat:'we0', q:'別のテンプレートに定義されているスタイルを、今開いている文書に読み込むには？', choices:['「スタイルの管理」の「インポート/エクスポート」を使う','コピー＆ペーストする','新規文書を作成し直す','フォントを変更する'], a:0},
+{cat:'we0', q:'文書やテンプレートをアドインとして登録し、Wordの機能を拡張できる場所は？', choices:['Wordのオプション画面の「アドイン」','ファイル＞印刷','校閲タブ','挿入タブ'], a:0},
+{cat:'we0', q:'文書を開いたときに自動的に有効化されるマクロの実行を制御する設定がある場所は？', choices:['トラストセンターの設定','文書の検査','スペルチェックと文章校正のオプション','互換性チェック'], a:0},
+{cat:'we0', q:'複数のサブ文書をまとめて1つの大きな文書として管理する機能は？', choices:['マスター文書（アウトライン表示）','セクション区切り','目次','ブックマーク'], a:0},
+// --- we1 高度な編集・書式設定機能 ---
+{cat:'we1', q:'特定の文字パターン（数字や記号など）を条件にして検索する機能は？', choices:['「オプション」で「ワイルドカードを使用する」を有効にして検索','通常の検索のみ','置換機能のみ','スペルチェック'], a:0},
+{cat:'we1', q:'文書の一部だけ用紙の向きを変えたいときに挿入するものは？', choices:['セクション区切り','ページ区切り','段区切り','改行'], a:0},
+{cat:'we1', q:'単語が行末で不自然に途切れないよう、自動的にハイフンを挿入する機能は？', choices:['ハイフネーション','均等割り付け','文字幅の調整','カーニング'], a:0},
+{cat:'we1', q:'印刷はされるが編集の邪魔にならないよう、文書全体に薄く文字を配置する機能は？', choices:['透かし（ウォーターマーク）','ヘッダー','テキストボックス','図形の背景'], a:0},
+{cat:'we1', q:'見出しなどのスタイルをまとめて別のデザインに一括変更できる機能は？', choices:['スタイルセット（デザインタブ）','テーマの色のみ変更','フォントの置換','検索と置換'], a:0},
+{cat:'we1', q:'文字と文字の間隔を微調整して見た目を整える機能は？', choices:['文字間隔の調整（カーニング）','行間隔','インデント','均等割り付け'], a:0},
+{cat:'we1', q:'キーボードから直接入力しにくい記号や特殊文字を挿入する機能は？', choices:['「挿入」タブの「記号と特殊文字」','オートコレクト','スペルチェック','検索と置換'], a:0},
+{cat:'we1', q:'段落の書式だけをコピーして別の段落に連続して適用したいときに使う機能は？', choices:['書式のコピー/貼り付け（ダブルクリックで連続適用）','コピー＆ペースト','スタイルの新規作成','検索と置換'], a:0},
+{cat:'we1', q:'文字列の向き（縦書き・横書きなど）を変更する設定は？', choices:['文字列の方向（レイアウトタブ）','ページ設定の余白','段組み','行間隔'], a:0},
+{cat:'we1', q:'箇条書きの記号を画像に変更したいときの設定は？', choices:['「箇条書き」の「新しい行頭文字の定義」から画像を指定','段落番号の変更のみ','記号と特殊文字から選ぶだけ','テーマの変更'], a:0},
+// --- we2 独自のドキュメント要素の作成 ---
+{cat:'we2', q:'独自の書式ルールをまとめて、繰り返し使えるように登録する機能は？', choices:['新しいスタイルの作成','テーマの変更','書式のコピー','検索と置換'], a:0},
+{cat:'we2', q:'配色やフォントの組み合わせを独自に作成し、文書全体に適用する機能は？', choices:['独自のテーマを作成（デザインタブ）','スタイルセットの変更のみ','ページ色の変更','透かしの追加'], a:0},
+{cat:'we2', q:'奇数ページと偶数ページで異なるヘッダー/フッターを設定するオプションは？', choices:['ヘッダー/フッターツールの「奇数/偶数ページ別指定」','セクション区切りのみ','ページ番号の書式設定','ページ設定の余白'], a:0},
+{cat:'we2', q:'よく使う定型文（署名や挨拶文など）を再利用できる形で登録する機能は？', choices:['クイックパーツ（文書パーツの登録）','オートコレクトのみ','スタイルの新規作成','検索と置換'], a:0},
+{cat:'we2', q:'独自デザインの表紙を作成し、他の文書でも使えるように保存する方法は？', choices:['作成した表紙を選択し「クイックパーツギャラリーに保存」','表紙ギャラリーからそのまま選ぶだけ','ページ区切りを挿入するだけ','テーマを変更するだけ'], a:0},
+{cat:'we2', q:'目次に表示する見出しレベルを、既定の3段階から変更するには？', choices:['「目次」の「目次のオプション」でレベルを指定','見出しスタイルを削除する','段落番号を振り直す','ページ番号を変更する'], a:0},
+{cat:'we2', q:'文書内の図に自動で連番のキャプションを付ける機能は？', choices:['「参考資料」タブの「図表番号の挿入」','テキストボックスに手入力','ヘッダーに追加','脚注の挿入'], a:0},
+{cat:'we2', q:'記入者が選択肢から選ぶだけで入力できる、チェックボックスやドロップダウンを配置する機能は？', choices:['コンテンツコントロール（開発タブ）','テキストボックス','フォームフィールドの色変更','表の挿入'], a:0},
+{cat:'we2', q:'作成した文書のレイアウトやスタイルを、繰り返し使えるひな形として保存する形式は？', choices:['Word テンプレート (.dotx)','Word 文書 (.docx)','リッチテキスト形式 (.rtf)','PDF (.pdf)'], a:0},
+{cat:'we2', q:'参考文献の一覧（文献目録）を自動作成する機能は？', choices:['「参考資料」タブの「文献目録」','脚注の挿入','目次の作成','索引の挿入'], a:0},
+// --- we3 高度なWord機能の利用 ---
+{cat:'we3', q:'宛先リストの条件によって本文の内容を変える差し込み印刷機能は？', choices:['差し込み文書の「ルール」→「Ifの場合」','宛先の選択のみ','単票入力','プレビューの確認のみ'], a:0},
+{cat:'we3', q:'差し込み印刷の結果を、印刷ではなくメールで一括送信する機能は？', choices:['差し込み印刷を「電子メールメッセージ」で完了する','宛名ラベルの印刷','個々のドキュメントの編集','データファイルの編集のみ'], a:0},
+{cat:'we3', q:'よく行う操作を記録して、ワンクリックで再生できるようにする機能は？', choices:['マクロの記録（表示タブ）','クイックパーツの登録','スタイルの新規作成','オートコレクトの登録'], a:0},
+{cat:'we3', q:'記録したマクロをボタンとしてクイックアクセスツールバーに追加するには？', choices:['Wordのオプション画面でマクロをボタンに割り当てる','マクロの記録をやり直す','リボンはカスタマイズできない','ショートカットキーのみ対応'], a:0},
+{cat:'we3', q:'Excelの表を文書内に挿入し、ダブルクリックでExcelの機能を使って編集できるようにする機能は？', choices:['「挿入」タブの「オブジェクト」で埋め込む','画像として貼り付ける','テキストとして貼り付ける','ハイパーリンクの挿入'], a:0},
+{cat:'we3', q:'複数人からのコメントに返信したり、対応済みとして「解決」にする操作ができる場所は？', choices:['コメントの返信・「解決済み」ボタン','変更履歴の承諾','文書の比較','校閲者の追加のみ'], a:0},
+{cat:'we3', q:'変更履歴の表示方法を「すべての変更履歴/シンプルな変更履歴」などに切り替える設定は？', choices:['「校閲」タブの変更履歴の表示オプション','ファイルの保存形式の変更','コメントの表示/非表示のみ','文書の検査'], a:0},
+{cat:'we3', q:'2つの文書を見比べて、違いだけを新しい文書として出力する機能は？', choices:['「校閲」タブの「比較」','変更履歴の記録','コメントの挿入','文書の結合のみ'], a:0},
+{cat:'we3', q:'特定のスタイル以外を使えないように文書の書式設定を制限する機能は？', choices:['「編集の制限」の「書式の制限」','テーマの固定','スタイルの削除','パスワード保護のみ'], a:0},
+{cat:'we3', q:'見出しなどを参照して「〇ページ参照」のように自動更新される参照を挿入する機能は？', choices:['「参考資料」タブの「相互参照」','ハイパーリンクの挿入','ブックマークの挿入のみ','目次の更新のみ'], a:0},
+// ===== エキスパートレベル（Excel） =====
+// --- ee0 ブックのオプションと設定の管理 ---
+{cat:'ee0', q:'複数人で同時にブックを編集できるようにする機能は？', choices:['共同編集（ブックの共有）','ブックの保護','シートの保護','セルの保護'], a:0},
+{cat:'ee0', q:'シートの追加・削除・移動などの操作をできないようにする設定は？', choices:['ブックの保護（構成の保護）','シートの保護','セルのロック','パスワードでファイルを開く制限'], a:0},
+{cat:'ee0', q:'特定の表示状態（フィルターや列幅など）を名前を付けて保存し、後で呼び出せる機能は？', choices:['ユーザー設定のビュー','ウィンドウ枠の固定','シートの保護','印刷範囲の設定'], a:0},
+{cat:'ee0', q:'マクロを含むブックを保存するときのファイル形式は？', choices:['Excel マクロ有効ブック (.xlsm)','Excel ブック (.xlsx)','CSV (.csv)','Excel テンプレート (.xltx)'], a:0},
+{cat:'ee0', q:'他のブックへのリンク（外部参照）を更新するかどうかを制御する設定は？', choices:['「データ」タブの「リンクの編集」','セルの参照設定','ブックの保護','ウィンドウの整列'], a:0},
+{cat:'ee0', q:'特定のシートを非表示にして、通常の操作では見えないようにする機能は？', choices:['シートを右クリックして「非表示」','行/列の非表示のみ','ブックの保護','ウィンドウを閉じる'], a:0},
+{cat:'ee0', q:'ブックを開いたときに自動で実行されるマクロを許可するかどうかを設定する場所は？', choices:['トラストセンターのマクロの設定','ブックの保護','数式の設定','データの入力規則'], a:0},
+{cat:'ee0', q:'独自の表示形式（例：1000→1,000円）を作るときに使う機能は？', choices:['セルの書式設定「ユーザー定義」','条件付き書式','データの入力規則','関数の挿入'], a:0},
+{cat:'ee0', q:'校閲者が数式を壊さないよう、特定セルだけ編集を許可し他をロックする手順は？', choices:['対象セルの「ロックを解除」→「シートの保護」を有効化','シートの保護のみ実行','セルの結合','入力規則の設定のみ'], a:0},
+{cat:'ee0', q:'複数のウィンドウでブックを開き、並べて表示する機能は？', choices:['「表示」タブの「整列」','ウィンドウ枠の固定','分割','新しいウィンドウを開くのみ'], a:0},
+// --- ee1 データの管理・書式設定 ---
+{cat:'ee1', q:'数式を使って「他のセルの値」を条件に書式を変える条件付き書式を設定するには？', choices:['「新しい書式ルール」で「数式を使用して、書式設定するセルを決定」を選ぶ','セルの色を直接変更する','データバーを使うだけ','ルールの管理を開くだけ'], a:0},
+{cat:'ee1', q:'入力規則で、独自の数式条件（例：他のセルより大きい値のみ許可）を設定する種類は？', choices:['ユーザー設定（数式を指定）','リスト','整数','日付'], a:0},
+{cat:'ee1', q:'複数条件を満たすデータだけを抽出する、オートフィルターより高度な機能は？', choices:['「データ」タブの「詳細設定（フィルターオプションの設定）」','オートフィルターのみ','並べ替えのみ','条件付き書式'], a:0},
+{cat:'ee1', q:'複数の範囲やシートのデータを1つの表に集計する機能は？', choices:['「データ」タブの「統合」','ピボットテーブルの作成','SUM関数を1つずつ入力','テーブルの結合のみ'], a:0},
+{cat:'ee1', q:'テーブルの列見出しの名前を数式内でそのまま使える参照方法は？', choices:['構造化参照（テーブル名[列名]）','絶対参照','相対参照','名前の定義のみ'], a:0},
+{cat:'ee1', q:'セルの色やアイコンを基準にしてデータを並べ替える機能は？', choices:['並べ替えの詳細設定で「セルの色」を指定','通常の昇順/降順のみ','フィルターのみ','条件付き書式のみ'], a:0},
+{cat:'ee1', q:'特定の列だけを基準にして重複データを削除する機能は？', choices:['「重複の削除」で対象列だけチェックを入れる','フィルターで手動確認する','並べ替えのみ行う','検索と置換を使う'], a:0},
+{cat:'ee1', q:'大量の行をグループにまとめて折りたたみ表示できるようにする機能は？', choices:['「データ」タブの「グループ化」','行の非表示','ウィンドウ枠の固定','シートの保護'], a:0},
+{cat:'ee1', q:'名前付き範囲の適用範囲を「ブック全体」か「特定シートのみ」かを設定できる機能は？', choices:['「名前の管理」でスコープを指定する','セルを結合する','ウィンドウを整列する','データを統合する'], a:0},
+{cat:'ee1', q:'1つの列のデータを、区切り文字をもとに複数の列に分割する機能は？', choices:['「データ」タブの「区切り位置」','フラッシュフィル','テキストの折り返し','セルの結合'], a:0},
+// --- ee2 高度な数式・マクロ ---
+{cat:'ee2', q:'複数の条件をすべて満たす数値の合計を求める関数は？', choices:['SUMIFS','SUMIF','SUM','COUNTIFS'], a:0},
+{cat:'ee2', q:'表の左端以外の列も検索でき、列の挿入に強い検索関数は？', choices:['XLOOKUP','VLOOKUP','HLOOKUP','LOOKUP'], a:0},
+{cat:'ee2', q:'数式がエラーになった場合に、代わりの値を表示する関数は？', choices:['IFERROR','ISERROR','IF','ERROR.TYPE'], a:0},
+{cat:'ee2', q:'条件に応じて掛け算した値の合計を、配列数式を使わずに求められる関数は？', choices:['SUMPRODUCT','SUMIFS','PRODUCT','SUMSQ'], a:0},
+{cat:'ee2', q:'指定した営業日数だけ前後の日付を計算する関数は？', choices:['WORKDAY','NETWORKDAYS','EDATE','DATEDIF'], a:0},
+{cat:'ee2', q:'開始日から終了日までの「稼働日数」を求める関数は？', choices:['NETWORKDAYS','WORKDAY','DAYS','DATEDIF'], a:0},
+{cat:'ee2', q:'複数のセルの文字列を、指定した区切り文字でつなげる関数は？', choices:['TEXTJOIN','CONCATENATE','TEXT','JOIN'], a:0},
+{cat:'ee2', q:'数式がどのセルを参照しているか、矢印で確認できる機能は？', choices:['「数式」タブの「参照元のトレース」','セルの書式設定','名前の管理','エラーチェックのみ'], a:0},
+{cat:'ee2', q:'特定のセルの値の変化を、シートを移動しても常に確認できるようにする機能は？', choices:['ウォッチウィンドウ','ウィンドウ枠の固定','名前の定義','条件付き書式'], a:0},
+{cat:'ee2', q:'操作を記録してマクロとして保存し、後から自動実行できるようにする機能は？', choices:['「表示」タブの「マクロの記録」','ピボットテーブルの作成','関数の挿入','ソルバーの実行'], a:0},
+// --- ee3 高度なグラフ・ピボットテーブル ---
+{cat:'ee3', q:'大量データを、ドラッグ操作だけで様々な角度から集計・分析できる機能は？', choices:['ピボットテーブル','テーブル(Ctrl+T)','データの統合','オートフィルター'], a:0},
+{cat:'ee3', q:'ピボットテーブルの項目をボタンで直感的に絞り込める機能は？', choices:['スライサー','タイムライン','フィルターエリア','ピボットグラフ'], a:0},
+{cat:'ee3', q:'ピボットテーブルの日付データを、月単位や四半期単位でまとめて絞り込む機能は？', choices:['タイムライン','スライサー','グループ化（日付）のみ','並べ替え'], a:0},
+{cat:'ee3', q:'ピボットテーブルの元データにない、独自の計算列を追加する機能は？', choices:['集計フィールド（計算フィールド）の追加','値フィールドの設定のみ','フィルターの追加','スライサーの追加'], a:0},
+{cat:'ee3', q:'ピボットテーブルを基にグラフを作成する機能は？', choices:['ピボットグラフ','おすすめグラフ','スパークライン','散布図'], a:0},
+{cat:'ee3', q:'2種類のグラフ（棒グラフと折れ線グラフなど）を1つにまとめて表示するグラフは？', choices:['組み合わせグラフ','積み上げグラフ','散布図','ドーナツグラフ'], a:0},
+{cat:'ee3', q:'グラフの数値の傾向（今後の予測含む）を示す線を追加する機能は？', choices:['近似曲線（トレンドライン）','スパークライン','データラベル','軸の書式設定'], a:0},
+{cat:'ee3', q:'ピボットテーブルの集計セルをダブルクリックすると起きることは？', choices:['元になった明細データが新しいシートに一覧表示される','ピボットテーブルが削除される','グラフが自動作成される','ブックが再計算される'], a:0},
+{cat:'ee3', q:'元データが更新された後、ピボットテーブルに反映させる操作は？', choices:['ピボットテーブルの「更新」','ピボットテーブルの再作成','ブックの再起動','フィルターの再設定のみ'], a:0},
+{cat:'ee3', q:'ピボットテーブルの集計値を、通常のセルの数式から参照する関数は？', choices:['GETPIVOTDATA','VLOOKUP','INDEX','SUMIFS'], a:0},
 ];
 
 const choiceLabels = ['ア','イ','ウ','エ'];
@@ -432,19 +545,29 @@ let bestStreak = 0;
 function catCount(id){ return QUESTIONS.filter(q=>q.cat===id).length; }
 
 function renderMenus(){
-  const wordCats = CATS.filter(c=>c.subject==='word');
-  const excelCats = CATS.filter(c=>c.subject==='excel');
+  const wordCats = CATS.filter(c=>c.subject==='word' && c.level==='general');
+  const excelCats = CATS.filter(c=>c.subject==='excel' && c.level==='general');
+  const wordExpertCats = CATS.filter(c=>c.subject==='word' && c.level==='expert');
+  const excelExpertCats = CATS.filter(c=>c.subject==='excel' && c.level==='expert');
   document.getElementById('wordMenu').innerHTML = wordCats.map(c=>`
     <button onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
   `).join('');
   document.getElementById('excelMenu').innerHTML = excelCats.map(c=>`
     <button class="excel-cat" onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
   `).join('');
+  document.getElementById('wordExpertMenu').innerHTML = wordExpertCats.map(c=>`
+    <button class="expert-cat" onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
+  `).join('');
+  document.getElementById('excelExpertMenu').innerHTML = excelExpertCats.map(c=>`
+    <button class="expert-cat" onclick="startCategory('${c.id}')"><div class="gicon">${c.icon}</div><div class="mtitle">${c.label}</div><div class="msub">（${catCount(c.id)}問）</div></button>
+  `).join('');
 }
 
 function catLabel(catId){
   const c = CATS.find(x=>x.id===catId);
-  return c ? (c.subject==='word' ? '📝 '+c.label : '📈 '+c.label) : '';
+  if(!c) return '';
+  const icon = c.level==='expert' ? '🏆' : (c.subject==='word' ? '📝' : '📈');
+  return icon+' '+c.label;
 }
 
 // ===== 統計（累計） =====
@@ -510,9 +633,15 @@ function startCategory(catId){
   current = shuffle(QUESTIONS.filter(q=>q.cat===catId)).map(cloneQ);
   beginQuiz();
 }
+function catLevel(catId){
+  const c = CATS.find(x=>x.id===catId);
+  return c ? c.level : 'general';
+}
+
 function startMode(mode){
-  if(mode==='mini') current = shuffle(QUESTIONS).slice(0,20).map(cloneQ);
-  else if(mode==='all') current = shuffle(QUESTIONS).map(cloneQ);
+  if(mode==='mini') current = shuffle(QUESTIONS.filter(q=>catLevel(q.cat)==='general')).slice(0,20).map(cloneQ);
+  else if(mode==='all') current = shuffle(QUESTIONS.filter(q=>catLevel(q.cat)==='general')).map(cloneQ);
+  else if(mode==='allExpert') current = shuffle(QUESTIONS.filter(q=>catLevel(q.cat)==='expert')).map(cloneQ);
   beginQuiz();
 }
 
