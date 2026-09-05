@@ -106,7 +106,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .canvas-grid td{padding:4px 8px;border:1px solid #dcdfe3;text-align:center;}
 .canvas-grid td.sel{background:#bcd6ff;outline:2px solid #1a73e8;outline-offset:-2px;}
 
-.hint-btn{display:block;width:100%;margin-bottom:12px;padding:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13.5px;font-weight:800;}
+.hint-btn{display:block;width:100%;margin:0;padding:9px 12px;background:#202020;border:none;border-bottom:1px solid #3a3a3a;border-radius:0;color:var(--muted);font-size:13.5px;font-weight:800;}
 
 /* 結果 */
 #end-screen{display:none;}
@@ -237,12 +237,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <div class="instruction-text" id="instructionText"></div>
     </div>
     <div class="feedback" id="feedback"></div>
-    <button class="hint-btn" onclick="showHint()">💡 ヒント（正解のタブを表示）</button>
     <div class="app-window">
       <div class="window-titlebar">
         <span class="win-dot red"></span><span class="win-dot yellow"></span><span class="win-dot green"></span>
         <span class="win-title" id="windowTitle">文書1 - Word</span>
       </div>
+      <button class="hint-btn" onclick="showHint()">💡 ヒント（正解のタブを表示）</button>
       <div class="ribbon-tabs" id="ribbonTabs"></div>
       <div class="ribbon-body" id="ribbonBody"></div>
       <div class="canvas-wrap">
