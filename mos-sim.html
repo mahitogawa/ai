@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MOS操作シミュレーション（ワード・エクセル 一般）</title>
-<meta name="description" content="MOS一般レベルの操作場所を、リボンUIの疑似操作で練習するシミュレーションドリル。本番のCBT実技試験に近い形式。">
+<title>MOS操作シミュレーション（ワード・エクセル 一般＋エキスパート）</title>
+<meta name="description" content="MOS一般＋エキスパートレベルの操作場所を、リボンUIの疑似操作で練習するシミュレーションドリル。本番のCBT実技試験に近い形式。">
 <meta name="theme-color" content="#0a1a2e">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -53,6 +53,10 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .menu button:active{transform:scale(.96);}
 .gicon{font-size:22px;margin-bottom:6px;}
 .msub{display:block;font-weight:500;font-size:.82em;opacity:.75;margin-top:3px;}
+.sub-heading.expert{color:#fbbf24;font-size:13.5px;font-weight:900;margin:18px 0 8px;text-align:center;}
+.menu button.expert-cat{border-color:rgba(251,191,36,.35);}
+.menu button.expert-cat .gicon{background:rgba(251,191,36,.1);}
+.menu button.expert-all{border:2px solid #fbbf24;box-shadow:0 0 14px rgba(251,191,36,.25);}
 
 /* シミュレーション画面 */
 #sim-screen{display:none;}
@@ -227,6 +231,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <button class="wide" onclick="startSim('excel')"><div class="gicon">📈</div><div>エクセル操作編</div><div class="msub">（20問）</div></button>
       <button class="wide" onclick="startSim('all')"><div class="gicon">🔁</div><div>ワード＋エクセル 混合</div><div class="msub">（全40問）</div></button>
     </div>
+    <div class="sub-heading expert">🏆 エキスパート編</div>
+    <div class="menu">
+      <button class="wide expert-cat" onclick="startSim('wordExpert')"><div class="gicon">📝</div><div>ワード操作編（上級）</div><div class="msub">（10問）</div></button>
+      <button class="wide expert-cat" onclick="startSim('excelExpert')"><div class="gicon">📈</div><div>エクセル操作編（上級）</div><div class="msub">（10問）</div></button>
+      <button class="wide expert-all" onclick="startSim('allExpert')"><div class="gicon">🏆</div><div>エキスパート 混合</div><div class="msub">（全20問）</div></button>
+    </div>
   </div>
 
   <div id="sim-screen">
@@ -280,7 +290,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 // ===== リボン定義（アプリごとのタブ・グループ・ボタン） =====
 const RIBBONS = {
   word: {
-    tabs: ['ホーム','挿入','レイアウト','参考資料','校閲','表示'],
+    tabs: ['ホーム','挿入','デザイン','レイアウト','参考資料','校閲','表示'],
     groups: {
       'ホーム': [
         {label:'クリップボード', btns:[{id:'paste',label:'貼り付け',icon:'📋'},{id:'copy',label:'コピー',icon:'📄'}]},
@@ -294,25 +304,32 @@ const RIBBONS = {
         {label:'表', btns:[{id:'table',label:'表',icon:'▦'}]},
         {label:'図', btns:[{id:'pictures',label:'画像',icon:'🖼'},{id:'shapes',label:'図形',icon:'🔷'},{id:'smartart',label:'SmartArt',icon:'🧩'},{id:'chart',label:'グラフ',icon:'📊'}]},
         {label:'ヘッダーとフッター', btns:[{id:'header',label:'ヘッダー',icon:'⬆'},{id:'footer',label:'フッター',icon:'⬇'},{id:'page-number',label:'ページ番号',icon:'#'}]},
-        {label:'テキスト', btns:[{id:'textbox',label:'テキストボックス',icon:'📝'},{id:'wordart',label:'ワードアート',icon:'🎨'}]},
+        {label:'テキスト', btns:[{id:'textbox',label:'テキストボックス',icon:'📝'},{id:'wordart',label:'ワードアート',icon:'🎨'},{id:'insert-object',label:'オブジェクト',icon:'📦'}]},
+      ],
+      'デザイン': [
+        {label:'ドキュメントの書式設定', btns:[{id:'theme',label:'テーマ',icon:'🎨'},{id:'style-set',label:'スタイルセット',icon:'✨'},{id:'watermark',label:'透かし',icon:'💧'}]},
       ],
       'レイアウト': [
-        {label:'ページ設定', btns:[{id:'margins',label:'余白',icon:'▭'},{id:'orientation',label:'印刷の向き',icon:'🔄'},{id:'size',label:'サイズ',icon:'📐'},{id:'columns',label:'段組み',icon:'❘❘'},{id:'breaks',label:'区切り',icon:'⏸'}]},
+        {label:'ページ設定', btns:[{id:'margins',label:'余白',icon:'▭'},{id:'orientation',label:'印刷の向き',icon:'🔄'},{id:'size',label:'サイズ',icon:'📐'},{id:'columns',label:'段組み',icon:'❘❘'},{id:'breaks',label:'区切り',icon:'⏸'},{id:'hyphenation',label:'ハイフネーション',icon:'-'}]},
         {label:'配置', btns:[{id:'wrap-text',label:'文字列の折り返し',icon:'↩'},{id:'align',label:'配置',icon:'⊞'}]},
       ],
       '参考資料': [
         {label:'目次', btns:[{id:'toc',label:'目次',icon:'📑'}]},
         {label:'脚注', btns:[{id:'footnote',label:'脚注の挿入',icon:'¹'}]},
         {label:'引用文献と文献目録', btns:[{id:'citation',label:'引用文献の挿入',icon:'❝'},{id:'bibliography',label:'文献目録',icon:'📚'}]},
+        {label:'相互参照', btns:[{id:'cross-reference',label:'相互参照',icon:'🔗'}]},
       ],
       '校閲': [
         {label:'文章校正', btns:[{id:'spelling',label:'スペルチェックと文章校正',icon:'✓'}]},
         {label:'コメント', btns:[{id:'new-comment',label:'新しいコメント',icon:'💬'}]},
         {label:'変更履歴', btns:[{id:'track-changes',label:'変更履歴の記録',icon:'✏'}]},
+        {label:'保護', btns:[{id:'restrict-editing',label:'編集の制限',icon:'🔒'}]},
+        {label:'比較', btns:[{id:'compare-docs',label:'比較',icon:'⚖'}]},
       ],
       '表示': [
         {label:'表示', btns:[{id:'read-mode',label:'閲覧モード',icon:'📖'},{id:'print-layout',label:'印刷レイアウト',icon:'🖨'}]},
         {label:'表示設定', btns:[{id:'ruler',label:'ルーラー',icon:'📏'},{id:'gridlines',label:'グリッド線',icon:'▦'},{id:'nav-pane',label:'ナビゲーションウィンドウ',icon:'🧭'}]},
+        {label:'マクロ', btns:[{id:'record-macro',label:'マクロの記録',icon:'⏺'}]},
       ],
     }
   },
@@ -329,9 +346,9 @@ const RIBBONS = {
         {label:'編集', btns:[{id:'autosum',label:'オートSUM',icon:'Σ'},{id:'sort-filter',label:'並べ替えとフィルター',icon:'🔽'},{id:'find-select',label:'検索と選択',icon:'🔍'}]},
       ],
       '挿入': [
-        {label:'テーブル', btns:[{id:'pivot-table',label:'ピボットテーブル',icon:'📊'},{id:'table',label:'テーブル',icon:'▦'}]},
+        {label:'テーブル', btns:[{id:'pivot-table',label:'ピボットテーブル',icon:'📊'},{id:'table',label:'テーブル',icon:'▦'},{id:'insert-slicer',label:'スライサー',icon:'🎚'}]},
         {label:'図', btns:[{id:'pictures',label:'画像',icon:'🖼'},{id:'shapes',label:'図形',icon:'🔷'}]},
-        {label:'グラフ', btns:[{id:'recommended-charts',label:'おすすめグラフ',icon:'📈'},{id:'column-chart',label:'縦棒',icon:'📊'},{id:'line-chart',label:'折れ線',icon:'📉'},{id:'pie-chart',label:'円',icon:'🥧'}]},
+        {label:'グラフ', btns:[{id:'recommended-charts',label:'おすすめグラフ',icon:'📈'},{id:'column-chart',label:'縦棒',icon:'📊'},{id:'line-chart',label:'折れ線',icon:'📉'},{id:'pie-chart',label:'円',icon:'🥧'},{id:'pivot-chart',label:'ピボットグラフ',icon:'📊'},{id:'trendline',label:'近似曲線',icon:'📈'}]},
         {label:'スパークライン', btns:[{id:'sparkline-line',label:'折れ線',icon:'〰'},{id:'sparkline-column',label:'縦棒',icon:'▁▃▅'}]},
       ],
       'ページレイアウト': [
@@ -342,11 +359,11 @@ const RIBBONS = {
       '数式': [
         {label:'関数ライブラリ', btns:[{id:'insert-function',label:'関数の挿入',icon:'fx'},{id:'autosum2',label:'オートSUM',icon:'Σ'},{id:'logical',label:'論理',icon:'⊤'},{id:'text-func',label:'文字列操作',icon:'Aa'}]},
         {label:'定義された名前', btns:[{id:'define-name',label:'名前の定義',icon:'🏷'},{id:'name-manager',label:'名前の管理',icon:'📇'}]},
-        {label:'ワークシート分析', btns:[{id:'show-formulas',label:'数式の表示',icon:'👁'},{id:'error-check',label:'エラーチェック',icon:'⚠'}]},
+        {label:'ワークシート分析', btns:[{id:'show-formulas',label:'数式の表示',icon:'👁'},{id:'error-check',label:'エラーチェック',icon:'⚠'},{id:'watch-window',label:'ウォッチウィンドウ',icon:'👀'}]},
       ],
       'データ': [
         {label:'並べ替えとフィルター', btns:[{id:'sort',label:'並べ替え',icon:'🔤'},{id:'filter',label:'フィルター',icon:'🔽'}]},
-        {label:'データツール', btns:[{id:'remove-duplicates',label:'重複の削除',icon:'🗑'},{id:'data-validation',label:'データの入力規則',icon:'✅'}]},
+        {label:'データツール', btns:[{id:'remove-duplicates',label:'重複の削除',icon:'🗑'},{id:'data-validation',label:'データの入力規則',icon:'✅'},{id:'consolidate',label:'統合',icon:'🧷'},{id:'text-to-columns',label:'区切り位置',icon:'✂'}]},
         {label:'アウトライン', btns:[{id:'group',label:'グループ化',icon:'📦'},{id:'subtotal',label:'小計',icon:'∑'}]},
       ],
       '校閲': [
@@ -355,58 +372,81 @@ const RIBBONS = {
         {label:'変更', btns:[{id:'protect-sheet',label:'シートの保護',icon:'🔒'},{id:'protect-workbook',label:'ブックの保護',icon:'🔐'}]},
       ],
       '表示': [
-        {label:'ブックの表示', btns:[{id:'normal-view',label:'標準',icon:'▦'},{id:'page-break-preview',label:'改ページプレビュー',icon:'🔲'}]},
+        {label:'ブックの表示', btns:[{id:'normal-view',label:'標準',icon:'▦'},{id:'page-break-preview',label:'改ページプレビュー',icon:'🔲'},{id:'custom-views',label:'ユーザー設定のビュー',icon:'👁'}]},
         {label:'表示設定', btns:[{id:'gridlines-check',label:'目盛線',icon:'▦'},{id:'formula-bar',label:'数式バー',icon:'fx'}]},
         {label:'ウィンドウ', btns:[{id:'freeze-panes',label:'ウィンドウ枠の固定',icon:'📌'},{id:'split',label:'分割',icon:'⊟'}]},
+        {label:'マクロ', btns:[{id:'record-macro',label:'マクロの記録',icon:'⏺'}]},
       ],
     }
   }
 };
 
-// ===== 課題データ（40問） =====
+// ===== 課題データ（一般40問＋エキスパート20問＝全60問） =====
 const TASKS = [
-  {app:'word', instruction:'選択した文字を「太字」にしなさい。', tab:'ホーム', btnId:'bold'},
-  {app:'word', instruction:'選択した文字に「下線」を付けなさい。', tab:'ホーム', btnId:'underline'},
-  {app:'word', instruction:'段落の「行と段落の間隔」を変更しなさい。', tab:'ホーム', btnId:'line-spacing'},
-  {app:'word', instruction:'見出しに「見出し1」のスタイルを適用しなさい。', tab:'ホーム', btnId:'heading1'},
-  {app:'word', instruction:'文書に「表紙」を挿入しなさい。', tab:'挿入', btnId:'cover-page'},
-  {app:'word', instruction:'文書に「画像」を挿入しなさい。', tab:'挿入', btnId:'pictures'},
-  {app:'word', instruction:'すべてのページに「ページ番号」を挿入しなさい。', tab:'挿入', btnId:'page-number'},
-  {app:'word', instruction:'見出しを使って「目次」を自動作成しなさい。', tab:'参考資料', btnId:'toc'},
-  {app:'word', instruction:'ページの「余白」を変更しなさい。', tab:'レイアウト', btnId:'margins'},
-  {app:'word', instruction:'文書の「スペルチェックと文章校正」を実行しなさい。', tab:'校閲', btnId:'spelling'},
-  {app:'excel', instruction:'選択したセルを「太字」にしなさい。', tab:'ホーム', btnId:'bold'},
-  {app:'excel', instruction:'セルを「結合して中央揃え」にしなさい。', tab:'ホーム', btnId:'merge-center'},
-  {app:'excel', instruction:'選択範囲の合計を「オートSUM」で計算しなさい。', tab:'ホーム', btnId:'autosum'},
-  {app:'excel', instruction:'データに「条件付き書式」を設定しなさい。', tab:'ホーム', btnId:'conditional-formatting'},
-  {app:'excel', instruction:'選択範囲を「テーブルとして書式設定」しなさい。', tab:'ホーム', btnId:'format-as-table'},
-  {app:'excel', instruction:'データを「並べ替え」しなさい。', tab:'データ', btnId:'sort'},
-  {app:'excel', instruction:'選択したデータから「おすすめグラフ」を挿入しなさい。', tab:'挿入', btnId:'recommended-charts'},
-  {app:'excel', instruction:'セルの入力値を制限する「データの入力規則」を設定しなさい。', tab:'データ', btnId:'data-validation'},
-  {app:'excel', instruction:'ワークシートを「保護」しなさい。', tab:'校閲', btnId:'protect-sheet'},
-  {app:'excel', instruction:'印刷時に見出し行を固定する「印刷タイトル」を設定しなさい。', tab:'ページレイアウト', btnId:'print-titles'},
+  {app:'word', instruction:'選択した文字を「太字」にしなさい。', tab:'ホーム', btnId:'bold', level:'general'},
+  {app:'word', instruction:'選択した文字に「下線」を付けなさい。', tab:'ホーム', btnId:'underline', level:'general'},
+  {app:'word', instruction:'段落の「行と段落の間隔」を変更しなさい。', tab:'ホーム', btnId:'line-spacing', level:'general'},
+  {app:'word', instruction:'見出しに「見出し1」のスタイルを適用しなさい。', tab:'ホーム', btnId:'heading1', level:'general'},
+  {app:'word', instruction:'文書に「表紙」を挿入しなさい。', tab:'挿入', btnId:'cover-page', level:'general'},
+  {app:'word', instruction:'文書に「画像」を挿入しなさい。', tab:'挿入', btnId:'pictures', level:'general'},
+  {app:'word', instruction:'すべてのページに「ページ番号」を挿入しなさい。', tab:'挿入', btnId:'page-number', level:'general'},
+  {app:'word', instruction:'見出しを使って「目次」を自動作成しなさい。', tab:'参考資料', btnId:'toc', level:'general'},
+  {app:'word', instruction:'ページの「余白」を変更しなさい。', tab:'レイアウト', btnId:'margins', level:'general'},
+  {app:'word', instruction:'文書の「スペルチェックと文章校正」を実行しなさい。', tab:'校閲', btnId:'spelling', level:'general'},
+  {app:'excel', instruction:'選択したセルを「太字」にしなさい。', tab:'ホーム', btnId:'bold', level:'general'},
+  {app:'excel', instruction:'セルを「結合して中央揃え」にしなさい。', tab:'ホーム', btnId:'merge-center', level:'general'},
+  {app:'excel', instruction:'選択範囲の合計を「オートSUM」で計算しなさい。', tab:'ホーム', btnId:'autosum', level:'general'},
+  {app:'excel', instruction:'データに「条件付き書式」を設定しなさい。', tab:'ホーム', btnId:'conditional-formatting', level:'general'},
+  {app:'excel', instruction:'選択範囲を「テーブルとして書式設定」しなさい。', tab:'ホーム', btnId:'format-as-table', level:'general'},
+  {app:'excel', instruction:'データを「並べ替え」しなさい。', tab:'データ', btnId:'sort', level:'general'},
+  {app:'excel', instruction:'選択したデータから「おすすめグラフ」を挿入しなさい。', tab:'挿入', btnId:'recommended-charts', level:'general'},
+  {app:'excel', instruction:'セルの入力値を制限する「データの入力規則」を設定しなさい。', tab:'データ', btnId:'data-validation', level:'general'},
+  {app:'excel', instruction:'ワークシートを「保護」しなさい。', tab:'校閲', btnId:'protect-sheet', level:'general'},
+  {app:'excel', instruction:'印刷時に見出し行を固定する「印刷タイトル」を設定しなさい。', tab:'ページレイアウト', btnId:'print-titles', level:'general'},
   // --- 追加分（ワード） ---
-  {app:'word', instruction:'選択した文字を「斜体」にしなさい。', tab:'ホーム', btnId:'italic'},
-  {app:'word', instruction:'選択した文字に「蛍光ペン」で色を付けなさい。', tab:'ホーム', btnId:'highlight'},
-  {app:'word', instruction:'選択した段落に「箇条書き」を設定しなさい。', tab:'ホーム', btnId:'bullets'},
-  {app:'word', instruction:'選択した段落を「中央揃え」にしなさい。', tab:'ホーム', btnId:'align-center'},
-  {app:'word', instruction:'文書に「表」を挿入しなさい。', tab:'挿入', btnId:'table'},
-  {app:'word', instruction:'文書に「ヘッダー」を挿入しなさい。', tab:'挿入', btnId:'header'},
-  {app:'word', instruction:'文書のレイアウトを「段組み」に設定しなさい。', tab:'レイアウト', btnId:'columns'},
-  {app:'word', instruction:'文中の語句に「脚注」を挿入しなさい。', tab:'参考資料', btnId:'footnote'},
-  {app:'word', instruction:'選択した箇所に「新しいコメント」を追加しなさい。', tab:'校閲', btnId:'new-comment'},
-  {app:'word', instruction:'文書を「閲覧モード」で表示しなさい。', tab:'表示', btnId:'read-mode'},
+  {app:'word', instruction:'選択した文字を「斜体」にしなさい。', tab:'ホーム', btnId:'italic', level:'general'},
+  {app:'word', instruction:'選択した文字に「蛍光ペン」で色を付けなさい。', tab:'ホーム', btnId:'highlight', level:'general'},
+  {app:'word', instruction:'選択した段落に「箇条書き」を設定しなさい。', tab:'ホーム', btnId:'bullets', level:'general'},
+  {app:'word', instruction:'選択した段落を「中央揃え」にしなさい。', tab:'ホーム', btnId:'align-center', level:'general'},
+  {app:'word', instruction:'文書に「表」を挿入しなさい。', tab:'挿入', btnId:'table', level:'general'},
+  {app:'word', instruction:'文書に「ヘッダー」を挿入しなさい。', tab:'挿入', btnId:'header', level:'general'},
+  {app:'word', instruction:'文書のレイアウトを「段組み」に設定しなさい。', tab:'レイアウト', btnId:'columns', level:'general'},
+  {app:'word', instruction:'文中の語句に「脚注」を挿入しなさい。', tab:'参考資料', btnId:'footnote', level:'general'},
+  {app:'word', instruction:'選択した箇所に「新しいコメント」を追加しなさい。', tab:'校閲', btnId:'new-comment', level:'general'},
+  {app:'word', instruction:'文書を「閲覧モード」で表示しなさい。', tab:'表示', btnId:'read-mode', level:'general'},
   // --- 追加分（エクセル） ---
-  {app:'excel', instruction:'選択したセルを「斜体」にしなさい。', tab:'ホーム', btnId:'italic'},
-  {app:'excel', instruction:'選択したセルに「塗りつぶしの色」を設定しなさい。', tab:'ホーム', btnId:'fill-color'},
-  {app:'excel', instruction:'選択したセルの表示形式を「パーセントスタイル」にしなさい。', tab:'ホーム', btnId:'percent'},
-  {app:'excel', instruction:'選択範囲を「並べ替えとフィルター」で並べ替えなさい。', tab:'ホーム', btnId:'sort-filter'},
-  {app:'excel', instruction:'選択したデータから「縦棒」グラフを挿入しなさい。', tab:'挿入', btnId:'column-chart'},
-  {app:'excel', instruction:'選択範囲に「ピボットテーブル」を挿入しなさい。', tab:'挿入', btnId:'pivot-table'},
-  {app:'excel', instruction:'印刷する「印刷範囲」を設定しなさい。', tab:'ページレイアウト', btnId:'print-area'},
-  {app:'excel', instruction:'数式の「エラーチェック」を実行しなさい。', tab:'数式', btnId:'error-check'},
-  {app:'excel', instruction:'選択範囲の「重複の削除」を実行しなさい。', tab:'データ', btnId:'remove-duplicates'},
-  {app:'excel', instruction:'先頭行が常に見えるように「ウィンドウ枠の固定」を設定しなさい。', tab:'表示', btnId:'freeze-panes'},
+  {app:'excel', instruction:'選択したセルを「斜体」にしなさい。', tab:'ホーム', btnId:'italic', level:'general'},
+  {app:'excel', instruction:'選択したセルに「塗りつぶしの色」を設定しなさい。', tab:'ホーム', btnId:'fill-color', level:'general'},
+  {app:'excel', instruction:'選択したセルの表示形式を「パーセントスタイル」にしなさい。', tab:'ホーム', btnId:'percent', level:'general'},
+  {app:'excel', instruction:'選択範囲を「並べ替えとフィルター」で並べ替えなさい。', tab:'ホーム', btnId:'sort-filter', level:'general'},
+  {app:'excel', instruction:'選択したデータから「縦棒」グラフを挿入しなさい。', tab:'挿入', btnId:'column-chart', level:'general'},
+  {app:'excel', instruction:'選択範囲に「ピボットテーブル」を挿入しなさい。', tab:'挿入', btnId:'pivot-table', level:'general'},
+  {app:'excel', instruction:'印刷する「印刷範囲」を設定しなさい。', tab:'ページレイアウト', btnId:'print-area', level:'general'},
+  {app:'excel', instruction:'数式の「エラーチェック」を実行しなさい。', tab:'数式', btnId:'error-check', level:'general'},
+  {app:'excel', instruction:'選択範囲の「重複の削除」を実行しなさい。', tab:'データ', btnId:'remove-duplicates', level:'general'},
+  {app:'excel', instruction:'先頭行が常に見えるように「ウィンドウ枠の固定」を設定しなさい。', tab:'表示', btnId:'freeze-panes', level:'general'},
+  // --- エキスパート（ワード） ---
+  {app:'word', instruction:'文書の内容を変更できないように「編集の制限」を設定しなさい。', tab:'校閲', btnId:'restrict-editing', level:'expert'},
+  {app:'word', instruction:'2つの文書を「比較」して差分を確認しなさい。', tab:'校閲', btnId:'compare-docs', level:'expert'},
+  {app:'word', instruction:'操作手順を記録する「マクロの記録」を開始しなさい。', tab:'表示', btnId:'record-macro', level:'expert'},
+  {app:'word', instruction:'文書に「オブジェクト」を埋め込みなさい。', tab:'挿入', btnId:'insert-object', level:'expert'},
+  {app:'word', instruction:'段組みされた文書に「ハイフネーション」を設定しなさい。', tab:'レイアウト', btnId:'hyphenation', level:'expert'},
+  {app:'word', instruction:'図表番号を参照する「相互参照」を挿入しなさい。', tab:'参考資料', btnId:'cross-reference', level:'expert'},
+  {app:'word', instruction:'引用した資料の一覧である「文献目録」を挿入しなさい。', tab:'参考資料', btnId:'bibliography', level:'expert'},
+  {app:'word', instruction:'文書全体の配色・フォントを変更する「テーマ」を適用しなさい。', tab:'デザイン', btnId:'theme', level:'expert'},
+  {app:'word', instruction:'文書の背景に「透かし」を入れなさい。', tab:'デザイン', btnId:'watermark', level:'expert'},
+  {app:'word', instruction:'見出しなどの見た目をまとめて変える「スタイルセット」を適用しなさい。', tab:'デザイン', btnId:'style-set', level:'expert'},
+  // --- エキスパート（エクセル） ---
+  {app:'excel', instruction:'ブック全体の構成を変更できないように「ブックの保護」を設定しなさい。', tab:'校閲', btnId:'protect-workbook', level:'expert'},
+  {app:'excel', instruction:'よく使う範囲に名前を付けて管理する「名前の管理」を開きなさい。', tab:'数式', btnId:'name-manager', level:'expert'},
+  {app:'excel', instruction:'複数シートのデータをまとめる「統合」を実行しなさい。', tab:'データ', btnId:'consolidate', level:'expert'},
+  {app:'excel', instruction:'1つのセルの文字列を複数列に分ける「区切り位置」を実行しなさい。', tab:'データ', btnId:'text-to-columns', level:'expert'},
+  {app:'excel', instruction:'表示状態を保存しておく「ユーザー設定のビュー」を追加しなさい。', tab:'表示', btnId:'custom-views', level:'expert'},
+  {app:'excel', instruction:'数式の値を監視できる「ウォッチウィンドウ」を開きなさい。', tab:'数式', btnId:'watch-window', level:'expert'},
+  {app:'excel', instruction:'操作手順を記録する「マクロの記録」を開始しなさい。', tab:'表示', btnId:'record-macro', level:'expert'},
+  {app:'excel', instruction:'ピボットテーブルを絞り込む「スライサー」を挿入しなさい。', tab:'挿入', btnId:'insert-slicer', level:'expert'},
+  {app:'excel', instruction:'ピボットテーブルを元に「ピボットグラフ」を作成しなさい。', tab:'挿入', btnId:'pivot-chart', level:'expert'},
+  {app:'excel', instruction:'グラフに将来の傾向を示す「近似曲線」を追加しなさい。', tab:'挿入', btnId:'trendline', level:'expert'},
 ];
 
 // ===== 状態 =====
@@ -461,8 +501,12 @@ function showCatToast(correct, streakCount, rateText){
 }
 
 function startSim(mode){
-  if(mode==='word') current = shuffle(TASKS.filter(t=>t.app==='word'));
-  else if(mode==='excel') current = shuffle(TASKS.filter(t=>t.app==='excel'));
+  if(mode==='word') current = shuffle(TASKS.filter(t=>t.app==='word' && t.level==='general'));
+  else if(mode==='excel') current = shuffle(TASKS.filter(t=>t.app==='excel' && t.level==='general'));
+  else if(mode==='all') current = shuffle(TASKS.filter(t=>t.level==='general'));
+  else if(mode==='wordExpert') current = shuffle(TASKS.filter(t=>t.app==='word' && t.level==='expert'));
+  else if(mode==='excelExpert') current = shuffle(TASKS.filter(t=>t.app==='excel' && t.level==='expert'));
+  else if(mode==='allExpert') current = shuffle(TASKS.filter(t=>t.level==='expert'));
   else current = shuffle(TASKS);
   idx = 0; perfectCount = 0; results = []; streak = 0; bestStreak = 0;
   document.getElementById('menu-screen').style.display = 'none';
