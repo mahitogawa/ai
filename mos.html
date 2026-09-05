@@ -16,6 +16,7 @@ html{scroll-behavior:smooth}
   --ink:#e0f7ff; --muted:rgba(255,255,255,.65);
   --line:rgba(148,163,184,.2);
   --danger:#f87171; --good:#34d399;
+  --font-size:16.5px;
 }
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
@@ -102,14 +103,19 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .progress-bar{height:100%;background:linear-gradient(to right,var(--teal),#67e8f9);border-radius:999px;transition:.3s ease;}
 .q-card{background:linear-gradient(160deg,#17304e 0%,#0f2138 100%);border:1px solid rgba(148,163,184,.35);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.35);}
 .q-cat-tag{display:inline-block;font-size:11.5px;font-weight:800;color:var(--teal);background:rgba(34,211,238,.1);border-radius:999px;padding:3px 10px;margin-bottom:10px;}
-.q-text{font-size:16.5px;font-weight:700;line-height:1.6;color:#f0feff;}
+.q-text{font-size:var(--font-size);font-weight:700;line-height:1.6;color:#f0feff;}
 .choices{display:flex;flex-direction:column;gap:10px;}
 .choice-btn{
   display:flex;align-items:center;gap:10px;
   background:rgba(255,255,255,.09);border:1.5px solid rgba(148,163,184,.4);border-radius:12px;
-  padding:13px 14px;font-size:14.5px;font-weight:700;color:#ffffff;
+  padding:13px 14px;font-size:var(--font-size);font-weight:700;color:#ffffff;
   text-align:left;transition:.12s;
 }
+#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:10px;}
+#font-controls span{font-size:12px;font-weight:800;color:var(--muted);margin-right:2px;}
+.font-btn{padding:4px 10px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;font-size:12.5px;font-weight:900;border-radius:6px;transition:background .15s;}
+.font-btn.active{background:var(--teal);border-color:var(--teal);color:#04141f;}
+.font-btn:hover:not(.active){background:rgba(255,255,255,.15);}
 .choice-btn:active{transform:scale(.98);}
 .choice-btn .cl{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--teal);}
 .choice-btn.correct{background:rgba(52,211,153,.15);border-color:var(--good);}
@@ -153,9 +159,9 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   .gicon{font-size:24px;margin-bottom:8px;}
   .msub{font-size:.85em;}
   .q-cat-tag{font-size:13px;padding:4px 12px;}
-  .q-text{font-size:19px;}
+  :root{--font-size:19px;}
   .q-card{padding:24px;}
-  .choice-btn{font-size:16px;padding:16px 18px;}
+  .choice-btn{padding:16px 18px;}
   .choice-btn .cl{width:30px;height:30px;font-size:15px;}
   .next-btn{font-size:18px;padding:17px;}
   .quiz-progress,.quiz-score{font-size:14px;}
@@ -251,6 +257,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <div class="quiz-score" id="quizScore">正解 0</div>
     </div>
     <button class="quiz-back" onclick="exitQuiz()">← メニューに戻る（途中でやめる）</button>
+    <div id="font-controls">
+      <span>文字サイズ</span>
+      <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
+      <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
+      <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+    </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%;"></div></div>
     <div class="q-card">
       <span class="q-cat-tag" id="qCatTag">ワード</span>
@@ -291,6 +303,20 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 </div>
 
 <script>
+// ===== 文字サイズ切替 =====
+const FONT_MAP = {small:'16px', medium:'20px', large:'24px'};
+function setFont(size){
+  document.documentElement.style.setProperty('--font-size', FONT_MAP[size] || FONT_MAP.medium);
+  document.querySelectorAll('.font-btn').forEach(b=>b.classList.toggle('active', b.dataset.size===size));
+  try{ localStorage.setItem('mosFontSize', size); }catch(e){}
+}
+(function(){
+  try{
+    const s = localStorage.getItem('mosFontSize');
+    if(s && FONT_MAP[s]) setFont(s);
+  }catch(e){}
+})();
+
 // ===== カテゴリ定義 =====
 const CATS = [
   {id:'w0', subject:'word',  level:'general', icon:'📁', label:'文書管理・基本操作'},

@@ -16,6 +16,7 @@ body{overflow-x:hidden;}
   --ink:#e0f7ff; --muted:rgba(255,255,255,.65);
   --line:rgba(148,163,184,.2);
   --danger:#f87171; --good:#34d399;
+  --font-size:15.5px;
 }
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
@@ -80,10 +81,15 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   border:1.5px solid rgba(34,211,238,.4); border-radius:14px; padding:14px 16px; margin-bottom:12px;
 }
 .instruction-label{font-size:11.5px;font-weight:800;color:var(--teal);letter-spacing:.06em;margin-bottom:4px;}
-.instruction-text{font-size:15.5px;font-weight:800;color:#f0feff;line-height:1.5;}
+.instruction-text{font-size:var(--font-size);font-weight:800;color:#f0feff;line-height:1.5;}
 .feedback{min-height:20px;font-size:13.5px;font-weight:800;margin-bottom:8px;}
 .feedback.ok{color:var(--good);}
 .feedback.ng{color:var(--danger);}
+#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:8px;}
+#font-controls span{font-size:12px;font-weight:800;color:var(--muted);margin-right:2px;}
+.font-btn{padding:4px 10px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;font-size:12.5px;font-weight:900;border-radius:6px;transition:background .15s;}
+.font-btn.active{background:var(--teal);border-color:var(--teal);color:#04141f;}
+.font-btn:hover:not(.active){background:rgba(255,255,255,.15);}
 
 /* リボンUI */
 .app-window{
@@ -156,7 +162,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   .gicon{font-size:28px;margin-bottom:8px;}
   .msub{font-size:.85em;}
   .instruction-label{font-size:13px;}
-  .instruction-text{font-size:19px;}
+  :root{--font-size:19px;}
   .feedback{font-size:15px;}
   .hint-btn{font-size:15px;padding:14px;}
   .end-score{font-size:52px;}
@@ -293,6 +299,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   <div id="sim-screen">
     <div class="sim-top"><span id="simProgress">1 / 10</span><span id="simScoreLabel">一発正解 0</span></div>
     <button class="sim-back" onclick="exitSim()">← メニューに戻る（途中でやめる）</button>
+    <div id="font-controls">
+      <span>文字サイズ</span>
+      <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
+      <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
+      <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+    </div>
     <div class="instruction-bar">
       <div class="instruction-label">📋 次の操作を行いなさい</div>
       <div class="instruction-text" id="instructionText"></div>
@@ -338,6 +350,20 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 </div>
 
 <script>
+// ===== 文字サイズ切替 =====
+const FONT_MAP = {small:'16px', medium:'20px', large:'24px'};
+function setFont(size){
+  document.documentElement.style.setProperty('--font-size', FONT_MAP[size] || FONT_MAP.medium);
+  document.querySelectorAll('.font-btn').forEach(b=>b.classList.toggle('active', b.dataset.size===size));
+  try{ localStorage.setItem('mosFontSize', size); }catch(e){}
+}
+(function(){
+  try{
+    const s = localStorage.getItem('mosFontSize');
+    if(s && FONT_MAP[s]) setFont(s);
+  }catch(e){}
+})();
+
 // ===== リボン定義（アプリごとのタブ・グループ・ボタン） =====
 const RIBBONS = {
   word: {
