@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260906185615">
+<meta name="app-build" content="20260906191841">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260906185615";
+    var LOCAL_BUILD = "20260906191841";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -299,6 +299,8 @@ body.fs-large .cheat-ai-answer { font-size:16px; }
 .stat-bar { background:rgba(255,255,255,.12); border-radius:6px; height:6px; overflow:hidden; margin:2px 0 3px; }
 .stat-bar-fill { background:linear-gradient(90deg,#0891b2,#22d3ee); height:100%; border-radius:6px; transition:width .3s; }
 .stat-sub { font-size:11.5px; color:rgba(255,255,255,.5); margin:0; }
+.stat-badges { font-size:13px; margin-left:2px; letter-spacing:1px; }
+.stat-sub3 { font-size:11px; color:rgba(255,255,255,.4); margin-top:6px; }
 .cal-title { font-size:12.5px; color:rgba(255,255,255,.55); font-weight:700; margin:8px 0 6px; }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; text-align:center; }
 .cal-dow { font-size:11px; color:rgba(255,255,255,.35); font-weight:700; padding:2px 0; }
@@ -744,6 +746,20 @@ function renderCalendarHtml(activeDates){
 }
 
 // メニュー画面の「ネコ成長＋連続学習日数＋カレンダー」カードを最新の保存データで描き直す
+// 正解数に応じて解放されるネコの見た目バッジ（軽量版：画像なし・絵文字のみ）
+const BADGE_TIERS = [
+  {min:25,  emoji:'🕶️', name:'サングラス'},
+  {min:75,  emoji:'🎀', name:'リボン'},
+  {min:150, emoji:'👑', name:'王冠'},
+  {min:300, emoji:'✨', name:'キラキラオーラ'},
+];
+function getUnlockedBadges(totalCorrect){
+  return BADGE_TIERS.filter(b => (totalCorrect||0) >= b.min);
+}
+function getNextBadge(totalCorrect){
+  return BADGE_TIERS.find(b => (totalCorrect||0) < b.min) || null;
+}
+
 function renderMenuStats(){
   const el = document.getElementById('statsCard');
   if(!el) return;
@@ -754,11 +770,15 @@ function renderMenuStats(){
     ? `<div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.min(100, Math.round((st.totalSolved / lvl.next.min)*100))}%;"></div></div>`
     : '';
   const subText = lvl.next ? `次のレベルまであと${lvl.remaining}問` : '最高レベルにゃ！これからも積み上げていくにゃ';
+  const unlocked = getUnlockedBadges(st.totalCorrect||0);
+  const badgeHtml = unlocked.length ? ` <span class="stat-badges" title="${unlocked.map(b=>b.name).join('・')}">${unlocked.map(b=>b.emoji).join('')}</span>` : '';
+  const nextBadge = getNextBadge(st.totalCorrect||0);
+  const badgeHint = nextBadge ? `<div class="stat-sub3">次のバッジ「${nextBadge.emoji}${nextBadge.name}」まであと正解${nextBadge.min - (st.totalCorrect||0)}問</div>` : '';
   el.innerHTML = `
     <div class="stat-row">
       <div class="stat-cat">${lvl.emoji}</div>
       <div>
-        <div class="stat-title">Lv.${lvl.idx+1} ${lvl.name}</div>
+        <div class="stat-title">Lv.${lvl.idx+1} ${lvl.name}${badgeHtml}</div>
         <div class="stat-sub2">累計${st.totalSolved||0}問（正解${st.totalCorrect||0}問）・連続学習${st.streakDays||0}日目</div>
       </div>
     </div>
@@ -767,6 +787,7 @@ function renderMenuStats(){
       <p class="stat-sub" style="white-space:nowrap;">${subText}</p>
       <button onclick="resetAllProgress()" style="flex-shrink:0; background:transparent; border:none; color:rgba(255,255,255,.4); font-size:12px; padding:0; cursor:pointer; font-family:inherit; text-decoration:underline;">🗑 過去の記録を消す</button>
     </div>
+    ${badgeHint}
   `;
 }
 
