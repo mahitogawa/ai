@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260906144838">
+<meta name="app-build" content="20260906151145">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260906144838";
+    var LOCAL_BUILD = "20260906151145";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -191,6 +191,8 @@ body.fs-small .cheat-item .term { font-size:14.5px; }
 body.fs-small .cheat-item .read { font-size:11.5px; }
 body.fs-small .cheat-item .desc { font-size:12.5px; }
 body.fs-small .cheat-noresult { font-size:12.5px; }
+body.fs-small .cheat-ai-btn { font-size:12.5px; }
+body.fs-small .cheat-ai-answer { font-size:12.5px; }
 
 body.fs-large #question { font-size:22px; }
 body.fs-large .choice-text { font-size:20px; }
@@ -221,6 +223,8 @@ body.fs-large .cheat-item .term { font-size:18px; }
 body.fs-large .cheat-item .read { font-size:14px; }
 body.fs-large .cheat-item .desc { font-size:16px; }
 body.fs-large .cheat-noresult { font-size:16px; }
+body.fs-large .cheat-ai-btn { font-size:16px; }
+body.fs-large .cheat-ai-answer { font-size:16px; }
 
 #crosslink { text-align:center; padding:7px 16px; background:var(--navy-dark); border-bottom:1px solid var(--border); }
 #crosslink a { color:var(--teal); font-size:13.5px; font-weight:700; text-decoration:none; }
@@ -316,6 +320,9 @@ body.fs-large .cheat-noresult { font-size:16px; }
 .cheat-item .read { color:var(--teal); font-size:12.5px; }
 .cheat-item .desc { display:none; margin-top:10px; color:rgba(255,255,255,.85); font-size:14px; line-height:1.7; }
 .cheat-noresult { color:rgba(255,255,255,.5); text-align:center; padding:30px 0; font-size:14px; }
+.cheat-ai-btn { margin-top:14px; padding:10px 20px; border-radius:10px; border:1px solid rgba(34,211,238,.45); background:rgba(34,211,238,.14); color:var(--teal); font-size:14px; font-weight:800; cursor:pointer; }
+.cheat-ai-btn:hover { background:rgba(34,211,238,.24); }
+.cheat-ai-answer { margin-top:14px; padding:14px 16px; background:rgba(255,255,255,.05); border:1px solid rgba(34,211,238,.3); border-radius:12px; color:#eaf6fa; font-size:14px; line-height:1.75; white-space:pre-wrap; }
 
 .qcard { background:#fdfdfd; border:1px solid #c7cbd1; border-radius:10px; padding:0; overflow:hidden; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.25); }
 .qcard .qhead { background:#e9ebee; padding:12px 18px; border-bottom:1px solid #c7cbd1; }
@@ -461,7 +468,11 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
     <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." class="cheat-search-input">
     <div id="cheat-count" class="cheat-count"></div>
     <div id="cheat-list"></div>
-    <div id="cheat-noresult" class="cheat-noresult" style="display:none;">該当する用語が見つからないにゃ🐱</div>
+    <div id="cheat-noresult" class="cheat-noresult" style="display:none;">
+      該当する用語が見つからないにゃ🐱<br>
+      <button class="cheat-ai-btn" onclick="askCheatAI()">🐱 AI先生に聞いてみる</button>
+    </div>
+    <div id="cheat-ai-answer" class="cheat-ai-answer" style="display:none;"></div>
     <button class="info-back-btn" onclick="closeCheatScreen()">← 戻る</button>
   </div>
 
@@ -1323,6 +1334,8 @@ function showCheatScreen(){
   if (searchInput) searchInput.value = '';
   _cheatCurrentCat = 'all';
   _cheatOpenCats = {};
+  const aiBox = document.getElementById('cheat-ai-answer');
+  if (aiBox) { aiBox.style.display = 'none'; aiBox.textContent = ''; }
   renderCheatList();
 }
 
@@ -1331,7 +1344,30 @@ function closeCheatScreen(){
   document.getElementById('menu-screen').style.display = 'block';
 }
 
-function filterCheat(){ renderCheatList(); }
+function filterCheat(){
+  const aiBox = document.getElementById('cheat-ai-answer');
+  if (aiBox) { aiBox.style.display = 'none'; aiBox.textContent = ''; }
+  renderCheatList();
+}
+
+async function askCheatAI(){
+  const q = (document.getElementById('cheat-search')?.value || '').trim();
+  if (!q) return;
+  const box = document.getElementById('cheat-ai-answer');
+  box.style.display = 'block';
+  box.textContent = '🐱 考え中にゃ...';
+  try {
+    const res = await fetch('https://ai-sensei2.mahito-ai.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q })
+    });
+    const text = await res.text();
+    box.textContent = '🐱 ' + text;
+  } catch(e) {
+    box.textContent = '😿 接続エラーにゃ…';
+  }
+}
 
 function toggleCheatCat(catKey){
   _cheatOpenCats[catKey] = !_cheatOpenCats[catKey];
