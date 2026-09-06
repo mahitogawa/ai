@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260902120000">
+<meta name="app-build" content="20260906143031">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260902120000";
+    var LOCAL_BUILD = "20260906143031";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -184,6 +184,13 @@ body.fs-small footer { font-size:11.5px; }
 body.fs-small .stat-title { font-size:13.5px; }
 body.fs-small .stat-sub2, body.fs-small .stat-sub, body.fs-small .cal-title { font-size:11px; }
 body.fs-small .cal-cell, body.fs-small .cal-dow { font-size:10.5px; }
+body.fs-small .cheat-search-input { font-size:13.5px; }
+body.fs-small .cheat-count { font-size:11px; }
+body.fs-small .cheat-cat-head .name { font-size:14.5px; }
+body.fs-small .cheat-item .term { font-size:14.5px; }
+body.fs-small .cheat-item .read { font-size:11.5px; }
+body.fs-small .cheat-item .desc { font-size:12.5px; }
+body.fs-small .cheat-noresult { font-size:12.5px; }
 
 body.fs-large #question { font-size:22px; }
 body.fs-large .choice-text { font-size:20px; }
@@ -207,6 +214,13 @@ body.fs-large footer { font-size:14px; }
 body.fs-large .stat-title { font-size:17px; }
 body.fs-large .stat-sub2, body.fs-large .stat-sub, body.fs-large .cal-title { font-size:14px; }
 body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
+body.fs-large .cheat-search-input { font-size:17px; }
+body.fs-large .cheat-count { font-size:14px; }
+body.fs-large .cheat-cat-head .name { font-size:18px; }
+body.fs-large .cheat-item .term { font-size:18px; }
+body.fs-large .cheat-item .read { font-size:14px; }
+body.fs-large .cheat-item .desc { font-size:16px; }
+body.fs-large .cheat-noresult { font-size:16px; }
 
 #crosslink { text-align:center; padding:7px 16px; background:var(--navy-dark); border-bottom:1px solid var(--border); }
 #crosslink a { color:var(--teal); font-size:13.5px; font-weight:700; text-decoration:none; }
@@ -287,6 +301,21 @@ body.fs-large .cal-cell, body.fs-large .cal-dow { font-size:14px; }
 .passline-box ul { margin:0 0 6px; padding-left:1.2em; }
 .passline-box li { margin:0 0 2px; }
 .passline-box .plnote { font-size:13px; color:rgba(190,235,245,.55); margin:6px 0 0; }
+
+#cheat-screen h2 { color:#7ee8fa; font-size:19px; margin:0 0 14px; }
+.cheat-search-input { width:100%; box-sizing:border-box; padding:12px 14px; margin-bottom:10px; background:rgba(255,255,255,.05); border:1px solid rgba(34,211,238,.35); border-radius:12px; color:#eaf6fa; font-size:15px; }
+.cheat-search-input::placeholder { color:rgba(255,255,255,.4); }
+.cheat-count { font-size:12.5px; color:rgba(255,255,255,.5); margin-bottom:8px; }
+.cheat-cat-head { display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin:18px 0 10px; padding:6px 2px; }
+.cheat-cat-head .name { color:#7ee8fa; font-size:16px; font-weight:800; }
+.cheat-cat-head .name .count { font-size:12px; color:rgba(255,255,255,.45); font-weight:400; margin-left:6px; }
+.cheat-cat-head .arrow { color:#7ee8fa; font-size:14px; transition:transform .15s; }
+.cheat-item { background:rgba(255,255,255,.05); border:1px solid rgba(34,211,238,.2); border-radius:10px; padding:14px; margin-bottom:8px; cursor:pointer; }
+.cheat-item .row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+.cheat-item .term { color:#eaf6fa; font-weight:800; font-size:16px; }
+.cheat-item .read { color:var(--teal); font-size:12.5px; }
+.cheat-item .desc { display:none; margin-top:10px; color:rgba(255,255,255,.85); font-size:14px; line-height:1.7; }
+.cheat-noresult { color:rgba(255,255,255,.5); text-align:center; padding:30px 0; font-size:14px; }
 
 .qcard { background:#fdfdfd; border:1px solid #c7cbd1; border-radius:10px; padding:0; overflow:hidden; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.25); }
 .qcard .qhead { background:#e9ebee; padding:12px 18px; border-bottom:1px solid #c7cbd1; }
@@ -406,7 +435,7 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
       <button onclick="startCategory('technology')"><div class="gicon" aria-hidden="true">😹</div><div class="mtitle">テクノロジ系</div><div class="msub">（374問中ランダム100問）</div></button>
       <button class="official" onclick="startMode('official')"><div class="gicon" aria-hidden="true">🙀</div><div class="mtitle">IPA公式問題だけ</div><div class="msub">（令和6〜8年度・300問中ランダム100問）</div></button>
       <button class="secondary" onclick="startMode('all')"><div class="gicon" aria-hidden="true">😾</div><div class="mtitle">全問ランダム総復習</div><div class="msub">（830問中100問・本番形式）</div></button>
-      <button class="crosslink-btn" onclick="location.href='index.html?screen=cheat&from=itp'"><div class="gicon" aria-hidden="true">😽</div><div class="mtitle">略語チートシート</div><div class="msub">（AI・IT両方の略語）</div></button>
+      <button class="crosslink-btn" onclick="showCheatScreen()"><div class="gicon" aria-hidden="true">😽</div><div class="mtitle">略語チートシート</div><div class="msub">（IT用語まとめ）</div></button>
     </div>
   </div>
 
@@ -424,6 +453,16 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
       <p class="plnote">※この点数は単純な正答率ではなく、問題の難易度を考慮した項目応答理論（IRT）方式で採点される。100問のうち実は8問はダミー（採点対象外）で、計算方法の詳細はIPAから公表されていないよ。目安として7〜8割正解を目指すのがおすすめ。</p>
     </div>
     <button class="info-back-btn" onclick="closeInfoScreen()">← 戻る</button>
+  </div>
+
+  <div id="cheat-screen" style="display:none;">
+    <h2>📖 略語チートシート</h2>
+    <p class="menu-note">IT用語をタップで解説を表示。カテゴリ名をタップすると開閉するよ。</p>
+    <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." class="cheat-search-input">
+    <div id="cheat-count" class="cheat-count"></div>
+    <div id="cheat-list"></div>
+    <div id="cheat-noresult" class="cheat-noresult" style="display:none;">該当する用語が見つからないにゃ🐱</div>
+    <button class="info-back-btn" onclick="closeCheatScreen()">← 戻る</button>
   </div>
 
   <div id="quiz-screen" style="display:none;">
@@ -1095,6 +1134,239 @@ function showInfoScreen(){
 function closeInfoScreen(){
   document.getElementById('info-screen').style.display='none';
   document.getElementById('menu-screen').style.display='block';
+}
+
+const cheatData = [
+  {cat:"💼 ビジネス", items:[
+    {term:"DX", read:"Digital Transformation", desc:"「紙をPDFにした」だけでは不十分にゃ。ITを使ってビジネスのやり方・仕組み・文化を根本から変えることがDXにゃ。「注文は電話→アプリ自動受注・在庫自動管理・AI需要予測」まで変えることが真のDXにゃ。"},
+    {term:"BPR", read:"Business Process Re-engineering", desc:"AIを導入するとき「今の手順をそのまま自動化」するだけでは効果が半減にゃ。「AIがある前提で手順ごと設計し直す」のがBPRにゃ。道具に合わせて仕事の流れを最初から作り直すにゃ。"},
+    {term:"ROI", read:"Return on Investment（投資対効果）", desc:"「100万円投資したら、いくら返ってくるか」を示す指標にゃ。AI導入に100万かけて200万分の業務削減ができたらROI100%にゃ。上司を説得するときに数字で示せると強いにゃ。"},
+    {term:"KPI", read:"Key Performance Indicator（重要業績評価指標）", desc:"目標に向かってどれだけ進んでいるか測るための「ものさし」にゃ。「月10件の成約」「エラー率5%以下」などの具体的な数字で設定するにゃ。AI導入の成果を測るときにも使うにゃ。"},
+    {term:"OKR", read:"Objectives and Key Results", desc:"「何を達成するか（目標）」と「どうなったら達成か（成果指標）」をセットで決める目標管理の仕組みにゃ。GoogleやFacebookが使っていることで有名になったにゃ。KPIより大きくて挑戦的な目標を設定するのが特徴にゃ。"},
+    {term:"PDCAサイクル", read:"Plan・Do・Check・Act", desc:"計画→実行→確認→改善を繰り返す業務改善の基本サイクルにゃ。AIを導入したら「使い方の計画→試す→効果を確認→やり方を改善」を回し続けることが大切にゃ。"},
+    {term:"PREP法", read:"Point・Reason・Example・Point", desc:"「結論→理由→具体例→結論」の順で話す構成にゃ。例：「AIを導入すべきです（結論）。なぜなら作業時間が半減するから（理由）。実際に〇〇社では…（具体例）。だから導入を勧めます（結論）」にゃ。プロンプトでも有効にゃ。"},
+    {term:"PoC", read:"Proof of Concept（概念実証）", desc:"大きなお金をかける前に「小さく試してみる」工程にゃ。新しい料理を大量に作る前に少量で試食するイメージにゃ。AI導入で失敗リスクを下げる必須ステップにゃ。"},
+    {term:"MVP", read:"Minimum Viable Product（最小限の製品）", desc:"「必要最低限の機能だけ」でまず作って世に出すことにゃ。完璧なものを目指して何年も開発するより、シンプルな版を出してユーザーの反応を見て改善する方が失敗しにくいにゃ。スタートアップの鉄則にゃ。"},
+    {term:"サブスクリプション", read:"Subscription", desc:"毎月・毎年一定額を払って使い続けるビジネスモデルにゃ。NetflixやSpotifyが典型例にゃ。1回売り切りより安定した収益が見込めるため、AIサービスもこのモデルが主流になっているにゃ。"},
+    {term:"フリーミアム", read:"Freemium", desc:"無料版で使い始めてもらい、もっと使いたくなったら有料版に課金してもらうモデルにゃ。ClaudeやChatGPTも無料・有料プランがあるのはこの戦略にゃ。まず使ってもらって便利さを体験させるにゃ。"},
+    {term:"B2B / B2C / B2G", read:"Business to Business / Consumer / Government", desc:"誰に売るかで分類するビジネスの種類にゃ。B2Bは企業同士、B2Cは企業から一般消費者へ、B2Gは企業から行政へのビジネスにゃ。AIサービスもB2B向けとB2C向けで機能や価格が全然違うにゃ。"},
+    {term:"リスキリング", read:"Reskilling", desc:"今の仕事に必要な技術が変わったとき、新しいスキルを一から学び直すことにゃ。AIの普及で「事務作業→AIプロンプト設計」のようにスキルの転換が求められているにゃ。国も支援策を進めているにゃ。"},
+    {term:"データドリブン", read:"Data-Driven", desc:"勘や経験ではなくデータをもとに意思決定することにゃ。「なんとなく売れそう」ではなく「過去データからAIが需要を予測して仕入れを決める」のがデータドリブン経営にゃ。AIと相性が抜群にゃ。"},
+    {term:"カスタマーサクセス", read:"Customer Success", desc:"商品を売って終わりでなく、お客さんが使い続けて成功できるようにサポートし続けることにゃ。解約を防いでリピーターを増やすのが目的にゃ。SaaSサービスでは特に重要な考え方にゃ。"},
+    {term:"LTV", read:"Life Time Value（顧客生涯価値）", desc:"お客さん一人が生涯を通じて払ってくれる合計金額のことにゃ。1回だけ1万円使うお客さんより、毎月1,000円を10年使ってくれるお客さんの方がLTVが高いにゃ。AIの課金設計にも使われる指標にゃ。"},
+    {term:"ステークホルダー", read:"Stakeholder（利害関係者）", desc:"企業の活動に関係するすべての人たちにゃ。株主・社員・顧客・取引先・地域住民なども全員ステークホルダーにゃ。AI導入のとき「誰に影響があるか」を洗い出すのに使う言葉にゃ。"},
+    {term:"グロースハック", read:"Growth Hack", desc:"少ないお金でユーザーを急増させる施策のことにゃ。TwitterやDropboxが無料招待キャンペーンで爆発的に広がったのが典型例にゃ。AIを使ったコンテンツ量産やパーソナライズがグロースハックに活用されているにゃ。"},
+    {term:"ハンドオーバー", read:"Handover", desc:"AIが対応しきれない場面で人間の担当者に引き継ぐことにゃ。チャットボットが「この質問は専門スタッフに繋ぎます」と切り替えるのが典型例にゃ。スムーズな引き継ぎ設計がAI活用の鍵にゃ。"},
+    {term:"レコメンド", read:"Recommendation", desc:"過去の行動や好みをAIが分析して「あなたにはコレがおすすめ」と提示する機能にゃ。Netflixの「次に見る作品」やAmazonの「よく一緒に購入される商品」がまさにこれにゃ。"},
+    {term:"パーソナライズ", read:"Personalization", desc:"同じサービスでも人によって表示や内容を変えることにゃ。Spotifyが毎週「あなたのおすすめプレイリスト」を作るのも、AIが好みを学習してパーソナライズした結果にゃ。"},
+    {term:"CRM", read:"Customer Relationship Management（顧客管理）", desc:"お客さんの情報・購買履歴・やりとりをまとめて管理するシステムにゃ。「この人は3ヶ月前に買ったから次はこれをすすめよう」とAIが提案できるようになるにゃ。Salesforceが有名にゃ。"},
+    {term:"ウェルビーイング", read:"Well-being", desc:"体・心・仕事・社会のすべてが満たされた状態のことにゃ。「給料が高いだけ」でなく「仕事が楽しく、健康で、人間関係も良い」状態を目指す考え方にゃ。AIで業務負担を減らすこともウェルビーイング向上につながるにゃ。"},
+    {term:"ESG経営", read:"Environment・Social・Governance", desc:"環境（E）・社会（S）・企業統治（G）の3つを大切にする経営にゃ。「利益だけ追えばいい」時代から、AIの倫理的利用・環境への配慮も投資判断に使われる時代になったにゃ。"},
+    {term:"バリューチェーン", read:"Value Chain", desc:"原材料の調達から製造・販売・アフターサービスまで、価値が生まれる一連の流れのことにゃ。AIはこの各段階（需要予測・生産最適化・接客自動化など）に組み込まれつつあるにゃ。"},
+    {term:"リーンスタートアップ", read:"Lean Startup", desc:"「作る→計測する→学ぶ」を素早く繰り返して、無駄なく事業を成長させる手法にゃ。MVPを作ってすぐ市場の反応を見るのもこの考え方の一部にゃ。",},
+    {term:"ピボット", read:"Pivot", desc:"事業の方向性を大きく転換することにゃ。「最初のアイデアが上手くいかなかったので方向を変える」という意味で、スタートアップ用語としてよく使われるにゃ。",},
+    {term:"競合分析", read:"Competitive Analysis", desc:"同じ市場で戦うライバル企業の強み・弱み・戦略を調べる分析手法にゃ。AIツールを使うと、競合の口コミやSNS反応を自動で収集・要約できるようになったにゃ。"},
+    {term:"バーンレート", read:"Burn Rate", desc:"スタートアップが毎月どれくらいの現金を使っているかを示す指標にゃ。「あと何ヶ月で資金が尽きるか」を計算するのに使われる重要な数字にゃ。"},
+    {term:"タレントマネジメント", read:"Talent Management", desc:"社員一人ひとりの能力を把握し、育成・配置・評価を最適化する人事戦略にゃ。AIが社員のスキルデータを分析して、最適な配置転換を提案することも増えてきたにゃ。"},
+    {term:"ノーコード / ローコード", read:"No-code / Low-code", desc:"プログラミングの専門知識がなくても、画面操作だけでアプリやシステムを作れる開発手法にゃ。AIとの組み合わせで、より複雑なアプリも作れるようになってきたにゃ。"},
+    {term:"RPA", read:"Robotic Process Automation", desc:"「毎朝データをコピーしてExcelに貼る」のような単純なPC作業を、ロボットが代わりに自動でやってくれる仕組みにゃ。AIと組み合わせるとさらに賢くなるにゃ。会社のDX推進で最もよく使われる自動化ツールにゃ。"},
+    {term:"SWOT分析", read:"Strength・Weakness・Opportunity・Threat", desc:"自社の「強み・弱み」と外部の「機会・脅威」を4マスに整理して経営戦略を立てるフレームワークにゃ。ITパスポートの経営戦略分野の定番にゃ。"},
+    {term:"3C分析", read:"Customer・Competitor・Company", desc:"「顧客」「競合」「自社」の3つの視点で市場環境を分析する手法にゃ。SWOT分析とセットで問われやすいにゃ。"},
+    {term:"4P", read:"Product・Price・Place・Promotion", desc:"マーケティング戦略を「商品・価格・流通・販促」の4つの切り口で考えるフレームワークにゃ。"},
+    {term:"CSR", read:"Corporate Social Responsibility（企業の社会的責任）", desc:"企業が利益だけじゃなく、社会や環境に対しても責任を果たすべきという考え方にゃ。"},
+    {term:"SDGs", read:"Sustainable Development Goals（持続可能な開発目標）", desc:"2030年までに世界が達成を目指す17の目標にゃ。国連が採択したにゃ。"},
+    {term:"BCP", read:"Business Continuity Plan（事業継続計画）", desc:"災害やシステム障害が起きても事業を止めない・早く復旧するための計画にゃ。"},
+    {term:"OJT", read:"On the Job Training", desc:"実際の仕事をしながら先輩から教わる社員教育のスタイルにゃ。座学で学ぶ「Off-JT」とセットで覚えるにゃ。"},
+    {term:"BSC", read:"Balanced Scorecard（バランススコアカード）", desc:"「財務」「顧客」「業務プロセス」「学習と成長」の4つの視点で会社の業績を評価する手法にゃ。"},
+    {term:"SCM", read:"Supply Chain Management（供給連鎖管理）", desc:"原材料の調達から製造・物流・販売までの一連の流れを、会社をまたいで最適化する取り組みにゃ。"},
+    {term:"ERP", read:"Enterprise Resource Planning（企業資源計画）", desc:"ヒト・モノ・カネ・情報といった経営資源を一元管理する統合基幹業務システムにゃ。"},
+    {term:"ROE", read:"Return On Equity（自己資本利益率）", desc:"自己資本（株主のお金）に対して、どれだけ効率よく利益を生み出せたかを示す指標にゃ。"},
+    {term:"ROA", read:"Return On Asset（総資産利益率）", desc:"会社が持つ資産全体（借金含む）に対して、どれだけ効率よく利益を生み出せたかを示す指標にゃ。"},
+    {term:"M&A", read:"Mergers and Acquisitions（合併と買収）", desc:"会社同士が一つになったり（合併）、片方がもう片方を買ったり（買収）すること。事業拡大の手段の一つにゃ。"},
+    {term:"OEM", read:"Original Equipment Manufacturer（相手先ブランド製造）", desc:"自社ブランドじゃなく、依頼された他社のブランド名で製品を製造すること、またはその製造元のことにゃ。"},
+    {term:"IPO", read:"Initial Public Offering（新規株式公開）", desc:"会社が初めて証券取引所に株式を上場して、誰でも株を売買できるようにすることにゃ。"},
+    {term:"CxO", read:"Chief x Officer（最高〇〇責任者）", desc:"CEO（最高経営責任者）・CIO（最高情報責任者）・CTO（最高技術責任者）のように、各分野のトップを表す役職の総称にゃ。"},
+    {term:"HRM", read:"Human Resource Management（人的資源管理）", desc:"採用・育成・評価・配置など「人」に関する経営活動全般のことにゃ。"},
+    {term:"KGI", read:"Key Goal Indicator（重要目標達成指標）", desc:"最終的なゴールの達成度を測る指標にゃ。途中経過を測るKPIとセットで使われるにゃ。"},
+    {term:"TQM", read:"Total Quality Management（総合的品質管理）", desc:"経営者から現場まで全社一丸となって品質改善に取り組む考え方にゃ。"},
+    {term:"EULA", read:"End User License Agreement（使用許諾契約）", desc:"ソフトウェアを使うときに「同意する」をクリックする、あの利用ルールの契約書のことにゃ。"},
+  ]},
+  {cat:"💻 開発", items:[
+    {term:"API", read:"Application Programming Interface", desc:"アプリ同士をつなぐ「共通の窓口」にゃ。天気予報アプリが気象庁のデータを取ってくる仕組みや、ChatGPTを自分のアプリに組み込む仕組みがAPIにゃ。料理に例えると「食材の注文口」にゃ。"},
+    {term:"OSS", read:"Open Source Software", desc:"レシピが公開されていて誰でも無料で使えるソフトウェアにゃ。改造も自由にゃ。Linux・Python・FirefoxがOSSの代表例で、AIの世界でもLlamaやStable Diffusionが有名にゃ。"},
+    {term:"デプロイ", read:"Deploy", desc:"作ったアプリやサービスをインターネット上に公開することにゃ。料理に例えると「作った料理をお客さんのテーブルに出す」瞬間にゃ。GitHubにコードをアップしてWebで使えるようにする作業にゃ。"},
+    {term:"マージ", read:"Merge", desc:"複数の人が別々に修正したファイルを一つに合体させることにゃ。Aさんがデザインを直し、Bさんが機能を追加した、その両方を一つのファイルに合わせるイメージにゃ。"},
+    {term:"リポジトリ", read:"Repository", desc:"プログラムのファイルと変更履歴をまとめて保管する場所にゃ。Googleドライブの「プログラム専用・変更履歴付き版」のイメージにゃ。GitHubが世界で最も有名なリポジトリサービスにゃ。"},
+    {term:"アジャイル", read:"Agile", desc:"完成を目指して一気に作るのでなく、小さく作って試してを繰り返す開発方法にゃ。料理で例えると「完璧なフルコースを一発で作る」より「まず一品出して感想をもらって改善する」スタイルにゃ。"},
+    {term:"アーキテクチャー", read:"Architecture", desc:"システム全体のつくりや設計図のことにゃ。「どのサーバーがどの機能を担当して、どうつながっているか」を設計することにゃ。建物で言えば間取り図にゃ。"},
+    {term:"YAML", read:"YAML Ain't Markup Language", desc:"設定ファイルを人間が読みやすい形で書くためのルールにゃ。AIツールやサーバーの設定によく使われるにゃ。インデント（字下げ）でデータの関係を表すのが特徴にゃ。"},
+    {term:"GPU・CPU", read:"GPU / CPU", desc:"CPUはPCの「脳」で何でもこなす万能選手にゃ。GPUはもともとゲームの映像処理用だったが、並列計算が得意なためAI学習に最適な「AIの心臓部」になったにゃ。大きなAIを学習させるには数百個のGPUが必要にゃ。"},
+    {term:"TPU", read:"Tensor Processing Unit", desc:"GoogleがAI専用に設計した計算チップにゃ。GPUよりさらにAI向けに最適化されていて、GeminiなどGoogleのAIの学習に使われているにゃ。「AI専用のスーパーエンジン」のイメージにゃ。"},
+    {term:"JS", read:"JavaScript", desc:"Webページを動かすためのプログラミング言語にゃ。ボタンをクリックしたら何かが起きる・画面の一部がリアルタイムに変わるといった「動き」を作るのに使うにゃ。ほぼ全てのウェブサイトで使われているにゃ。"},
+    {term:"マークダウン", read:"Markdown", desc:"#を行頭に書くと見出しになる、**で囲むと太字になる、というシンプルな記法にゃ。このチャットでClaudeが使っているのもマークダウンにゃ。NotionやGitHubでもよく使われるにゃ。"},
+    {term:"デバッグ", read:"Debug", desc:"プログラムの不具合（バグ）を見つけて直す作業にゃ。「押したらクラッシュする」「数字がおかしい」などの問題を一つ一つ原因を調べて修正するにゃ。デバッグがプログラマーの仕事の大半とも言われるにゃ。"},
+    {term:"フロントエンジニアリング", read:"Frontend Engineering", desc:"ユーザーが実際に目にする画面（ボタン・レイアウト・色・動き）を作る開発分野にゃ。「見た目担当」のエンジニアリングにゃ。サーバー側を作る「バックエンド」と対になる言葉にゃ。"},
+    {term:"ライブコーディング", read:"Live Coding", desc:"プログラムを書く様子をリアルタイムで配信する形式にゃ。学習者に「どう考えてコードを書くか」を見せるのに使われるにゃ。最近はAIとの対話しながらコードを作る配信も人気にゃ。"},
+    {term:"CI/CD", read:"Continuous Integration / Continuous Delivery", desc:"コードの変更を自動でテスト・公開する仕組みにゃ。「変更を保存したら自動でチェックされ、問題なければ自動で本番に反映される」流れで、人手のミスを減らして開発を高速化するにゃ。"},
+    {term:"コンテナ", read:"Container（Docker）", desc:"アプリとその実行環境をひとまとめにして、どのPCでも同じように動かせるようにする技術にゃ。「弁当箱に必要なものを全部入れて持ち運ぶ」イメージで、環境の違いによる不具合を防ぐにゃ。"},
+    {term:"サーバーレス", read:"Serverless", desc:"開発者がサーバーの管理をせず、コードを書くだけでアプリが動く仕組みにゃ。実際にはサーバーは存在するが、利用者が意識しなくていいという意味にゃ。使った分だけ課金される料金体系が多いにゃ。"},
+    {term:"データベース", read:"Database", desc:"大量のデータを整理して保存・検索できるようにした仕組みにゃ。図書館の蔵書目録のように、必要な情報をすぐ取り出せるように整理されているにゃ。SQLという言語で操作することが多いにゃ。"},
+    {term:"バージョン管理", read:"Version Control", desc:"ファイルの変更履歴を記録して、いつでも過去の状態に戻せるようにする仕組みにゃ。Gitが代表的なツールで、複数人での共同開発に欠かせないにゃ。"},
+    {term:"プルリクエスト", read:"Pull Request", desc:"「自分が直したコードを、本体に取り込んでください」とお願いする仕組みにゃ。他の開発者がレビューしてOKを出してから本体に反映されるので、間違いを防げるにゃ。"},
+    {term:"リファクタリング", read:"Refactoring", desc:"プログラムの動作を変えずに、内部のコードを整理してわかりやすくする作業にゃ。散らかった部屋を、中身は変えずに整理整頓するイメージにゃ。",},
+    {term:"テスト駆動開発", read:"Test-Driven Development (TDD)", desc:"「先にテスト（合格基準）を書いてから、それに合格するコードを書く」開発手法にゃ。ゴールを先に決めてから走り出すイメージで、バグの少ないコードが書きやすくなるにゃ。"},
+    {term:"技術的負債", read:"Technical Debt", desc:"急いで作ったコードのせいで、あとから修正や機能追加がしにくくなる状態のことにゃ。「借金」に例えられ、放置すると利子（修正コスト）がどんどん膨らんでいくにゃ。"},
+    {term:"スクラム", read:"Scrum", desc:"アジャイル開発の代表的な進め方の一つにゃ。1〜4週間の短い期間（スプリント）ごとに区切って開発を進め、毎回振り返りをして改善していくにゃ。",},
+    {term:"IDE", read:"Integrated Development Environment", desc:"プログラムを書く・実行する・デバッグするための機能が全部入った開発ツールにゃ。VS CodeやCursorが代表例で、AIの補完機能もここに組み込まれることが多いにゃ。"},
+  ]},
+  {cat:"🎨 UI・デザイン", items:[
+    {term:"ヘッダー", read:"Header", desc:"Webページの一番上にある帯状のエリアにゃ。会社のロゴ・メニュー・検索窓などが置かれることが多いにゃ。スクロールしても常に上に固定されることが多いにゃ。"},
+    {term:"フッター", read:"Footer", desc:"Webページの一番下にあるエリアにゃ。著作権表示・プライバシーポリシーへのリンク・連絡先などが並ぶにゃ。ページの「後書き」のような場所にゃ。"},
+    {term:"サイドバー", read:"Sidebar", desc:"画面の左右に縦に並ぶメニューや補足情報のエリアにゃ。ブログのカテゴリ一覧や人気記事リストがよく置かれるにゃ。スマホでは画面が狭いので非表示になることも多いにゃ。"},
+    {term:"モーダル", read:"Modal", desc:"画面の上に重なって出てくるポップアップウィンドウにゃ。「本当に削除しますか？」の確認や、写真の拡大表示などに使われるにゃ。後ろの画面が暗くなるのが特徴にゃ。"},
+    {term:"CTA", read:"Call To Action", desc:"「今すぐ無料登録」「カートに入れる」など、ユーザーに次の行動を促すボタンのことにゃ。サイトで一番目立つボタンがCTAにゃ。色・サイズ・文言でクリック率が大きく変わるにゃ。"},
+    {term:"トースト", read:"Toast Notification", desc:"操作の結果を伝えるために画面に一瞬だけ現れて消えるメッセージにゃ。「保存しました✓」「送信完了」などが右下にスッと出て消えるやつにゃ。トーストパンがポンと飛び出るイメージから来た名前にゃ。"},
+    {term:"レスポンシブ", read:"Responsive Design", desc:"スマホ・タブレット・PCなど画面サイズが違う端末でも、自動でレイアウトが最適に調整されるデザインにゃ。「スマホで見たら文字が小さすぎて読めない」をなくすためのしくみにゃ。"},
+    {term:"スティッキー", read:"Sticky", desc:"スクロールしても画面上に固定されたまま動かない要素のことにゃ。ページをどこまでスクロールしても常に上に表示されているメニューバーがスティッキーにゃ。"},
+    {term:"インフォグラフィック", read:"Infographic", desc:"複雑なデータや情報を、グラフ・アイコン・イラストを組み合わせてひと目でわかる絵にしたものにゃ。「文字で説明するより図で見せた方が伝わる」ときに使うにゃ。SNSでもシェアされやすいにゃ。"},
+    {term:"グラフィックレコーディング", read:"Graphic Recording", desc:"会議や講演を聞きながら、話の内容をリアルタイムで絵と文字で大きな紙に記録する手法にゃ。文字だけの議事録より記憶に残りやすく、参加者の共感を生みやすいにゃ。"},
+    {term:"3DCG", read:"3D Computer Graphics", desc:"コンピューターで作った立体的な映像・グラフィックにゃ。映画の特撮・ゲームのキャラクター・建築の完成イメージ図などに使われるにゃ。最近はAIで3DCGを自動生成することも増えてきたにゃ。"},
+    {term:"CTAボタン配色", read:"Button Color Psychology", desc:"ボタンの色でクリック率が変わる心理効果にゃ。赤は緊急性・緑は安心感・オレンジは行動喚起を伝えやすいと言われるにゃ。周りの色とコントラストが強いほど目立つにゃ。"},
+    {term:"ナビゲーション", read:"Navigation", desc:"サイト内を移動するためのメニューの総称にゃ。ヘッダーの横並びメニューやハンバーガーメニューなど、色々な形があるにゃ。「今どこにいるか」が分かるように作るのが基本にゃ。"},
+    {term:"カード（UI）", read:"Card UI", desc:"情報を四角い枠にまとめて表示するデザインパターンにゃ。写真・タイトル・説明文をひとまとまりにして並べるので、商品一覧やブログ記事一覧でよく使われるにゃ。",},
+    {term:"タブ", read:"Tab", desc:"クリックで表示内容を切り替えられるメニューにゃ。「概要」「レビュー」「Q&A」のように、1つの画面で複数の情報を整理して見せるのに便利にゃ。",},
+    {term:"パンくずリスト", read:"Breadcrumb",desc:"「トップ＞商品一覧＞シャツ」のように、今いる場所を階層で示すナビゲーションにゃ。童話ヘンゼルとグレーテルのパンくずが名前の由来で、迷子にならないようにする役割にゃ。"},
+    {term:"アコーディオン", read:"Accordion", desc:"クリックすると中身が開いたり閉じたりするUI部品にゃ。よくある質問（FAQ）で「質問をタップすると答えが出てくる」のがこれにゃ。省スペースで情報を整理できるにゃ。"},
+    {term:"ドロップダウン", read:"Dropdown", desc:"クリックすると選択肢がリストで下に開くUI部品にゃ。都道府県選択や並び替えメニューなどでよく使われるにゃ。省スペースで多くの選択肢を扱えるにゃ。"},
+    {term:"プレースホルダー", read:"Placeholder", desc:"入力欄が空のときに薄いグレーで表示されるヒント文字にゃ。「メールアドレスを入力」のような案内にゃ。入力すると自動的に消えるにゃ。"},
+    {term:"スケルトンスクリーン", read:"Skeleton Screen", desc:"データ読み込み中に、これから表示される内容の形（骨組み）をうっすら見せておくローディング表現にゃ。グルグル回るマークより「待ってる感」が少なく感じられる工夫にゃ。"},
+    {term:"ダークモード", read:"Dark Mode", desc:"画面の背景を黒っぽくして、目の負担や電池消費を減らす表示モードにゃ。このアプリのようなダークテーマがまさにこれにゃ。夜間の利用や省エネに向いているにゃ。"},
+    {term:"コントラスト比", read:"Contrast Ratio", desc:"文字色と背景色の明るさの差のことにゃ。差が小さいと文字が読みにくくなるにゃ。アクセシビリティの観点から、一定以上のコントラスト比を確保することが推奨されているにゃ。"},
+    {term:"アクセシビリティ", read:"Accessibility", desc:"高齢者・視覚障害のある人など、誰にとっても使いやすいデザインにする配慮にゃ。文字サイズ変更・音声読み上げ対応・色だけに頼らない表現などが含まれるにゃ。",},
+    {term:"マイクロインタラクション", read:"Micro-interaction", desc:"ボタンを押したときの小さなアニメーションや振動など、細かい反応演出のことにゃ。「いいね」を押すとハートが弾む動きなどが代表例にゃ。使い心地の良さに直結する小さな工夫にゃ。"},
+    {term:"ワイヤーフレーム", read:"Wireframe", desc:"デザインの色や装飾を入れる前に作る、画面のおおまかな配置図にゃ。「どこに何を置くか」だけを決めるための設計図で、家づくりでいう間取り図のようなものにゃ。"},
+    {term:"プロトタイプ", read:"Prototype", desc:"実際に操作できる試作品のことにゃ。本番のコードを書く前に「タップしたら次の画面に移る」という動きだけを再現して、使い勝手を確認するのに使うにゃ。"},
+    {term:"デザインシステム", read:"Design System", desc:"ボタン・色・フォントなどのデザインルールを会社やアプリ全体で統一するためのルールブックにゃ。誰が作っても同じ見た目・使い心地になるようにする仕組みにゃ。",},
+    {term:"グリッドレイアウト", read:"Grid Layout", desc:"画面を格子状のマス目に分けて要素を整列させるレイアウト手法にゃ。新聞や雑誌のような整然とした配置を作れるにゃ。CSSのGridという技術がこれを実現するにゃ。"},
+    {term:"ホワイトスペース", read:"White Space（余白）", desc:"要素と要素の間の何もない空間のことにゃ。余白を適切に取ることで、情報が詰め込みすぎにならず読みやすくなるにゃ。「余白は無駄ではなくデザインの一部」という考え方にゃ。"},
+    {term:"タイポグラフィ", read:"Typography", desc:"文字のフォント・大きさ・行間・字間などをデザインする技術にゃ。同じ文章でもフォント選びで印象が大きく変わるにゃ。読みやすさと見た目の両方を両立させる工夫にゃ。"},
+    {term:"UX", read:"User Experience（ユーザー体験）", desc:"見た目の使いやすさだけじゃなく、使った時の満足感や印象まで含めた「体験」全体のことにゃ。見た目・操作性を指す「UI」とセットで使われるにゃ。"},
+  ]},
+  {cat:"🌐 Web・IT", items:[
+    {term:"LGWAN", read:"Local Government Wide Area Network", desc:"日本の自治体・行政機関専用の安全なネットワークにゃ。インターネットとは切り離された閉じた回線で、個人情報や機密データを安全にやりとりするにゃ。"},
+    {term:"RCS", read:"Rich Communication Services", desc:"ショートメール（SMS）の進化版にゃ。既読確認・画像・動画・スタンプ送信などLINEのような機能が使えるにゃ。iPhoneとAndroid間でも使えるようになり、普及が進んでいるにゃ。"},
+    {term:"ワークスペース", read:"Workspace", desc:"作業する場所・環境のこと。SlackやNotionなどでプロジェクト単位の空間にゃ。メンバーやデータをまとめて管理できるにゃ。"},
+    {term:"クラウド", read:"Cloud Computing", desc:"データやソフトをネット上のサーバーに保存・処理する仕組みにゃ。自分のPCに保存しなくていいから、どこからでもアクセスできるにゃ。GoogleドライブやiCloudが身近な例にゃ。"},
+    {term:"SaaS", read:"Software as a Service", desc:"ソフトをネット経由でサービスとして使う形態にゃ。インストール不要で、月額料金で使えるにゃ。Google Workspace・Slack・Notionなどが代表例にゃ。"},
+    {term:"IoT", read:"Internet of Things", desc:"家電・センサー・車などあらゆる「モノ」がインターネットにつながる仕組みにゃ。スマート家電・スマートウォッチ・スマートシティの基盤技術にゃ。"},
+    {term:"5G", read:"5th Generation Mobile Network", desc:"第5世代移動通信システム。4Gより約100倍速く、つながる端末数も大幅に増えたにゃ。自動運転・遠隔手術・AIリアルタイム処理の基盤になるにゃ。"},
+    {term:"VPN", read:"Virtual Private Network", desc:"インターネット上に「暗号化されたトンネル」を作って安全に通信する技術にゃ。カフェのWi-Fiでも情報漏洩リスクを下げられるにゃ。テレワーク時の定番セキュリティ対策にゃ。"},
+    {term:"Cookie", read:"Cookie / サードパーティCookie", desc:"Webサイトがブラウザに保存する小さなデータにゃ。ログイン状態の保持や行動追跡に使われるにゃ。第三者（広告会社など）が設置するサードパーティCookieは規制が強まっているにゃ。"},
+    {term:"ブロックチェーン", read:"Blockchain", desc:"データを分散して管理し、改ざんをほぼ不可能にする技術にゃ。暗号資産（ビットコイン）やNFT、スマートコントラクトの基盤にゃ。「みんなで監視し合う台帳」イメージにゃ。"},
+    {term:"メタバース", read:"Metaverse", desc:"VRやARで作られた仮想空間の世界にゃ。アバターで人と交流したり、仕事・ゲーム・ショッピングができるにゃ。2020年代後半の主要トレンドの一つにゃ。"},
+    {term:"AR / VR / XR", read:"Augmented / Virtual / Extended Reality", desc:"AR（拡張現実）は現実にCGを重ねる技術、VR（仮想現実）は完全な仮想空間、XR（拡張現実）はその総称にゃ。Pokémon GOはAR、Meta QuestはVRの代表例にゃ。"},
+    {term:"CDN", read:"Content Delivery Network", desc:"世界中にサーバーを分散配置して、ユーザーに近い場所からWebコンテンツを高速配信する仕組みにゃ。動画や画像の読み込みを速くするインフラにゃ。"},
+    {term:"フィンテック", read:"FinTech", desc:"金融（Finance）と技術（Technology）を組み合わせた言葉にゃ。PayPay・LINE Pay・スマホ証券など、お金をスマホで扱う技術・サービス全般のことにゃ。"},
+    {term:"シェアリングエコノミー", read:"Sharing Economy", desc:"個人が持つモノ・スキル・場所を共有してお金を稼ぐ経済の仕組みにゃ。Airbnb（部屋）・Uber（車）・ランサーズ（スキル）などが代表例にゃ。"},
+    {term:"スマートシティ", read:"Smart City", desc:"IoT・AI・ビッグデータを使って交通・エネルギー・行政を効率化した都市にゃ。信号の最適化、ゴミ収集の自動化、電力の節約などを一括管理するにゃ。"},
+    {term:"デジタルツイン", read:"Digital Twin", desc:"現実の工場・都市・設備をデジタル空間にそっくり再現したモデルにゃ。シミュレーションして問題を事前に発見したり、AIで最適化するのに使うにゃ。"},
+    {term:"ビッグデータ", read:"Big Data", desc:"従来のシステムでは処理しきれない巨大なデータの集まりにゃ。SNSの投稿・購買履歴・センサーデータなどを分析してビジネスに活かすにゃ。AIの学習材料にもなるにゃ。"},
+    {term:"ビーコン", read:"Beacon", desc:"Bluetooth電波を使って近くのスマホに情報を送る技術にゃ。店舗でクーポンを自動送信したり、来店客数を計測するのに使われるにゃ。屋内GPSとも呼ばれるにゃ。"},
+    {term:"フィッシング詐欺", read:"Phishing", desc:"本物そっくりの偽サイトやメールでパスワードやクレカ情報を盗む詐欺にゃ。AIで精巧な文面が量産されており、年々巧妙化しているにゃ。URLをよく確認することが基本の対策にゃ。"},
+    {term:"ランサムウェア", read:"Ransomware", desc:"PCのデータを暗号化して「お金を払えば解除する」と脅すマルウェアにゃ。病院・自治体・企業が被害を受けた事例が多数あるにゃ。バックアップが最大の防衛策にゃ。"},
+    {term:"ダークウェブ", read:"Dark Web", desc:"通常の検索エンジンでは見つからない、特殊なブラウザ（Tor）でしかアクセスできないWebの領域にゃ。違法取引に使われることもあり、流出した個人情報が売られることもあるにゃ。"},
+    {term:"エッジコンピューティング", read:"Edge Computing", desc:"データをクラウドに送らず、現場（エッジ）に近い端末やサーバーで処理する技術にゃ。自動運転や工場IoTなど、遅延が許されない場面で重要にゃ。"},
+    {term:"OCR", read:"Optical Character Recognition", desc:"紙やスキャン画像に書かれた文字を、コンピューターが読み取れるテキストに変換する技術にゃ。手書きの書類をAIに読み込ませるときの「入口」になるにゃ。スマホで名刺をスキャンすると自動で文字が入力されるのもこれにゃ。"},
+    {term:"SEO", read:"Search Engine Optimization（検索エンジン最適化）", desc:"Googleなどの検索結果でサイトが上位に出るように工夫することにゃ。"},
+    {term:"BI", read:"Business Intelligence", desc:"会社に蓄積されたデータを分析して、経営判断に活かすための考え方・ツールのことにゃ。"},
+    {term:"POS", read:"Point Of Sale（販売時点情報管理）", desc:"レジで商品を売った瞬間に、いつ・何が・いくつ売れたかを記録するシステムにゃ。コンビニなどで使われてるにゃ。"},
+    {term:"GPS", read:"Global Positioning System（全地球測位システム）", desc:"人工衛星からの電波で、自分がいる位置を特定する仕組みにゃ。カーナビやスマホの地図アプリに使われてるにゃ。"},
+  ]},
+  {cat:"🔐 セキュリティ（IT全般）", items:[
+    {term:"ゼロトラスト", read:"Zero Trust", desc:"「社内ネットワークだから安全」という思い込みをやめて、アクセスのたびに全員を疑って確認する考え方にゃ。会社の入口を通った後も、部屋ごとにIDカードで確認するイメージにゃ。"},
+    {term:"多要素認証", read:"Multi-Factor Authentication", desc:"パスワードだけでなく、スマホに届く確認番号・指紋・顔認証など複数の方法で本人確認する仕組みにゃ。パスワードが漏れても2つ目の壁があるから安心にゃ。不正ログイン対策の基本にゃ。"},
+    {term:"マルウェア", read:"Malware", desc:"ウイルス・ワーム・ランサムウェアなど、悪意を持って作られたソフトウェアの総称にゃ。「malicious（悪意ある）」＋「software」を合わせた造語にゃ。感染すると情報漏洩や端末の乗っ取りにつながるにゃ。"},
+    {term:"DDoS攻撃", read:"Distributed Denial of Service", desc:"大量のアクセスを一斉に送りつけて、サーバーをパンクさせてサービスを止める攻撃にゃ。お店の前に大勢の人を並ばせて、本当のお客さんが入れなくするイメージにゃ。"},
+    {term:"ゼロデイ攻撃", read:"Zero-day Attack", desc:"ソフトの脆弱性が見つかってから、修正パッチが配布されるまでの「無防備な期間（0日目）」を狙う攻撃にゃ。対策が間に合わないため特に危険視されるにゃ。"},
+    {term:"暗号化", read:"Encryption", desc:"データを第三者に読めない形に変換する技術にゃ。正しい鍵（パスワードなど）を持つ人だけが元に戻して読めるにゃ。通信の盗聴やデータ漏洩からの防御に欠かせないにゃ。"},
+    {term:"エンドツーエンド暗号化", read:"End-to-End Encryption", desc:"送信者から受信者までの間、途中のサーバーでも中身が見えないように暗号化する方式にゃ。LINEやWhatsAppのメッセージがこれで守られているにゃ。運営会社すら中身を読めないのが特徴にゃ。",},
+    {term:"バグバウンティ", read:"Bug Bounty", desc:"企業が自社サービスの脆弱性を見つけたハッカーに報奨金を払う制度にゃ。「敵に回すより味方につける」発想で、悪用される前に安全に修正できるにゃ。GoogleやAppleも実施しているにゃ。"},
+    {term:"インシデントレスポンス", read:"Incident Response", desc:"サイバー攻撃や情報漏洩が発生したときの緊急対応手順にゃ。「検知→封じ込め→原因調査→復旧→再発防止」の流れで被害を最小限に抑えるにゃ。事前の訓練が重要にゃ。"},
+    {term:"SOC", read:"Security Operation Center", desc:"24時間365日、サイバー攻撃の兆候を監視する専門チームや部署のことにゃ。企業のセキュリティの「見張り台」で、異常を早期に発見して対応するにゃ。"},
+    {term:"サンドボックス", read:"Sandbox", desc:"怪しいプログラムを安全に隔離された環境で試しに動かして、悪さをしないか検証する仕組みにゃ。子供が砂場で自由に遊べるように、本番環境に影響を与えず安全に試せるにゃ。"},
+    {term:"CVE", read:"Common Vulnerabilities and Exposures", desc:"世界共通で使われるソフトウェアの脆弱性の識別番号にゃ。「このソフトのCVE-2026-〇〇番の脆弱性が危険」のように、脆弱性情報を世界中で統一して管理するための仕組みにゃ。"},
+  ]},
+];
+
+let _cheatCurrentCat = "all";
+let _cheatOpenCats = {};
+
+function showCheatScreen(){
+  document.getElementById('menu-screen').style.display = 'none';
+  document.getElementById('cheat-screen').style.display = 'block';
+  window.scrollTo(0,0);
+  const searchInput = document.getElementById('cheat-search');
+  if (searchInput) searchInput.value = '';
+  _cheatCurrentCat = 'all';
+  _cheatOpenCats = {};
+  renderCheatList();
+}
+
+function closeCheatScreen(){
+  document.getElementById('cheat-screen').style.display = 'none';
+  document.getElementById('menu-screen').style.display = 'block';
+}
+
+function filterCheat(){ renderCheatList(); }
+
+function toggleCheatCat(catKey){
+  _cheatOpenCats[catKey] = !_cheatOpenCats[catKey];
+  renderCheatList();
+}
+
+function renderCheatList(){
+  const searchVal = (document.getElementById('cheat-search')?.value || '').toLowerCase();
+  const list = document.getElementById('cheat-list');
+  const noResult = document.getElementById('cheat-noresult');
+  const countEl = document.getElementById('cheat-count');
+  list.innerHTML = '';
+
+  let totalMatched = 0;
+  cheatData.forEach((cat, catIdx) => {
+    const items = cat.items.filter(item => {
+      if (!searchVal) return true;
+      return item.term.toLowerCase().includes(searchVal) ||
+             item.read.toLowerCase().includes(searchVal) ||
+             item.desc.toLowerCase().includes(searchVal);
+    });
+    if (items.length === 0) return;
+    totalMatched += items.length;
+
+    const catKey = "cat" + catIdx;
+    const isOpen = !!searchVal || !!_cheatOpenCats[catKey];
+
+    list.innerHTML += `
+      <div class="cheat-cat-head" onclick="toggleCheatCat('${catKey}')">
+        <div class="name">${cat.cat} <span class="count">${items.length}語</span></div>
+        <div class="arrow" style="transform:rotate(${isOpen?90:0}deg);">▶</div>
+      </div>`;
+
+    if (isOpen) {
+      items.forEach(item => {
+        list.innerHTML += `
+          <div class="cheat-item" onclick="event.stopPropagation(); this.querySelector('.desc').style.display = this.querySelector('.desc').style.display==='none' ? 'block' : 'none'">
+            <div class="row">
+              <span class="term">${item.term}</span>
+              <span class="read">${item.read}</span>
+            </div>
+            <div class="desc" style="display:none;">${item.desc}</div>
+          </div>`;
+      });
+    }
+  });
+
+  countEl.textContent = searchVal ? (totalMatched + "件の用語がヒット") : "カテゴリをタップして開くにゃ";
+  noResult.style.display = (searchVal && totalMatched === 0) ? "block" : "none";
 }
 
 renderMenuStats();
