@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260906191841">
+<meta name="app-build" content="20260906203639">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260906191841";
+    var LOCAL_BUILD = "20260906203639";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -386,13 +386,13 @@ body.fs-large .cheat-ai-answer { font-size:16px; }
 #endBackBtn { display:block; width:100%; background:rgba(34,211,238,.08); color:#d7f5fb; border:1px solid rgba(34,211,238,.4); padding:15px; border-radius:12px; font-size:16px; font-weight:bold; box-shadow:none; }
 
 footer { text-align:center; color:#94a3b8; font-size:12.5px; margin-top:10px; line-height:1.7; padding:0 8px 20px; }
-footer .flink-row { display:flex; align-items:stretch; justify-content:center; gap:12px; margin-top:10px; }
-footer .flink-tile { display:flex; flex-direction:column; align-items:center; text-decoration:none; width:140px; padding:12px 8px; border-radius:14px; background:rgba(255,255,255,.03); border:1px solid rgba(34,211,238,.25); }
+footer .flink-row { display:flex; flex-wrap:nowrap; align-items:stretch; justify-content:center; gap:8px; margin-top:10px; }
+footer .flink-tile { display:flex; flex-direction:column; align-items:center; text-decoration:none; flex:1 1 0; min-width:0; max-width:150px; padding:10px 4px; border-radius:14px; background:rgba(255,255,255,.03); border:1px solid rgba(34,211,238,.25); }
 footer .flink-tile:active { background:rgba(34,211,238,.1); }
-footer .flink-icon-badge { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(34,211,238,.08); border:1px solid rgba(34,211,238,.4); box-shadow:inset 0 0 6px rgba(34,211,238,.12); margin-bottom:7px; }
-footer .flink-icon-badge svg { width:20px; height:20px; }
-footer .flink-title { font-size:12.5px; font-weight:800; color:var(--teal); line-height:1.35; }
-footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3px; line-height:1.3; }
+footer .flink-icon-badge { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:rgba(34,211,238,.08); border:1px solid rgba(34,211,238,.4); box-shadow:inset 0 0 6px rgba(34,211,238,.12); margin-bottom:6px; flex-shrink:0; }
+footer .flink-icon-badge svg { width:18px; height:18px; }
+footer .flink-title { font-size:11px; font-weight:800; color:var(--teal); line-height:1.3; }
+footer .flink-sub { font-size:9px; color:rgba(255,255,255,.55); margin-top:3px; line-height:1.25; }
 
 .fw-particle { position:fixed; border-radius:50%; pointer-events:none; z-index:9999; animation:fw-burst 1.1s ease-out forwards; }
 @keyframes fw-burst { 0% { transform:translate(0,0) scale(1); opacity:1; } 100% { transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0; } }
@@ -404,6 +404,25 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
 .resume-card button { display:block; width:100%; border-radius:10px; padding:12px; font-size:15px; font-weight:800; margin-bottom:9px; border:1.5px solid transparent; }
 .resume-card .resume-continue { background:var(--teal); color:#04141f; }
 .resume-card .resume-restart { background:transparent; color:#9fd8e8; border-color:rgba(34,211,238,.4); margin-bottom:0; }
+
+/* PC（広い画面）向けに拡大表示 */
+@media (min-width:900px) {
+  body { font-size:18.5px; }
+  .phone-frame { width:480px; }
+  .phone-screen { height:min(960px, 92vh); }
+  #topHeader h1 { font-size:27px; }
+  #topHeader .tagline { font-size:18px; }
+  #toolbar .toolbar-label { font-size:15px; }
+  #toolbar .fs-btn { width:37px; height:37px; font-size:15px; }
+  #toolbar .timer-group { font-size:15px; }
+  .menu-note { font-size:15.5px; }
+  .menu button { font-size:16px; padding:19px 10px; }
+  .menu button .gicon { width:50px; height:50px; font-size:23px; }
+  .menu button.mini { font-size:17.5px; }
+  #question { font-size:21px; padding:19px 20px; }
+  #answers .choice-item .choice-text { font-size:19px; }
+  .qhead .catline, .qhead .progress { font-size:16.5px; }
+}
 </style></head>
 <body>
 <div class="phone-frame">
@@ -528,6 +547,11 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
     <div class="flink-icon-badge" aria-hidden="true"><svg viewBox="0 0 40 40"><polygon points="6,14 12,4 16,14" fill="#22d3ee"/><polygon points="34,14 28,4 24,14" fill="#22d3ee"/><circle cx="20" cy="22" r="14" fill="#22d3ee"/><circle cx="15" cy="21" r="2.2" fill="#0a1a2e"/><circle cx="25" cy="21" r="2.2" fill="#0a1a2e"/><polygon points="20,25 18,27.5 22,27.5" fill="#0a1a2e"/></svg></div>
     <div class="flink-title">MOS対策ドリル</div>
     <div class="flink-sub">ワード・エクセル →</div>
+  </a>
+  <a href="it-passport-sim.html" class="flink-tile">
+    <div class="flink-icon-badge" aria-hidden="true"><svg viewBox="0 0 40 40"><rect x="4" y="6" width="32" height="22" rx="2" fill="#22d3ee"/><rect x="7" y="9" width="26" height="16" fill="#0a1a2e"/><rect x="16" y="29" width="8" height="4" fill="#22d3ee"/><rect x="11" y="33" width="18" height="3" rx="1.5" fill="#22d3ee"/></svg></div>
+    <div class="flink-title">模擬試験（PC版）</div>
+    <div class="flink-sub">IPA公式風 →</div>
   </a>
 </div>
 </footer>
