@@ -877,6 +877,7 @@ function startMode(mode){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
+  window.scrollTo(0,0);
   startTimer(current.length*1.2);
   showQuestion();
 }
@@ -890,6 +891,7 @@ function startCategory(cat){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
+  window.scrollTo(0,0);
   startTimer(current.length*1.2);
   showQuestion();
 }
@@ -904,6 +906,7 @@ function reviewWrong(){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
+  window.scrollTo(0,0);
   startTimer(current.length*1.2);
   showQuestion();
 }
