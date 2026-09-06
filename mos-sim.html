@@ -74,7 +74,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 /* シミュレーション画面 */
 #sim-screen{display:none;}
 #sim-screen.show{display:block;}
-.sim-back{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:10px;padding:0;}
+.sim-back{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.14);border:1.5px solid rgba(34,211,238,.5);color:var(--teal);font-size:15px;font-weight:800;margin-bottom:10px;padding:9px 18px;border-radius:10px;cursor:pointer;transition:background .15s;}
+.sim-back:hover{background:rgba(34,211,238,.24);}
 .sim-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px;font-weight:800;color:var(--teal);}
 .instruction-bar{
   background:linear-gradient(135deg, rgba(34,211,238,.14), rgba(139,124,246,.1));
@@ -312,7 +313,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 
   <div id="sim-screen">
     <div class="sim-top"><span id="simProgress">1 / 10</span><span id="simScoreLabel">一発正解 0</span></div>
-    <button class="sim-back" onclick="exitSim()">← メニューに戻る（途中でやめる）</button>
+    <button class="sim-back" onclick="exitSim()">← メニューに戻る</button>
     <div id="font-controls">
       <span>文字サイズ</span>
       <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
