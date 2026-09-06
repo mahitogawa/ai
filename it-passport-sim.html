@@ -63,8 +63,8 @@
   body.inverted .answer-row{ background:#1c1c1c; border-color:#444; }
   .answer-row .label{ font-weight:800; font-size:13.5px; color:#333; }
   body.inverted .answer-row .label{ color:#ccc; }
-  .radio-group{ display:flex; flex-wrap:wrap; gap:16px; }
-  .radio-item{ display:flex; align-items:center; gap:6px; font-size:15px; font-weight:700; cursor:pointer; }
+  .radio-group{ display:grid; grid-template-columns:1fr; row-gap:14px; width:100%; }
+  .radio-item{ display:flex; align-items:flex-start; gap:6px; font-size:15px; font-weight:700; cursor:pointer; line-height:1.5; }
   .radio-item input{ width:16px; height:16px; cursor:pointer; }
   .flag-check{ margin-left:auto; display:flex; align-items:center; gap:6px; font-size:13px; color:#333; cursor:pointer; }
   body.inverted .flag-check{ color:#ccc; }
@@ -140,7 +140,8 @@
   .resume-banner p{ margin:0; font-size:13.5px; color:#5a4300; }
   .resume-banner .resume-btns{ display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
   .resume-banner .resume-btns .nav-btn{ padding:9px 16px; }
-  .back-link{ display:inline-block; margin-top:16px; color:#1a5fb4; font-size:13.5px; font-weight:700; text-decoration:none; }
+  .back-link{ display:inline-block; margin-top:16px; padding:10px 20px; color:#1a5fb4; font-size:17px; font-weight:800; text-decoration:none; border:1px solid #1a5fb4; border-radius:6px; }
+  .back-link:hover{ background:#eaf2ff; }
   .result-table{ width:100%; border-collapse:collapse; font-size:13px; text-align:center; margin:14px 0; }
   .result-table th, .result-table td{ border:1px solid #ccc; padding:6px 8px; }
   .result-table th{ background:#eef0f2; }
@@ -149,6 +150,15 @@
   .cat-reaction-face{ font-size:46px; line-height:1; margin:0 0 4px; }
   .cat-reaction-line{ font-size:14px; color:#64748b; font-weight:700; margin:0; }
   .detail-scroll{ max-height:320px; overflow-y:auto; border:1px solid #ccc; margin-top:10px; }
+  .weak-report{ background:#eef2ff; border:1px solid #c7d2fe; border-radius:8px; padding:14px 16px; margin:6px 0 16px; text-align:left; }
+  .weak-report-title{ font-weight:800; margin:0 0 6px; color:#3730a3; }
+  .weak-report-line{ margin:0 0 10px; font-size:13.5px; line-height:1.7; color:#333; }
+  .weak-review-btn{ width:auto; padding:9px 18px; font-size:13.5px; }
+  .weak-report-perfect{ background:#dcfce7; border:1px solid #bbf7d0; border-radius:8px; padding:14px 16px; margin:6px 0 16px; font-weight:700; color:#166534; text-align:center; }
+  body.inverted .weak-report{ background:#1e2350; border-color:#4338ca; }
+  body.inverted .weak-report-title{ color:#c7d2fe; }
+  body.inverted .weak-report-line{ color:#ddd; }
+  body.inverted .weak-report-perfect{ background:#14351f; border-color:#166534; color:#bbf7d0; }
 </style>
 </head>
 <body>
@@ -500,6 +510,30 @@ function finishExam(){
     const ok = (picked!==null && picked!==undefined && picked===q.c);
     if(ok){ score++; catScore[q.cat].correct++; }
   });
+  // 苦手分野レポート用：間違えた（または未回答の）問題を集めて保存し、正答率が一番低い分野を判定する
+  const wrongQuestions = current.filter((q,i)=>{
+    const picked = answersGiven[i];
+    return !(picked!==null && picked!==undefined && picked===q.c);
+  });
+  try{
+    if(wrongQuestions.length>0){ localStorage.setItem('itpsim_wrong_v1', JSON.stringify(wrongQuestions)); }
+    else{ localStorage.removeItem('itpsim_wrong_v1'); }
+  }catch(e){}
+  let weakestCat = null, weakestRate = 101;
+  ['strategy','management','technology'].forEach(c=>{
+    const cs = catScore[c];
+    if(cs.total===0) return;
+    const rate = Math.round(cs.correct/cs.total*100);
+    if(rate < weakestRate){ weakestRate = rate; weakestCat = c; }
+  });
+  const weakReportHtml = wrongQuestions.length===0
+    ? `<div class="weak-report weak-report-perfect">🎉 全問正解！このセットに苦手分野はなかったにゃ</div>`
+    : `<div class="weak-report">
+        <p class="weak-report-title">🔍 弱点分野レポート</p>
+        <p class="weak-report-line">${weakestCat ? `一番正答率が低かったのは<b>${catLabels[weakestCat]}</b>（正答率${weakestRate}%）にゃ。ここを重点的に復習するといいにゃ。` : ''}</p>
+        <button class="nav-btn weak-review-btn" onclick="reviewWrongSim()">🔁 間違えた問題だけもう一度解く（${wrongQuestions.length}問）</button>
+      </div>`;
+
   const pct = Math.round(score/current.length*100);
   const overallPoint = Math.round(score/current.length*1000);
   const passOverall = overallPoint>=600;
@@ -526,7 +560,7 @@ function finishExam(){
       <tr style="cursor:pointer;" onclick="toggleDetail(${i})">
         <td>${i+1}</td><td>${choiceLabels[q.c]}</td><td>${userAnsLabel}</td>
         <td style="color:${color};font-weight:800;">${mark}</td>
-        <td style="color:#1a5fb4;font-size:11.5px;white-space:nowrap;">解説を見る ▾</td>
+        <td style="color:#1a5fb4;font-size:11.5px;white-space:nowrap;">解説を見るにゃ ▾</td>
       </tr>
       <tr id="detail-${i}" style="display:none;background:#f8f9fb;">
         <td colspan="5" style="text-align:left;padding:12px 14px;">
@@ -550,6 +584,7 @@ function finishExam(){
     <div class="pass-badge" style="background:${passed?'#dcfce7':'#fee2e2'};color:${passed?'#166534':'#991b1b'};border:1px solid ${passed?'#bbf7d0':'#fecaca'};">
       ${passed ? '🎉 合格ライン到達' : '📕 合格ラインには未到達'}
     </div>
+    ${weakReportHtml}
     <table class="result-table">
       <tr><th>分野</th><th>正解数</th><th>評価点</th><th>判定</th></tr>
       ${rows}
@@ -565,6 +600,25 @@ function finishExam(){
     <div><a class="back-link" href="it-passport.html">← ITパスポートドリルのメニューに戻る</a></div>
   `;
   end.style.display = 'block';
+}
+
+// 弱点分野レポート：前回間違えた（未回答含む）問題だけを集めた復習セットを開始する
+function reviewWrongSim(){
+  let wrong;
+  try{ wrong = JSON.parse(localStorage.getItem('itpsim_wrong_v1') || 'null'); }catch(e){ wrong = null; }
+  if(!Array.isArray(wrong) || wrong.length===0){ alert('復習する問題が見つからなかったにゃ'); return; }
+  clearSimSave();
+  current = wrong.map(shuffleChoices);
+  idx = 0;
+  answersGiven = new Array(current.length).fill(null);
+  flaggedSet = new Set();
+  remainingSec = Math.max(600, current.length*90);
+  document.getElementById('examNo').textContent = '復習セット';
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'none';
+  document.getElementById('exam-screen').style.display = 'block';
+  startTimer();
+  showQ();
 }
 
 function toggleDetail(i){
