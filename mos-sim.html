@@ -51,18 +51,19 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   border-radius:20px; padding:18px 14px 22px; box-shadow:0 8px 32px rgba(34,211,238,0.14);
 }
 .notice{font-size:13px;color:var(--muted);line-height:1.7;background:rgba(255,255,255,.04);border-left:4px solid var(--teal);padding:12px 14px;border-radius:8px;margin-bottom:16px;}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .menu button{
-  background:linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
-  color:#d7f5fb; font-size:14.5px; padding:16px 10px; border-radius:14px;
-  border:1px solid rgba(34,211,238,.28); font-weight:700;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
+  background:radial-gradient(ellipse at 50% 20%, rgba(34,211,238,0.12) 0%, transparent 70%), linear-gradient(170deg, #0a1a2e 0%, #071019 100%);
+  color:#d7f5fb; font-size:13px; padding:14px 6px; border-radius:14px;
+  border:1px solid rgba(34,211,238,.28); font-weight:700; line-height:1.4;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
   transition:transform .15s,border-color .15s,box-shadow .15s;
 }
-.menu button.wide{grid-column:1/-1;}
 .menu button:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.7);box-shadow:0 6px 16px rgba(34,211,238,.18);}
 .menu button:active{transform:scale(.96);}
-.gicon{font-size:22px;margin-bottom:6px;}
+.gicon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:8px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.4);box-shadow:inset 0 0 8px rgba(34,211,238,.12);}
+.mtitle{margin:0;}
 .msub{display:block;font-weight:500;font-size:.82em;opacity:.75;margin-top:3px;}
 .sub-heading.expert{color:#fbbf24;font-size:13.5px;font-weight:900;margin:18px 0 8px;text-align:center;}
 .menu button.expert-cat{border-color:rgba(251,191,36,.35);}
@@ -174,8 +175,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   #topHeader h1{font-size:26px;}
   #topHeader .tagline{font-size:15px;}
   .notice{font-size:14.5px;padding:16px 18px;}
-  .menu button{font-size:17px;padding:24px 16px;}
-  .gicon{font-size:28px;margin-bottom:8px;}
+  .menu button{font-size:15px;padding:20px 10px;}
+  .gicon{width:48px;height:48px;font-size:24px;margin-bottom:10px;}
   .msub{font-size:.85em;}
   .instruction-label{font-size:13px;}
   :root{--font-size:19px;}
@@ -300,15 +301,15 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   <div id="menu-screen">
     <div class="notice">💡 本物のMOS試験は「実際にWord・Excelを操作する実技試験」。ここではリボン（画面上部のボタン集）を再現して、「指示された操作をするにはどこを押せばいいか」を練習できるよ。文字入力やドラッグ操作までは再現していない、簡易シミュレーションだよ。</div>
     <div class="menu">
-      <button class="wide" onclick="startSim('word')"><div class="gicon">📝</div><div>ワード操作編</div><div class="msub">（20問）</div></button>
-      <button class="wide" onclick="startSim('excel')"><div class="gicon">📈</div><div>エクセル操作編</div><div class="msub">（20問）</div></button>
-      <button class="wide" onclick="startSim('all')"><div class="gicon">🔁</div><div>ワード＋エクセル 混合</div><div class="msub">（全40問）</div></button>
+      <button onclick="startSim('word')"><div class="gicon">📝</div><div class="mtitle">ワード操作編</div><div class="msub">（20問）</div></button>
+      <button onclick="startSim('excel')"><div class="gicon">📈</div><div class="mtitle">エクセル操作編</div><div class="msub">（20問）</div></button>
+      <button onclick="startSim('all')"><div class="gicon">🔁</div><div class="mtitle">ワード＋エクセル<br>混合</div><div class="msub">（全40問）</div></button>
     </div>
     <div class="sub-heading expert">🏆 エキスパート編</div>
     <div class="menu">
-      <button class="wide expert-cat" onclick="startSim('wordExpert')"><div class="gicon">📝</div><div>ワード操作編（上級）</div><div class="msub">（10問）</div></button>
-      <button class="wide expert-cat" onclick="startSim('excelExpert')"><div class="gicon">📈</div><div>エクセル操作編（上級）</div><div class="msub">（10問）</div></button>
-      <button class="wide expert-all" onclick="startSim('allExpert')"><div class="gicon">🏆</div><div>エキスパート 混合</div><div class="msub">（全20問）</div></button>
+      <button class="expert-cat" onclick="startSim('wordExpert')"><div class="gicon">📝</div><div class="mtitle">ワード操作編<br>（上級）</div><div class="msub">（10問）</div></button>
+      <button class="expert-cat" onclick="startSim('excelExpert')"><div class="gicon">📈</div><div class="mtitle">エクセル操作編<br>（上級）</div><div class="msub">（10問）</div></button>
+      <button class="expert-all" onclick="startSim('allExpert')"><div class="gicon">🏆</div><div class="mtitle">エキスパート<br>混合</div><div class="msub">（全20問）</div></button>
     </div>
   </div>
 
