@@ -145,6 +145,9 @@
   .result-table th, .result-table td{ border:1px solid #ccc; padding:6px 8px; }
   .result-table th{ background:#eef0f2; }
   .pass-badge{ display:inline-block; padding:10px 22px; border-radius:6px; font-size:18px; font-weight:900; margin:6px 0 16px; }
+  .cat-reaction{ margin:4px 0 2px; }
+  .cat-reaction-face{ font-size:46px; line-height:1; margin:0 0 4px; }
+  .cat-reaction-line{ font-size:14px; color:#64748b; font-weight:700; margin:0; }
   .detail-scroll{ max-height:320px; overflow-y:auto; border:1px solid #ccc; margin-top:10px; }
 </style>
 </head>
@@ -277,16 +280,16 @@ const catLabels = { strategy:'ストラテジ系', management:'マネジメン�
 const choiceLabels = ['ア','イ','ウ','エ'];
 
 // 自動保存・続きから再開のしくみ（it-passport.htmlと同じlocalStorageを使うが、キー名は別にして衝突を避ける）
+// 選択肢の並び順をシャッフルした後の状態（questions）をそのまま保存する。元のquizDataのインデックスだけを
+// 保存して後で引き直す方式だと、再開のたびに選択肢の並びが変わって解答インデックスがずれてしまうため。
 const SIM_SAVE_KEY = 'itpsim_save_v1';
-const quizIndexMap = new Map();
-quizData.forEach((q,i)=>quizIndexMap.set(q,i));
 
 function loadSimSave(){
   try{
     const raw = localStorage.getItem(SIM_SAVE_KEY);
     if(!raw) return null;
     const d = JSON.parse(raw);
-    if(!d || !Array.isArray(d.qidxs) || d.qidxs.length===0) return null;
+    if(!d || !Array.isArray(d.questions) || d.questions.length===0) return null;
     return d;
   }catch(e){ return null; }
 }
@@ -320,6 +323,15 @@ function stratifiedSet(s,m,t){
   return shuffle(strat.concat(mgmt, tech));
 }
 
+// 選択肢の並び順をシャッフルし、正解インデックスを再計算した状態でコピーを返す
+// （quizDataでは正解が常にa[0]に置かれているため、これをしないと正答が毎回「ア」になってしまう）
+function shuffleChoices(q){
+  const order = shuffle([0,1,2,3]);
+  const a = order.map(i => q.a[i]);
+  const c = order.indexOf(q.c);
+  return { q:q.q, a, cat:q.cat, c, d:q.d };
+}
+
 const EXAM_LENGTHS = {
   20:  { s:7,  m:4,  t:9,  minutes:24  },
   50:  { s:17, m:10, t:23, minutes:60  },
@@ -329,7 +341,7 @@ const EXAM_LENGTHS = {
 function beginExam(count){
   clearSimSave();
   const plan = EXAM_LENGTHS[count] || EXAM_LENGTHS[100];
-  current = stratifiedSet(plan.s, plan.m, plan.t);
+  current = stratifiedSet(plan.s, plan.m, plan.t).map(shuffleChoices);
   idx = 0;
   answersGiven = new Array(current.length).fill(null);
   flaggedSet = new Set();
@@ -346,9 +358,8 @@ function beginExam(count){
 // 今の進捗（出題順・何問目か・解答内容・見直しフラグ・残り時間）を自動保存する
 function saveSimProgress(){
   if(!current || current.length===0) return;
-  const qidxs = current.map(q=>quizIndexMap.get(q));
   writeSimSave({
-    qidxs, idx, answersGiven: answersGiven.slice(), flagged: Array.from(flaggedSet),
+    questions: current, idx, answersGiven: answersGiven.slice(), flagged: Array.from(flaggedSet),
     remainingSec, examNo: document.getElementById('examNo').textContent
   });
 }
@@ -468,6 +479,15 @@ function confirmFinish(){
   if(confirm(msg)) finishExam();
 }
 
+// 正答率に応じて結果画面に出す猫のリアクション（表情＋セリフ）を決める（it-passport.htmlと同じ基準）
+function catReaction(pct){
+  if(pct === 100) return {face:'😻', line:'パーフェクトにゃ！！完全勝利にゃ〜'};
+  if(pct >= 80) return {face:'😸', line:'やるにゃね！いい感じにゃ'};
+  if(pct >= 60) return {face:'😼', line:'惜しいにゃ…もう一声にゃ'};
+  if(pct >= 40) return {face:'😿', line:'ちょっと復習が必要かもにゃ…'};
+  return {face:'🙀', line:'これは基礎からやり直しにゃ！'};
+}
+
 function finishExam(){
   if(timerHandle) clearInterval(timerHandle);
   clearSimSave();
@@ -492,6 +512,7 @@ function finishExam(){
     return `<tr><td>${catLabels[cat]}</td><td>${cs.correct}/${cs.total}問</td><td>${pt}点</td><td>${ok?'✅ 基準クリア':'❌ 未達（300点未満）'}</td></tr>`;
   }).join('');
   const passed = passOverall && passAllFields;
+  const cat = catReaction(pct);
 
   const detailRows = current.map((q,i)=>{
     const picked = answersGiven[i];
@@ -522,6 +543,10 @@ function finishExam(){
   end.innerHTML = `
     <h2>🏆 疑似体験結果</h2>
     <p>${current.length}問中 ${score}問正解（正答率${pct}%）</p>
+    <div class="cat-reaction">
+      <div class="cat-reaction-face">${cat.face}</div>
+      <p class="cat-reaction-line">${cat.line}</p>
+    </div>
     <div class="pass-badge" style="background:${passed?'#dcfce7':'#fee2e2'};color:${passed?'#166534':'#991b1b'};border:1px solid ${passed?'#bbf7d0':'#fecaca'};">
       ${passed ? '🎉 合格ライン到達' : '📕 合格ラインには未到達'}
     </div>
@@ -563,20 +588,14 @@ function checkSimResume(){
   if(!d){ banner.style.display = 'none'; return; }
   const answered = d.answersGiven.filter(a=>a!==null && a!==undefined).length;
   document.getElementById('resumeText').textContent =
-    `前回の続き（全${d.qidxs.length}問中${d.idx+1}問目・解答済み${answered}問）が残ってるよ。再開する？`;
+    `前回の続き（全${d.questions.length}問中${d.idx+1}問目・解答済み${answered}問）が残ってるよ。再開する？`;
   banner.style.display = 'block';
 }
 
 function resumeSimExam(){
   const d = loadSimSave();
   if(!d) return;
-  const rebuilt = d.qidxs.map(i=>quizData[i]).filter(Boolean);
-  if(rebuilt.length !== d.qidxs.length){
-    // 問題データが更新されて一部が見つからない場合は諦めて最初からに切り替える
-    dismissSimResume();
-    return;
-  }
-  current = rebuilt;
+  current = d.questions;
   idx = Math.min(d.idx, current.length-1);
   answersGiven = (Array.isArray(d.answersGiven) && d.answersGiven.length===current.length)
     ? d.answersGiven.slice() : new Array(current.length).fill(null);
