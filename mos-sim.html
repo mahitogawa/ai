@@ -74,7 +74,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 /* シミュレーション画面 */
 #sim-screen{display:none;}
 #sim-screen.show{display:block;}
-.sim-back{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.14);border:1.5px solid rgba(34,211,238,.5);color:var(--teal);font-size:15px;font-weight:800;margin-bottom:10px;padding:9px 18px;border-radius:10px;cursor:pointer;transition:background .15s;}
+.sim-back-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.sim-back{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.14);border:1.5px solid rgba(34,211,238,.5);color:var(--teal);font-size:15px;font-weight:800;margin-bottom:0;padding:9px 18px;border-radius:10px;cursor:pointer;transition:background .15s;}
 .sim-back:hover{background:rgba(34,211,238,.24);}
 .sim-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px;font-weight:800;color:var(--teal);}
 .instruction-bar{
@@ -86,7 +87,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 .feedback{min-height:20px;font-size:13.5px;font-weight:800;margin-bottom:8px;}
 .feedback.ok{color:var(--good);}
 .feedback.ng{color:var(--danger);}
-#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:8px;}
+#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:0;}
 #font-controls span{font-size:12px;font-weight:800;color:var(--muted);margin-right:2px;}
 .font-btn{padding:4px 10px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;font-size:12.5px;font-weight:900;border-radius:6px;transition:background .15s;}
 .font-btn.active{background:var(--teal);border-color:var(--teal);color:#04141f;}
@@ -235,7 +236,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
     box-shadow:none;
   }
   #sim-screen .sim-top,
-  #sim-screen .sim-back,
+  #sim-screen .sim-back-row,
   #sim-screen .instruction-bar,
   #sim-screen .feedback{
     max-width:1400px;
@@ -313,12 +314,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 
   <div id="sim-screen">
     <div class="sim-top"><span id="simProgress">1 / 10</span><span id="simScoreLabel">一発正解 0</span></div>
-    <button class="sim-back" onclick="exitSim()">← メニューに戻る</button>
-    <div id="font-controls">
-      <span>文字サイズ</span>
-      <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
-      <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
-      <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+    <div class="sim-back-row">
+      <button class="sim-back" onclick="exitSim()">← メニューに戻る</button>
+      <div id="font-controls">
+        <span>文字サイズ</span>
+        <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
+        <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
+        <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+      </div>
     </div>
     <div class="instruction-bar">
       <div class="instruction-label">📋 次の操作を行いなさい</div>

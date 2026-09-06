@@ -94,7 +94,9 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
 /* クイズ画面 */
 #quiz-screen{display:none;}
 #quiz-screen.show{display:block;}
-.quiz-back{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:10px;padding:0;}
+.quiz-back-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.quiz-back{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.14);border:1.5px solid rgba(34,211,238,.5);color:var(--teal);font-size:15px;font-weight:800;margin-bottom:0;padding:9px 18px;border-radius:10px;cursor:pointer;transition:background .15s;}
+.quiz-back:hover{background:rgba(34,211,238,.24);}
 .quiz-back:active{color:var(--teal);}
 .quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .quiz-progress{font-size:13px;font-weight:800;color:var(--teal);}
@@ -111,7 +113,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
   padding:13px 14px;font-size:var(--font-size);font-weight:700;color:#ffffff;
   text-align:left;transition:.12s;
 }
-#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:10px;}
+#font-controls{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:0;}
 #font-controls span{font-size:12px;font-weight:800;color:var(--muted);margin-right:2px;}
 .font-btn{padding:4px 10px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;font-size:12.5px;font-weight:900;border-radius:6px;transition:background .15s;}
 .font-btn.active{background:var(--teal);border-color:var(--teal);color:#04141f;}
@@ -256,12 +258,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:
       <div class="quiz-progress" id="quizProgress">1 / 15</div>
       <div class="quiz-score" id="quizScore">正解 0</div>
     </div>
-    <button class="quiz-back" onclick="exitQuiz()">← メニューに戻る（途中でやめる）</button>
-    <div id="font-controls">
-      <span>文字サイズ</span>
-      <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
-      <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
-      <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+    <div class="quiz-back-row">
+      <button class="quiz-back" onclick="exitQuiz()">← メニューに戻る</button>
+      <div id="font-controls">
+        <span>文字サイズ</span>
+        <button class="font-btn" data-size="small" onclick="setFont('small')">小</button>
+        <button class="font-btn active" data-size="medium" onclick="setFont('medium')">中</button>
+        <button class="font-btn" data-size="large" onclick="setFont('large')">大</button>
+      </div>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%;"></div></div>
     <div class="q-card">
