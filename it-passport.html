@@ -425,7 +425,7 @@ footer .flink-sub { font-size:9px; color:rgba(255,255,255,.55); margin-top:3px; 
 </style></head>
 <body>
 <div class="phone-frame">
-<div class="phone-screen">
+<div class="phone-screen" id="phoneScreen">
 <div id="topHeader">
   <h1>🐱 ITパスポート対策ドリル</h1>
   <p class="tagline">「解き方の感覚」を身につけよう！</p>
@@ -609,6 +609,14 @@ let catScore = { strategy:{correct:0,total:0}, management:{correct:0,total:0}, t
 const modeLabels = { mini:'ネコと学ぶITミニ試験', exam:'本番形式ランダム', official:'IPA公式問題だけ', all:'全問ランダム総復習', strategy:'ストラテジ系', management:'マネジメント系', technology:'テクノロジ系', reviewWrong:'不正解だった問題の復習' };
 
 function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// 実際にスクロールしているのは #phoneScreen（スマホ枠の内側）で、window自体は動いていないため、
+// window.scrollTo(0,0) だけでは頭出しできない。両方リセットする。
+function scrollPhoneTop(){
+  const ps = document.getElementById('phoneScreen');
+  if(ps) ps.scrollTop = 0;
+  window.scrollTo(0,0);
+}
 
 // 選択肢の並び順をシャッフルし、正解インデックスを再計算した状態でコピーを返す
 function shuffleChoices(q){
@@ -877,7 +885,7 @@ function startMode(mode){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
-  window.scrollTo(0,0);
+  scrollPhoneTop();
   startTimer(current.length*1.2);
   showQuestion();
 }
@@ -891,7 +899,7 @@ function startCategory(cat){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
-  window.scrollTo(0,0);
+  scrollPhoneTop();
   startTimer(current.length*1.2);
   showQuestion();
 }
@@ -906,7 +914,7 @@ function reviewWrong(){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('end-screen').style.display='none';
   document.getElementById('quiz-screen').style.display='block';
-  window.scrollTo(0,0);
+  scrollPhoneTop();
   startTimer(current.length*1.2);
   showQuestion();
 }
@@ -1189,7 +1197,7 @@ function backToMenu(){
 function showInfoScreen(){
   document.getElementById('menu-screen').style.display='none';
   document.getElementById('info-screen').style.display='block';
-  window.scrollTo(0,0);
+  scrollPhoneTop();
 }
 
 function closeInfoScreen(){
@@ -1379,7 +1387,7 @@ let _cheatOpenCats = {};
 function showCheatScreen(){
   document.getElementById('menu-screen').style.display = 'none';
   document.getElementById('cheat-screen').style.display = 'block';
-  window.scrollTo(0,0);
+  scrollPhoneTop();
   const searchInput = document.getElementById('cheat-search');
   if (searchInput) searchInput.value = '';
   _cheatCurrentCat = 'all';
