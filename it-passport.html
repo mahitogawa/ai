@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260906151145">
+<meta name="app-build" content="20260906155238">
 <link rel="manifest" href="manifest-itpassport.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 // 新しいクエリ文字列付きURLへ移動する（そのURLは未キャッシュなので必ず最新が読み込まれる）。
 (function(){
   try{
-    var LOCAL_BUILD = "20260906151145";
+    var LOCAL_BUILD = "20260906155238";
     var params = new URLSearchParams(location.search);
     if(params.get('v') === LOCAL_BUILD) return;
     fetch(location.pathname, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
@@ -464,7 +464,7 @@ footer .flink-sub { font-size:10.5px; color:rgba(255,255,255,.55); margin-top:3p
 
   <div id="cheat-screen" style="display:none;">
     <h2>📖 略語チートシート</h2>
-    <p class="menu-note">IT用語をタップで解説を表示。カテゴリ名をタップすると開閉するよ。</p>
+    <p class="menu-note">IT用語をタップで解説を表示。見つからない時は「🙀AI先生」にも聞けるよ。</p>
     <input type="text" id="cheat-search" oninput="filterCheat()" placeholder="🔍 用語を検索..." class="cheat-search-input">
     <div id="cheat-count" class="cheat-count"></div>
     <div id="cheat-list"></div>
